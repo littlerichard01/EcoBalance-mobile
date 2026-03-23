@@ -1,13 +1,16 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../navigation/types";
 
+type NavigationProp = StackNavigationProp<RootStackParamList, "TelaInicial">;
 
 export function LinkTenhoConta() {
-    const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
   return (
     <View>
-      <TouchableOpacity onPress={() => console.log("Link 'Já possuo uma conta' pressionado")}>
+      <TouchableOpacity onPress={() => navigation.navigate("TelaLogin")}>
         <Text>Já possuo uma conta</Text>
       </TouchableOpacity>
     </View>

@@ -1,5 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
-
+import { RootStackParamList } from "./types"
 import TelaInicial from '../app/(tabs)/telaInicial';
 import TelaLogin from "../app/(tabs)/telaLogin"
 import TelaCadastro from "../app/(tabs)/telaCadastro"
@@ -10,13 +9,14 @@ import TelaCriarRotina from "../app/(tabs)/telaCriarRotina";
 import TelaCalculos from "../app/(tabs)/telaCalculos";
 import TelaPerfil from "../app/(tabs)/telaPerfil";
 import TelaConquistas from "../app/(tabs)/telaConquistas";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 export default function MyStack() {
     return (
-        <Stack.Navigator initialRouteName="TelaPerfil" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="TelaInicial" screenOptions={{ headerShown: true }}>
             <Stack.Screen name="TelaInicial" component={TelaInicial} />
             <Stack.Screen name="TelaLogin" component={TelaLogin} />
             <Stack.Screen name="TelaCadastro" component={TelaCadastro} />
