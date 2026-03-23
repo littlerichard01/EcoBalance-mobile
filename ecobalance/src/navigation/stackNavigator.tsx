@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 
 export default function MyStack() {
     return (
-        <Stack.Navigator initialRouteName="TelaLogin" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="TelaPerfil" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="TelaInicial" component={TelaInicial} />
             <Stack.Screen name="TelaLogin" component={TelaLogin} />
             <Stack.Screen name="TelaCadastro" component={TelaCadastro} />
