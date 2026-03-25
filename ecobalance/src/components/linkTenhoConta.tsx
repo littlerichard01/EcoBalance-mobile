@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../navigation/types";
+import { RootStackParamList } from "../navigation/stackNavigator"
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "TelaInicial">;
+type NavigationProp = StackNavigationProp<RootStackParamList, "TelaLogin">;
 
 export function LinkTenhoConta() {
   const navigation = useNavigation<NavigationProp>();
