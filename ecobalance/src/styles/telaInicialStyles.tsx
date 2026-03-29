@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { LinkTenhoConta } from '../components/linkTenhoConta';
 
 export const stylesTelaInicial = StyleSheet.create({
     container: {
@@ -6,16 +7,21 @@ export const stylesTelaInicial = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-  },
-  titulo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
+    alignContent: "center",
+    
   },
   imagem: {
     width: 500,
     height: 350,
     resizeMode: "contain",
     marginBottom: 20,
+  },
+
+  linkTenhoConta: {
+    marginTop: 20,
+    color: "#659E43",
+    fontSize: 16,
+    fontWeight: "bold",
+   textDecorationLine: "underline",
   }
 })

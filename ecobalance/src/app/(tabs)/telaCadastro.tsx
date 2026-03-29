@@ -6,6 +6,8 @@ import { stylesTelaCadastro } from "../../styles/telaCadastroStyles";
 import { useNavigation } from "@react-navigation/core";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
+import { stylesGeral } from "@/src/styles/stylesGeral";
+import { fonte } from "@/src/styles/fontes";
 
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
@@ -15,7 +17,7 @@ export default function TelaCadastro() {
     const [usuario, setUsuario] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    
+
     const navigation = useNavigation<NavigationProp>();
 
 
@@ -27,23 +29,26 @@ export default function TelaCadastro() {
     return (
         <View style={stylesTelaCadastro.telaCadastroContainer}>
             <Image source={require("../../assets/Logo.png")} style={styles.logo} />
-            <Text>Seja Bem Vindo</Text>
-            <Text>Faça seu Cadastro</Text>
+            <Text style={fonte.titulo}>Seja Bem Vindo</Text>
+            <Text style={fonte.subtitulo}>Faça seu Cadastro</Text>
 
             <Text>Nome</Text>
             <TextInput
+                style={stylesGeral.textInput}
                 placeholder="Digite seu e-mail"
                 value={usuario}
                 onChangeText={setUsuario}
             />
             <Text>Email</Text>
             <TextInput
+                style={stylesGeral.textInput}
                 placeholder="Digite seu email"
                 value={email}
                 onChangeText={setEmail}
             />
             <Text>Senha</Text>
             <TextInput
+            style={stylesGeral.textInput}
                 placeholder="Digite sua senha"
                 value={senha}
                 onChangeText={setSenha}
@@ -51,6 +56,7 @@ export default function TelaCadastro() {
             />
             <Text>Confirme sua senha</Text>
             <TextInput
+            style={stylesGeral.textInput}
                 placeholder="Confirme sua senha"
                 value={senha}
                 onChangeText={setSenha}

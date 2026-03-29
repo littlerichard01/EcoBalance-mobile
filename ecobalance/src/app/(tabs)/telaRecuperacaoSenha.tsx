@@ -1,4 +1,5 @@
 import { BotaoConcluir } from "@/src/components/botaoConcluir";
+import { stylesGeral } from "@/src/styles/stylesGeral";
 import React, { useState } from "react";
 import { Button, View, Text, TextInput, TouchableOpacity } from "react-native";
 
@@ -12,6 +13,7 @@ export default function TelaRecuperacaoSenha() {
       <Text>Cadastre sua nova senha</Text>
 
       <TextInput
+        style={stylesGeral.textInput}
         placeholder="Nova senha"
         value={novaSenha}
         onChangeText={setNovaSenha}
@@ -19,6 +21,7 @@ export default function TelaRecuperacaoSenha() {
       />
 
       <TextInput
+        style={stylesGeral.textInput}
         placeholder="Confirmar nova senha"
         value={confirmarSenha}
         onChangeText={setConfirmarSenha}

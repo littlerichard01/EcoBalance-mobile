@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-export default function TelaCriarRotina() {
+export default function TelaCalculos() {
     return (
-        <Text>Olá, esta é a tela de criar rotina!</Text>
+        <Text>Olá, esta é a tela de cálculos</Text>
     );
 }

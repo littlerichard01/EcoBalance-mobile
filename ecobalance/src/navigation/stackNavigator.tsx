@@ -40,7 +40,7 @@ export type RootStackParamList = {
 export default function MyStack() {
     return (
         // O initialRouteName define qual tela será exibida primeiro quando o aplicativo for iniciado
-        <Stack.Navigator initialRouteName="TelaInicial" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="TelaCarregamento" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="TelaInicial" component={TelaInicial} />
             <Stack.Screen name="TelaLogin" component={TelaLogin} />
             <Stack.Screen name="TelaCadastro" component={TelaCadastro} />

@@ -6,6 +6,10 @@ import { RootStackParamList } from "../../navigation/stackNavigator"
 import { BotaoEntrar } from "@/src/components/botaoEntrar";
 import { styles } from "../../styles/logo";
 import { stylesTelaLogin } from "../../styles/telaLoginStyles";
+import { fonte } from "@/src/styles/fontes";
+import { stylesGeral } from "@/src/styles/stylesGeral";
+import { LinkEsqueciSenha } from "@/src/components/linkEsqueciSenha";
+
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
 
@@ -23,17 +27,19 @@ export default function TelaLogin() {
   return (
     <View style={stylesTelaLogin.telaLoginContainer}>
       <Image source={require("../../assets/Logo.png")} style={styles.logo} />
-      <Text>Seja Bem Vindo de Volta</Text>
-      <Text>Faça seu Login</Text>
+      <Text style={fonte.titulo}>Seja Bem Vindo de Volta!</Text>
+      <Text style={fonte.subtitulo}>Faça seu Login</Text>
 
       <Text>E-mail</Text>
       <TextInput
+        style={stylesGeral.textInput}
         placeholder="Digite seu e-mail"
         value={usuario}
         onChangeText={setUsuario}
       />
       <Text>Senha</Text>
       <TextInput
+        style={stylesGeral.textInput}
         placeholder="Digite sua senha"
         value={senha}
         onChangeText={setSenha}
@@ -42,9 +48,7 @@ export default function TelaLogin() {
 
       <BotaoEntrar onPress={handleLogin} />
 
-      <TouchableOpacity onPress={() => navigation.navigate("TelaEsqueciSenha")}>
-        <Text>Esqueci minha senha</Text>
-      </TouchableOpacity>
+      <LinkEsqueciSenha />
     </View>
   );
 }

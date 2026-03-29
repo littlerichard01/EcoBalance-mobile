@@ -18,8 +18,8 @@ export default function TelaInicial() {
   };
 
   const slides = [
-    { imagem: require("../../assets/frame1.png"), texto: "Entenda seu impacto" },
-    { imagem: require("../../assets/arvore.png"), texto: "Conquiste!" }
+    { imagem: require("../../assets/frame1.png"), texto: "Entenda seu impacto", texto2:"Calcule sua pegada de carbono de forma fácil" },
+    { imagem: require("../../assets/arvore.png"), texto: "Conquiste!", texto2: "Melhore seus resultados, se mantenha ativo \ne consquiste!" }
   ];
 
   const [index, setIndex] = useState(0);
@@ -27,7 +27,7 @@ export default function TelaInicial() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000); // troca a cada 3 segundos
+    }, 5000); // troca a cada 5 segundos
 
     return () => clearInterval(interval);
   }, []);
@@ -37,6 +37,8 @@ export default function TelaInicial() {
 
       {/* Carrossel de imagens */}
       <Text style={fonte.titulo}>{slides[index].texto}</Text>
+      <Text style={fonte.subtitulo}>{slides[index].texto2}</Text>
+
       <Image source={slides[index].imagem} style={stylesTelaInicial.imagem} />
        
 

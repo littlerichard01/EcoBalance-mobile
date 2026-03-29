@@ -3,17 +3,17 @@ import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigation/stackNavigator"
 import { fonte } from "../styles/fontes";
-import { stylesTelaInicial } from "../styles/telaInicialStyles";
+import { stylesTelaLogin } from "../styles/telaLoginStyles";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "TelaLogin">;
 
-export function LinkTenhoConta() {
+export function LinkEsqueciSenha() {
   const navigation = useNavigation<NavigationProp>();
 
   return (
     <View>
-      <TouchableOpacity onPress={() => navigation.navigate("TelaLogin")}>
-        <Text style={stylesTelaInicial.linkTenhoConta}>Já possuo uma conta</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("TelaEsqueciSenha")}>
+        <Text style={stylesTelaLogin.linkEsqueciSenha}>Esqueci minha senha</Text>
       </TouchableOpacity>
     </View>
   );
