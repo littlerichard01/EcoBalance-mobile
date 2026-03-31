@@ -1,70 +1,136 @@
+      
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Dropdown } from 'react-native-element-dropdown';
-import Checkbox from 'expo-checkbox'; // Verifique se a importação está assim
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import TransporteSeletor from "./transporte";
 
 export default function ViagemRotina() {
-  // Estados devem ficar dentro da função do componente
-  const [viagem, setViagem] = useState<string | null>(null);
-  const [value, setValue] = useState<string | null>(null);
-  const [isFocus, setIsFocus] = useState(false);
-  const [isChecked, setChecked] = useState(false);
+  const [fezViagem, setFezViagem] = useState<boolean | null>(null);
+  const [internacional, setInternacional] = useState<boolean | null>(null);
+  
+  // Alterado para Record para ser compatível com o TransporteSeletor
+  const [kmViagens, setKmViagens] = useState<Record<string, number>>({});
 
-  const data = [
-    { label: 'Trabalho', value: '1' },
-    { label: 'Lazer', value: '2' },
-    { label: 'Viagem de Aplicativo', value: '3' },
-    { label: 'Outros', value: '4' },
+  // Lista baseada exatamente no enum da sua Model (respeitando acentos)
+  const opcoesVeiculos = [
+    'Carro', 'Carro elétrico', 'Moto', 'Ônibus', 
+    'Metrô', 'Trem', 'Avião', 'Barco/cruzeiro'
   ];
 
+  const toggleVeiculo = (nome: string, selecionado: boolean) => {
+    setKmViagens(prev => {
+      const novo = { ...prev };
+      if (selecionado) {
+        novo[nome] = 0;
+      } else {
+        delete novo[nome];
+      }
+      return novo;
+    });
+  };
+
+  const atualizarKm = (nome: string, val: string) => {
+    setKmViagens(prev => ({
+      ...prev,
+      [nome]: parseFloat(val) || 0
+    }));
+  };
+
+  // Função para preparar os dados para o MongoDB (Converte Map para Array)
+  const salvarDados = () => {
+    const veiculosParaBanco = Object.entries(kmViagens).map(([tipo, km]) => ({
+      tipo,
+      km,
+      emissao: km * 0.12 // Fator de exemplo
+    }));
+
+    const payload = {
+      viagem: {
+        fezViagem,
+        internacional,
+        veiculos: veiculosParaBanco
+      }
+    };
+    console.log("Enviando ao Banco:", payload);
+  };
+
   return (
-    <View>
-      <Text>Fale brevemente das viagens realizadas no último mês</Text>
+    <ScrollView style={{ padding: 20 }}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+        Fale brevemente das viagens realizadas no último mês
+      </Text>
 
-      <View>
+      <View style={{ marginBottom: 20 }}>
         <Text>Fez alguma viagem no último mês?</Text>
-        <Text>Considere viagens longas ou curtas, como viagens de carro de aplicativo, etc.</Text>
-        
-        <View>
-          {['Sim', 'Não'].map((tipo) => (
-            <TouchableOpacity
-              key={tipo}
-              onPress={() => setViagem(tipo)}
-            >
-              <Text style={{ color: viagem === tipo ? '#fff' : '#000' }}>{tipo}</Text>
-            </TouchableOpacity>
-          ))}
+        <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
+          <TouchableOpacity 
+            onPress={() => setFezViagem(true)}
+            style={{
+              padding: 10,
+              backgroundColor: fezViagem === true ? '#2e7d32' : '#ccc',
+              borderRadius: 5, flex: 1, alignItems: 'center'
+            }}
+          >
+            <Text style={{ color: fezViagem === true ? '#fff' : '#000' }}>SIM</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => { 
+              setFezViagem(false); 
+              setInternacional(null);
+              setKmViagens({}); 
+            }}
+            style={{
+              padding: 10,
+              backgroundColor: fezViagem === false ? '#2e7d32' : '#ccc',
+              borderRadius: 5, flex: 1, alignItems: 'center'
+            }}
+          >
+            <Text style={{ color: fezViagem === false ? '#fff' : '#000' }}>NÃO</Text>
+          </TouchableOpacity>
         </View>
-
-        {/* Dropdown - Adicionado estilo para aparecer na tela */}
-        <Dropdown
-          data={data}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Selecione um item' : '...'}
-          searchPlaceholder="Pesquisar..."
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
-        />
-
-        {/* Checkbox - Removi o 'disabled' para você conseguir testar */}
-        <View>
-          <Checkbox 
-            value={isChecked} 
-            onValueChange={setChecked} 
-            color={isChecked ? '#4630EB' : undefined}
-          />
-          <Text>Confirmo que as informações são verdadeiras</Text>
-        </View>
-
       </View>
-    </View>
+
+      {fezViagem === true && (
+        <View style={{ marginBottom: 20 }}>
+          <Text style={{ marginBottom: 10 }}>Foi uma viagem internacional?</Text>
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <TouchableOpacity 
+              onPress={() => setInternacional(true)}
+              style={{
+                padding: 10,
+                backgroundColor: internacional === true ? '#2e7d32' : '#ccc',
+                borderRadius: 5, flex: 1, alignItems: 'center'
+              }}
+            >
+              <Text style={{ color: internacional === true ? '#fff' : '#000' }}>SIM</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={() => setInternacional(false)}
+              style={{
+                padding: 10,
+                backgroundColor: internacional === false ? '#2e7d32' : '#ccc',
+                borderRadius: 5, flex: 1, alignItems: 'center'
+              }}
+            >
+              <Text style={{ color: internacional === false ? '#fff' : '#000' }}>NÃO</Text>
+            </TouchableOpacity>
+          </View>
+
+            <View style={{ marginTop: 20 }}>
+              <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>
+                Qual (ou quais) veículos você utilizou para viajar?
+              </Text>
+              <TransporteSeletor
+                lista={opcoesVeiculos} 
+                dados={kmViagens}
+                onToggle={toggleVeiculo}
+                onUpdateKm={atualizarKm}
+              />
+            </View>
+        </View>
+      )}
+      
+    </ScrollView>
   );
 }

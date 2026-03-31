@@ -53,10 +53,26 @@ export default function Gas (){
             )}
             {tipoGas==='Botijao' &&(
                 <View>
+
                     <View>
                         <Text>Qual tipo de botijão?</Text>
-                        <Text>aqui novamente dropdawn yey</Text>
+                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
+                    {['Comum - P13', 'Medio - P20', 'Grande - P45'].map((tipo) => (
+                    <TouchableOpacity
+                        key={tipo}
+                        onPress={() => setTipoBotijao(tipo)}
+                        style={{
+                            padding: 10,
+                            backgroundColor: tipoBotijao === tipo ? '#2e7d32' : '#ccc',
+                            borderRadius: 5
+                        }}
+                    >
+                    <Text style={{ color: 'white', fontSize: 12 }}>{tipo.toUpperCase()}</Text>
+                    </TouchableOpacity>
+                    ))}
+                </View>
                     </View>
+
                     <View>
                         <Text>Quanto tempo dura o gás que você compra? (meses)</Text>
                         <TextInput 
