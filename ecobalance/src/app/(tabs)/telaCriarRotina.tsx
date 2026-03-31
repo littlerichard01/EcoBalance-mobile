@@ -8,7 +8,8 @@ import { BotaoAvancar } from "@/src/components/botaoAvancar";
 import NomeRotina from "./criarRotina/nomeRotina";
 import  DietaRotina  from "./criarRotina/dietaRotina";
 import { BotaoRetornar } from "@/src/components/botaoRetornar";
-import Gas from "./criarRotina/gas";
+import Gas from "./criarRotina/gasRotina";
+import TransporteRotina from "./criarRotina/veiculosRotina";
 
 
 export default function TelaCriarRotina() {
@@ -26,7 +27,6 @@ export default function TelaCriarRotina() {
         }
     }
 
-
   return (
     <View>
         <View>
@@ -38,6 +38,7 @@ export default function TelaCriarRotina() {
                         {index === 1 && "Nome"}
                         {index === 2 && "Dieta"}
                         {index === 3 && "Gás"}
+                        {index === 4 && "Transporte"}
                     </Text>
                 </View>
                 <Text>{index}/7</Text>
@@ -50,6 +51,7 @@ export default function TelaCriarRotina() {
                 {index === 1 && <NomeRotina/>}
                 {index === 2 && <DietaRotina/>}
                 {index === 3 && <Gas/>}
+                {index === 4 && <TransporteRotina/>}
             </View>
         </View>
 
