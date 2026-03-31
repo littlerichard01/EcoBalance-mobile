@@ -8,6 +8,7 @@ import { BotaoAvancar } from "@/src/components/botaoAvancar";
 import NomeRotina from "./criarRotina/nomeRotina";
 import  DietaRotina  from "./criarRotina/dietaRotina";
 import { BotaoRetornar } from "@/src/components/botaoRetornar";
+import Gas from "./criarRotina/gas";
 
 
 export default function TelaCriarRotina() {
@@ -15,7 +16,7 @@ export default function TelaCriarRotina() {
     const [index, setIndex] = useState(1);
 
     const handleAvancar = () => {
-        if (index <3){
+        if (index <7){
             setIndex(index+1)
         } 
     }
@@ -36,18 +37,19 @@ export default function TelaCriarRotina() {
                     <Text>
                         {index === 1 && "Nome"}
                         {index === 2 && "Dieta"}
-                        {index === 3 && "Transporte"}
+                        {index === 3 && "Gás"}
                     </Text>
                 </View>
-                <Text>{index}/3</Text>
+                <Text>{index}/7</Text>
             </View>
-            <ProgressBar progresso={index / 3} />
+            <ProgressBar progresso={index / 7} />
         </View>
 
         <View>
             <View>
                 {index === 1 && <NomeRotina/>}
                 {index === 2 && <DietaRotina/>}
+                {index === 3 && <Gas/>}
             </View>
         </View>
 
