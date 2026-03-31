@@ -94,6 +94,7 @@ export default function TransporteRotina() {
                     </View>
                 </View>
             )}
+
         </ScrollView>
     );
 }

@@ -10,6 +10,8 @@ import  DietaRotina  from "./criarRotina/dietaRotina";
 import { BotaoRetornar } from "@/src/components/botaoRetornar";
 import Gas from "./criarRotina/gasRotina";
 import TransporteRotina from "./criarRotina/veiculosRotina";
+import EnergiaRotina from "./criarRotina/energiaRotina";
+import ViagemRotina from "./criarRotina/viagensRotina";
 
 
 export default function TelaCriarRotina() {
@@ -39,6 +41,8 @@ export default function TelaCriarRotina() {
                         {index === 2 && "Dieta"}
                         {index === 3 && "Gás"}
                         {index === 4 && "Transporte"}
+                        {index === 5 && "Energia Elétrica"}
+                        {index === 6 && "Viagens"}
                     </Text>
                 </View>
                 <Text>{index}/7</Text>
@@ -52,6 +56,8 @@ export default function TelaCriarRotina() {
                 {index === 2 && <DietaRotina/>}
                 {index === 3 && <Gas/>}
                 {index === 4 && <TransporteRotina/>}
+                {index === 5 && <EnergiaRotina/>}
+                {index === 6 && <ViagemRotina/>}
             </View>
         </View>
 
