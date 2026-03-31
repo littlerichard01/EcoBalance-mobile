@@ -1,0 +1,24 @@
+{
+  "usuarioId": "699e6c59868c3d228b73c46e",
+  "nome": "ROTINA MALUCA TESTE 3000",
+  "dieta": "Onívora",
+  "porcoes": {
+    "Carne bovina": 2,
+    "Frango": 4,
+    "Frutas e vegetais": 10
+  },
+  "quantidadePessoas": 3,
+  "tipoGas": "botijao",
+  "tipoBotijao": "P13",
+  "tempoDuracaoGas": 2,
+  "usaVeiculo": "sim",
+  "possuiVeiculo": "publico",
+  "transportesPublicos": [
+    "Ônibus",
+    "Metrô"
+  ],
+  "kmTransportes": {
+    "Ônibus": 40,
+    "Metrô": 60
+  }
+}

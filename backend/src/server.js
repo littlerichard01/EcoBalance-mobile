@@ -44,16 +44,20 @@ app.get('/', (req, res) => {
 
 // Importar rotas
 const authRoutes = require('./routes/authRoutes');
+const rotinaRoutes = require('./routes/rotinaRoutes');
+const testeRoutes = require('./routes/testeRoutes');
 
 // Rotas da API
 app.use('/api/auth', authRoutes);
+app.use('/api/rotinas', rotinaRoutes);
+app.use('/api/testes', testeRoutes);
 
 async function startServer() {
   await connectDB();
   app.listen(port, () => {
     const isProduction = process.env.NODE_ENV === 'production';
     const serverUrl = isProduction 
-      ? process.env.PROD_API_URL || 'https://producao.com' 
+      ? process.env.PROD_API_URL || 'https://producao.com' // @PLACEHOLDER para a URL de produção futura
       : `http://localhost:${port}`;
       
     console.log(`🚀 Servidor rodando na porta ${port} (${isProduction ? 'Produção' : 'Desenvolvimento'})`);

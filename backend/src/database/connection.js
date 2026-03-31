@@ -1,6 +1,4 @@
-const { MongoClient } = require('mongodb');
-
-let dbInstance = null;
+const mongoose = require('mongoose');
 
 async function connectDB() {
   const uri = process.env.MONGO_URI;
@@ -10,24 +8,13 @@ async function connectDB() {
     process.exit(1);
   }
 
-  const client = new MongoClient(uri);
-
   try {
-    await client.connect();
-    console.log('✅ Conectado com sucesso ao MongoDB Atlas');
-    dbInstance = client.db();
-    return dbInstance;
+    await mongoose.connect(uri);
+    console.log('✅ Conectado com sucesso ao MongoDB Atlas via Mongoose');
   } catch (error) {
     console.error('❌ Erro na conexão com o MongoDB:', error);
     process.exit(1);
   }
 }
 
-function getDB() {
-  if (!dbInstance) {
-    throw new Error('Database not initialized. Call connectDB first.');
-  }
-  return dbInstance;
-}
-
-module.exports = { connectDB, getDB };
+module.exports = { connectDB };
