@@ -115,11 +115,11 @@ export default function DietaRotina() {
                 />
             </View>
 
-            <View>
+
+                <ScrollView>
                     <Text>Porções consumidas por semana:</Text>
                     {renderCampos()}
-                   
-            </View>
+                </ScrollView>
 
         </ScrollView>
     );
