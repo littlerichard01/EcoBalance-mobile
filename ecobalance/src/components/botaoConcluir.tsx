@@ -9,7 +9,7 @@ export function BotaoConcluir({ onPress }: BotaoConcluirProps) {
     return (
         <TouchableOpacity
             style={styles.botaoConcluir}
-            onPress={() => console.log("Botão Concluir pressionado")}
+            onPress={onPress}
         >
             <Text style={styles.texto}>Concluir</Text>
         </TouchableOpacity>

@@ -9,7 +9,7 @@ export function BotaoAvancar({ onPress }: BotaoAvancarProps) {
     return (
         <TouchableOpacity
             style={styles.botaoAvancar}
-            onPress={() => console.log("Botão Avançar pressionado")}
+            onPress={onPress}
         >
             <Text style={styles.texto}>Avançar</Text>
         </TouchableOpacity>

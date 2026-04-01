@@ -13,6 +13,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TelaEsqueciSenha from '../app/(tabs)/telaEsqueciSenha';
 import TelaRecuperacaoSenha from '../app/(tabs)/telaRecuperacaoSenha';
 import { TabNavigator } from './tabNavigator';
+import ResultadoCalculo from '../app/(tabs)/telaResultado';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,6 +33,7 @@ export type RootStackParamList = {
     TelaConquistas: undefined;
     TelaEsqueciSenha: undefined;
     TelaRecuperacaoSenha: undefined;
+    ResultadoCalculo: undefined;
     MainTabs: undefined;
 
 };
@@ -49,6 +51,9 @@ export default function MyStack() {
             <Stack.Screen name="TelaConquistas" component={TelaConquistas} />
             <Stack.Screen name="TelaEsqueciSenha" component={TelaEsqueciSenha} />
             <Stack.Screen name="TelaRecuperacaoSenha" component={TelaRecuperacaoSenha} />
+             <Stack.Screen name="TelaRotina" component={TelaRotina} />
+            <Stack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
+            <Stack.Screen name="ResultadoCalculo" component={ResultadoCalculo} />
 
             {/* A tela "MainTabs" é onde o Tab Navigator é renderizado, permitindo a navegação entre as abas principais do aplicativo */}
             <Stack.Screen name="MainTabs" component={TabNavigator} />

@@ -9,8 +9,7 @@ export function BotaoCriarRotina({ onPress }: BotaoCriarRotinaProps) {
     return (
         <TouchableOpacity
             style={styles.BotaoCriarRotina}
-            onPress={() => console.log("Botão Criar Rotina pressionado")}
-        >
+            onPress={onPress} >
             <Text style={styles.texto}>Criar Rotina</Text>
         </TouchableOpacity>
     );

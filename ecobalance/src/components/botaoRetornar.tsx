@@ -9,7 +9,7 @@ export function BotaoRetornar({ onPress }: BotaoRetornarProps) {
     return (
         <TouchableOpacity
             style={styles.botaoRetornar}
-            onPress={() => console.log("Botão Retornar pressionado")}
+            onPress={onPress}
         >
             <Text style={styles.texto}>Retornar</Text>
         </TouchableOpacity>
