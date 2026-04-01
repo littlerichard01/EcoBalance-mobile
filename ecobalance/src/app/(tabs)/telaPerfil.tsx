@@ -6,8 +6,7 @@ import { fonte } from "@/src/styles/fontes";
 import { stylesGeral } from "@/src/styles/stylesGeral";
 import { Switch, StyleSheet } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-
-
+import { Image } from "react-native";
 
 export default function TelaPerfil() {
 
@@ -22,8 +21,10 @@ export default function TelaPerfil() {
 
     return (
         <View style={stylesTelaPerfil.container}>
+            <View>
+            <Image source={require("../../assets/engrenagem.png")}/>
             <Text style={fonte.titulo}>Perfil</Text>
-
+            </View>
             <Text>Nome</Text>
             <TextInput
                 style={stylesGeral.textInput}
