@@ -56,7 +56,7 @@ export default function TelaCalculos() {
                         <View>
                             {index === 1 && <SelecionaRotina/>}
                             {index === 2 && <EnergiaRotina/>}
-                            {index === 3 && <Gas/>}
+                            {index === 3 && <GasEncanado/>}
                             {index === 4 && <ViagemRotina/>}
                 
                         </View>

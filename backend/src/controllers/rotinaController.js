@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken');
 const Rotina = require('../models/Rotina');
+const User = require('../models/User');
 
 // Fatores de emissão (trazidos do front-end para o back-end)
 const FATORES_EMISSAO = {
@@ -87,13 +89,58 @@ const calcularEmissoesRotina = (dados) => {
     };
 };
 
+const obterUsuarioIdDaRequisicao = async (req) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return null;
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded?.id) {
+        return String(decoded.id);
+    }
+
+    if (decoded?._id) {
+        return String(decoded._id);
+    }
+
+    if (decoded?.userId) {
+        return String(decoded.userId);
+    }
+
+    if (decoded?.email) {
+        const user = await User.findOne({ email: decoded.email }).select('_id');
+        if (user) {
+            return String(user._id);
+        }
+    }
+
+    return null;
+};
+
 /**
  * Cadastrar nova rotina
  */
 exports.createRotina = async (req, res) => {
     try {
-        const dadosRotina = req.body;
+        const dadosRotina = { ...req.body };
+        const usuarioId = await obterUsuarioIdDaRequisicao(req);
+
+        if (!usuarioId) {
+            return res.status(401).json({ message: 'Usuário não autenticado.' });
+        }
+
+        dadosRotina.usuarioId = usuarioId;
         
+        // Formatar valores numéricos que podem vir como string vazia do front
+        if (dadosRotina.quantidadePessoas === '') delete dadosRotina.quantidadePessoas;
+        if (dadosRotina.tempoDuracaoGas === '') delete dadosRotina.tempoDuracaoGas;
+        if (dadosRotina.litrosCombustivel === '') delete dadosRotina.litrosCombustivel;
+        if (dadosRotina.kmEletrico === '') delete dadosRotina.kmEletrico;
+
         // Realiza o cálculo no Backend!
         const emissoesCalculadas = calcularEmissoesRotina(dadosRotina);
         
@@ -111,11 +158,16 @@ exports.createRotina = async (req, res) => {
 };
 
 /**
- * Buscar todas as rotinas de um usuário específico
+ * Buscar todas as rotinas do usuário logado
  */
 exports.getRotinasByUsuario = async (req, res) => {
     try {
-        const { usuarioId } = req.params;
+        const usuarioId = await obterUsuarioIdDaRequisicao(req);
+
+        if (!usuarioId) {
+            return res.status(401).json({ message: 'Usuário não autenticado.' });
+        }
+
         const rotinas = await Rotina.find({ usuarioId }).sort({ dataCriacao: -1 });
         
         res.status(200).json(rotinas);

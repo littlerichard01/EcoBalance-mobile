@@ -4,19 +4,22 @@ import { TextInput } from "react-native-gesture-handler";
 
 export default function GasEncanado (){
 
-    const [nomeRotina, setNomeRotina] = useState('')
+    const [gasEncanado, setGasEncanado] = useState('')
 
     return (
 
         <View>
-            <Text>Nomeie sua rotina</Text>
+            <Text>Consumo Mensal de Gás Natural</Text>
 
             <View>
-                <Text>Nome da rotina:</Text>
+                <Text>Digite o valor em metros cúbicos (m³) da sua última conta de gás natural:</Text>
                 <TextInput
-                placeholder="Digite o nome da rotina"
-                value={nomeRotina}
-                onChangeText={setNomeRotina}/>
+                    style={{borderWidth: 1, borderColor: '#bbb', padding: 10, marginTop: 10}}
+                    placeholder="Ex: 15.5"
+                    value={gasEncanado}
+                    onChangeText={setGasEncanado}
+                    keyboardType="numeric"
+                />
             </View>
         </View>
     )

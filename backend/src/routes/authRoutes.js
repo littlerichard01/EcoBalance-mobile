@@ -10,7 +10,6 @@ const authController = require('../controllers/authController');
  */
 
 /**
-/**
  * @swagger
  * /api/auth/register:
  *   post:

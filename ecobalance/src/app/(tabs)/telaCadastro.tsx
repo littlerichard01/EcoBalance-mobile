@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TouchableOpacity, Image, View, Text, TextInput } from "react-native";
+import { TouchableOpacity, Image, View, Text, TextInput, Alert } from "react-native";
 import { BotaoCriarConta } from "../../components/botaoCriarConta";
 import { styles } from "../../styles/logo";
 import { stylesTelaCadastro } from "../../styles/telaCadastroStyles";
@@ -8,22 +8,46 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
 import { stylesGeral } from "@/src/styles/stylesGeral";
 import { fonte } from "@/src/styles/fontes";
-
+import api from "../../services/api";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
 
 export default function TelaCadastro() {
 
-    const [usuario, setUsuario] = useState('');
+    const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmaSenha] = useState('');
 
     const navigation = useNavigation<NavigationProp>();
 
 
-    const handleLogin = () => {
-        navigation.navigate("MainTabs");
-        console.log("Usuário cadastrado com sucesso!");
+    const handleCadastro = async () => {
+        if (!nome || !email || !senha || !confirmarSenha) {
+            Alert.alert("Erro", "Por favor, preencha todos os campos.");
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
+            Alert.alert("Erro", "As senhas não coincidem.");
+            return;
+        }
+
+        // #region Conexão Front-Back (Cadastro)
+        try {
+            const response = await api.post('/auth/register', {
+                nome,
+                email,
+                senha
+            });
+
+            Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+            navigation.navigate("TelaLogin" as never); // Volta para tela de login
+        } catch (error: any) {
+            console.error("Erro ao cadastrar:", error.response?.data || error.message);
+            Alert.alert("Erro", error.response?.data?.message || "Ocorreu um erro ao cadastrar.");
+        }
+        // #endregion
     };
 
     return (
@@ -35,9 +59,9 @@ export default function TelaCadastro() {
             <Text>Nome</Text>
             <TextInput
                 style={stylesGeral.textInput}
-                placeholder="Digite seu e-mail"
-                value={usuario}
-                onChangeText={setUsuario}
+                placeholder="Digite seu nome"
+                value={nome}
+                onChangeText={setNome}
             />
             <Text>Email</Text>
             <TextInput
@@ -45,10 +69,12 @@ export default function TelaCadastro() {
                 placeholder="Digite seu email"
                 value={email}
                 onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
             />
             <Text>Senha</Text>
             <TextInput
-            style={stylesGeral.textInput}
+                style={stylesGeral.textInput}
                 placeholder="Digite sua senha"
                 value={senha}
                 onChangeText={setSenha}
@@ -56,17 +82,17 @@ export default function TelaCadastro() {
             />
             <Text>Confirme sua senha</Text>
             <TextInput
-            style={stylesGeral.textInput}
+                style={stylesGeral.textInput}
                 placeholder="Confirme sua senha"
-                value={senha}
-                onChangeText={setSenha}
+                value={confirmarSenha}
+                onChangeText={setConfirmaSenha}
                 secureTextEntry
             />
 
-            <BotaoCriarConta onPress={handleLogin} />
+            <BotaoCriarConta onPress={handleCadastro} />
 
-            <TouchableOpacity onPress={() => navigation.navigate("TelaEsqueciSenha")}>
-                <Text>Esqueci minha senha</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("TelaLogin" as never)} style={{ marginTop: 10 }}>
+                <Text>Já tem uma conta? Faça Login</Text>
             </TouchableOpacity>
         </View>
 

@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const testeController = require('../controllers/testeController');
+const authMiddleware = require('../middlewares/authMiddleware');
+
+// Aplica o middleware de autenticação em TODAS as rotas de teste
+router.use(authMiddleware);
 
 /**
  * @swagger

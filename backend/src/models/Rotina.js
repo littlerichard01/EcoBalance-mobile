@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const rotinaSchema = new mongoose.Schema({
-  usuarioId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  usuarioId: { type: String, required: true }, // Mudamos de ObjectId para String
   nome: { type: String, required: true },
   dieta: { type: String },
   porcoes: {

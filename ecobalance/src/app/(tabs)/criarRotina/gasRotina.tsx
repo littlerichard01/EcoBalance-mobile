@@ -1,89 +1,89 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 
-export default function Gas (){
-
-    const [pessoas, setPessoas] = useState('')
-    const [tipoGas, setTipoGas] = useState('')
-    const [gasEncanado, setGasEncanado] = useState('')
-    const [tempoBotijao, setTempoBotijao] = useState('')
-    const [tipoBotijao, setTipoBotijao] = useState('')
+export default function Gas({ rotinaData, updateRotina }: any) {
+    const pessoas = rotinaData.quantidadePessoas?.toString() || '';
+    const tipoGas = rotinaData.tipoGas;
+    const tempoBotijao = rotinaData.tempoDuracaoGas?.toString() || '';
+    const tipoBotijao = rotinaData.tipoBotijao;
 
     return (
-
         <View>
             <Text>Fale brevemente sobre seu consumo de gás</Text>
 
             <View>
                 <Text>Quantas pessoas vivem na sua casa?</Text>
                 <TextInput
-                value={pessoas}
-                onChangeText={setPessoas}/>
+                    value={pessoas}
+                    onChangeText={(text) => updateRotina('quantidadePessoas', text)}
+                    keyboardType="numeric"
+                    style={{ borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5 }}
+                />
             </View>
 
             <View>
-                <Text>Você utiliza gás encanado ou compra botijões? </Text>
+                <Text>Você utiliza gás encanado ou compra botijões?</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
-                    {['Encanado', 'Botijao'].map((tipo) => (
-                    <TouchableOpacity
-                        key={tipo}
-                        onPress={() => setTipoGas(tipo)}
-                        style={{
-                            padding: 10,
-                            backgroundColor: tipoGas === tipo ? '#2e7d32' : '#ccc',
-                            borderRadius: 5
-                        }}
-                    >
-                    <Text style={{ color: 'white', fontSize: 12 }}>{tipo.toUpperCase()}</Text>
-                    </TouchableOpacity>
+                    {['encanado', 'botijao'].map((tipo) => (
+                        <TouchableOpacity
+                            key={tipo}
+                            onPress={() => updateRotina('tipoGas', tipo)}
+                            style={{
+                                padding: 10,
+                                backgroundColor: tipoGas === tipo ? '#2e7d32' : '#ccc',
+                                borderRadius: 5
+                            }}
+                        >
+                            <Text style={{ color: 'white', fontSize: 12 }}>{tipo.toUpperCase()}</Text>
+                        </TouchableOpacity>
                     ))}
                 </View>
             </View>
 
-            {tipoGas==='Encanado' && (
+            {tipoGas === 'encanado' && (
                 <View>
-                    <Text>Digite o valor em metros cubicos (m3) da sua última conta de gás natural corrigido:</Text>
-                    <TextInput
-                    style={{borderWidth: 1, borderColor: '#bbb'}}
-                        value={gasEncanado}
-                        onChangeText={setGasEncanado}
-                        keyboardType="numeric"
-                    />
+                    <Text style={{ marginTop: 10, fontStyle: 'italic', color: '#555' }}>
+                        Como você utiliza gás encanado, o valor consumido em m³ será solicitado a cada vez que você realizar um cálculo (Teste de Usuário) mensal.
+                    </Text>
                 </View>    
             )}
-            {tipoGas==='Botijao' &&(
-                <View>
 
+            {tipoGas === 'botijao' && (
+                <View>
                     <View>
                         <Text>Qual tipo de botijão?</Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
-                    {['Comum - P13', 'Medio - P20', 'Grande - P45'].map((tipo) => (
-                    <TouchableOpacity
-                        key={tipo}
-                        onPress={() => setTipoBotijao(tipo)}
-                        style={{
-                            padding: 10,
-                            backgroundColor: tipoBotijao === tipo ? '#2e7d32' : '#ccc',
-                            borderRadius: 5
-                        }}
-                    >
-                    <Text style={{ color: 'white', fontSize: 12 }}>{tipo.toUpperCase()}</Text>
-                    </TouchableOpacity>
-                    ))}
-                </View>
+                            {[
+                                { label: 'Comum - P13', value: 'P13' },
+                                { label: 'Médio - P20', value: 'P20' },
+                                { label: 'Grande - P45', value: 'P45' }
+                            ].map((tipo) => (
+                                <TouchableOpacity
+                                    key={tipo.value}
+                                    onPress={() => updateRotina('tipoBotijao', tipo.value)}
+                                    style={{
+                                        padding: 10,
+                                        backgroundColor: tipoBotijao === tipo.value ? '#2e7d32' : '#ccc',
+                                        borderRadius: 5
+                                    }}
+                                >
+                                    <Text style={{ color: 'white', fontSize: 12 }}>{tipo.label.toUpperCase()}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
 
                     <View>
                         <Text>Quanto tempo dura o gás que você compra? (meses)</Text>
                         <TextInput 
                             value={tempoBotijao}
-                            onChangeText={setTempoBotijao}
+                            onChangeText={(text) => updateRotina('tempoDuracaoGas', text)}
                             keyboardType="numeric"
-                            style={{borderWidth: 1, borderColor: '#bbb'}}
-                            />
+                            style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                        />
                     </View>        
                 </View>
             )}
         </View>
-    )
+    );
 }

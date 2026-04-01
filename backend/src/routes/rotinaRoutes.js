@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const rotinaController = require('../controllers/rotinaController');
+const authMiddleware = require('../middlewares/authMiddleware');
+
+// Aplica o middleware de autenticação em TODAS as rotas de rotina
+router.use(authMiddleware);
 
 /**
  * @swagger
@@ -23,9 +27,6 @@ const rotinaController = require('../controllers/rotinaController');
  *           schema:
  *             type: object
  *             properties:
- *               usuarioId:
- *                 type: string
- *                 example: "id_do_usuario_aqui"
  *               nome:
  *                 type: string
  *                 example: "Nome da Rotina"
@@ -75,22 +76,16 @@ router.post('/', rotinaController.createRotina);
 
 /**
  * @swagger
- * /api/rotinas/usuario/{usuarioId}:
+ * /api/rotinas/usuario/lista:
  *   get:
- *     summary: Lista todas as rotinas de um usuário
+ *     summary: Lista todas as rotinas do usuário logado
+ *     description: Utiliza o Token JWT do cabeçalho para identificar o usuário, não precisando passar o ID na URL.
  *     tags: [Rotinas]
- *     parameters:
- *       - in: path
- *         name: usuarioId
- *         required: true
- *         schema:
- *           type: string
- *         example: "id_do_usuario_aqui"
  *     responses:
  *       200:
- *         description: Lista de rotinas.
+ *         description: Lista de rotinas do usuário.
  */
-router.get('/usuario/:usuarioId', rotinaController.getRotinasByUsuario);
+router.get('/usuario/lista', rotinaController.getRotinasByUsuario);
 
 /**
  * @swagger

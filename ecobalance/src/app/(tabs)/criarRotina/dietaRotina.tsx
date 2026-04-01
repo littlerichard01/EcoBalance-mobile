@@ -1,84 +1,82 @@
-import React, { useState } from "react";
-import { View, Text, ScrollView, TextInput, TouchableOpacity } from "react-native";
+import React from "react";
+import { View, Text, ScrollView, TextInput } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
+export default function DietaRotina({ rotinaData, updateRotina }: any) {
+    const dieta = rotinaData.dieta;
+    const porcoes = rotinaData.porcoes || {};
 
-export default function DietaRotina() {
+    const updatePorcao = (alimento: string, valor: string) => {
+        const num = parseFloat(valor) || 0;
+        updateRotina('porcoes', { ...porcoes, [alimento]: num });
+    };
 
-    const [carneBovina, setCarneBovina] = useState('');
-    const [carneSuina, setCarneSuina] = useState('');
-    const [frango, setFrango] = useState('');
-    const [peixe, setPeixe] = useState('');
-    const [leite, setLeite] = useState('');
-    const [ovos, setOvos] = useState('');
-    const [leguminosas, setLeguminosas] = useState('');
-    const [frutas, setFrutas] = useState('');
-    const [cereais, setCereais] = useState('');
+    const getPorcao = (alimento: string) => {
+        return porcoes[alimento]?.toString() || '';
+    };
 
-    const [dieta, setDieta] = useState<string |null>(null)
-    const tipoDieta =[ 
+    const tipoDieta = [ 
         { label: 'Onivora', value: 'onivora'},
         { label: 'Vegetariana', value: 'vegetariana'},
         { label: 'Vegana', value: 'vegana'},
         { label: 'Pescetariana', value: 'pescetariana'},
         { label: 'Carnívora', value: 'carnivora'}
-    ] ;
+    ];
 
-    {/*Define os campos das dietas*/}
     const renderCampos = () => {
         switch (dieta){
             case "carnivora":
                 return (
                     <>
-                        {renderInput("Carne Bovina (Pedaços)", carneBovina, setCarneBovina)}
-                        {renderInput("Carne Suina (Pedaços)", carneSuina, setCarneSuina)}
-                        {renderInput("Frango (Pedaços)", frango, setFrango)}
-                        {renderInput("Peixe (Pedaços)", peixe, setPeixe)}
-                        {renderInput("Leite (Litros)", leite, setLeite)}
-                        {renderInput("Ovos (Unidade)", ovos, setOvos)}
+                        {renderInput("Carne bovina", getPorcao("Carne bovina"), (v) => updatePorcao("Carne bovina", v))}
+                        {renderInput("Carne suína", getPorcao("Carne suína"), (v) => updatePorcao("Carne suína", v))}
+                        {renderInput("Frango", getPorcao("Frango"), (v) => updatePorcao("Frango", v))}
+                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
+                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
+                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
                     </>
                 )
             case "pescetariana":
                 return (
                     <>
-                        {renderInput("Peixe (Pedaços)", peixe, setPeixe)}
-                        {renderInput("Leite (Litros)", leite, setLeite)}
-                        {renderInput("Ovos (Unidade)", ovos, setOvos)}
-                        {renderInput("Leguminosas (Porçoes)", leguminosas, setLeguminosas)}
-                        {renderInput("Frutas e Vegetais (Porçoes)", frutas, setFrutas)}
-                        {renderInput("Cereais Integrais (Porçoes)", cereais, setCereais)}
+                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
+                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
+                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
+                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
+                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
+                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
                     </>
                 )
             case "vegana":
                 return (
                     <>
-                        {renderInput("Leguminosas (Porçoes)", leguminosas, setLeguminosas)}
-                        {renderInput("Frutas e Vegetais (Porçoes)", frutas, setFrutas)}
-                        {renderInput("Cereais Integrais (Porçoes)", cereais, setCereais)}
+                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
+                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
+                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
                     </>
                 )
             case "vegetariana":
                 return (
                     <>
-                        {renderInput("Leite (Litros)", leite, setLeite)}
-                        {renderInput("Ovos (Unidade)", ovos, setOvos)}
-                        {renderInput("Leguminosas (Porçoes)", leguminosas, setLeguminosas)}
-                        {renderInput("Frutas e Vegetais (Porçoes)", frutas, setFrutas)}
-                        {renderInput("Cereais Integrais (Porçoes)", cereais, setCereais)}
+                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
+                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
+                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
+                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
+                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
                     </>
                 )
             default: 
                 return (
                     <>
-                        {renderInput("Carne Bovina (Pedaços)", carneBovina, setCarneBovina)}
-                        {renderInput("Carne Suina (Pedaços)", carneSuina, setCarneSuina)}
-                        {renderInput("Frango (Pedaços)", frango, setFrango)}
-                        {renderInput("Peixe (Pedaços)", peixe, setPeixe)}
-                        {renderInput("Leite (Litros)", leite, setLeite)}
-                        {renderInput("Ovos (Unidade)", ovos, setOvos)}
-                        {renderInput("Leguminosas (Porções)", leguminosas, setLeguminosas)}
-                        {renderInput("Frutas e Vegetais (Porções)", frutas, setFrutas)}
-                        {renderInput("Cereais Integrais (Porções)", cereais, setCereais)}
+                        {renderInput("Carne bovina", getPorcao("Carne bovina"), (v) => updatePorcao("Carne bovina", v))}
+                        {renderInput("Carne suína", getPorcao("Carne suína"), (v) => updatePorcao("Carne suína", v))}
+                        {renderInput("Frango", getPorcao("Frango"), (v) => updatePorcao("Frango", v))}
+                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
+                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
+                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
+                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
+                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
+                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
                     </>
                 );
         }
@@ -88,8 +86,11 @@ export default function DietaRotina() {
         <View>
             <Text>{label}</Text>
             <TextInput
-            value={value}
-            onChangeText={onChange}/>
+                value={value}
+                onChangeText={onChange}
+                keyboardType="numeric"
+                style={{ borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5 }}
+            />
         </View>
     )
 
@@ -109,17 +110,20 @@ export default function DietaRotina() {
                     value={dieta}
                     placeholder="Selecione a dieta"
                     onChange={(item) => {
-                        setDieta(item.value);
+                        updateRotina('dieta', item.value);
+                        updateRotina('porcoes', {}); // Limpa porções ao mudar de dieta
                     }}
                     style={{padding: 10, borderColor: '#000', borderWidth: 1}}
                 />
             </View>
 
 
+            {dieta && (
                 <ScrollView>
-                    <Text>Porções consumidas por semana:</Text>
+                    <Text style={{ marginTop: 10 }}>Porções consumidas por semana:</Text>
                     {renderCampos()}
                 </ScrollView>
+            )}
 
         </ScrollView>
     );

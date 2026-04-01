@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
@@ -13,25 +13,71 @@ import TransporteRotina from "./criarRotina/veiculosRotina";
 import EnergiaRotina from "./criarRotina/energiaRotina";
 import ViagemRotina from "./criarRotina/viagensRotina";
 import { BotaoConcluir } from "@/src/components/botaoConcluir";
-
+import api from "../../services/api";
 
 export default function TelaCriarRotina() {
-
     const [index, setIndex] = useState(1);
+    
+    // Estado unificado da rotina
+    const [rotinaData, setRotinaData] = useState({
+        nome: '',
+        dieta: '',
+        porcoes: {},
+        quantidadePessoas: '',
+        tipoGas: '',
+        tipoBotijao: '',
+        tempoDuracaoGas: '',
+        usaVeiculo: '',
+        possuiVeiculo: '',
+        combustivel: '',
+        litrosCombustivel: '',
+        kmEletrico: '',
+        transportesPublicos: [] as string[],
+        kmTransportes: {}
+    });
+
+    // Função para atualizar campos específicos da rotina
+    const updateRotina = (key: string, value: any) => {
+        setRotinaData(prev => ({ ...prev, [key]: value }));
+    };
 
     const handleAvancar = () => {
-        if (index <4){
+        if (index === 1 && !rotinaData.nome) {
+            Alert.alert("Aviso", "Por favor, informe o nome da rotina.");
+            return;
+        }
+        if (index < 4){
             setIndex(index+1)
         } 
     }
+    
     const handleVoltar = () => {
-        if (index>1){
+        if (index > 1){
             setIndex(index-1)
         }
     }
 
-
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+    const handleSalvar = async () => {
+        try {
+            // Formatar os dados antes de enviar
+            const payload = {
+                ...rotinaData,
+                quantidadePessoas: Number(rotinaData.quantidadePessoas) || 1,
+                tempoDuracaoGas: Number(rotinaData.tempoDuracaoGas) || 0,
+                litrosCombustivel: Number(rotinaData.litrosCombustivel) || 0,
+                kmEletrico: Number(rotinaData.kmEletrico) || 0,
+            };
+
+            const response = await api.post('/rotinas', payload);
+            Alert.alert("Sucesso", "Rotina criada com sucesso!");
+            navigation.goBack(); // Volta para a tela de listar rotinas
+        } catch (error: any) {
+            console.error("Erro ao criar rotina:", error.response?.data || error.message);
+            Alert.alert("Erro", "Falha ao criar rotina: " + (error.response?.data?.message || error.message));
+        }
+    };
 
   return (
     <View>
@@ -55,10 +101,10 @@ export default function TelaCriarRotina() {
 
         <View>
             <View>
-                {index === 1 && <NomeRotina/>}
-                {index === 2 && <DietaRotina/>}
-                {index === 3 && <Gas/>}
-                {index === 4 && <TransporteRotina/>}
+                {index === 1 && <NomeRotina rotinaData={rotinaData} updateRotina={updateRotina} />}
+                {index === 2 && <DietaRotina rotinaData={rotinaData} updateRotina={updateRotina} />}
+                {index === 3 && <Gas rotinaData={rotinaData} updateRotina={updateRotina} />}
+                {index === 4 && <TransporteRotina rotinaData={rotinaData} updateRotina={updateRotina} />}
             </View>
         </View>
 
@@ -70,10 +116,9 @@ export default function TelaCriarRotina() {
             <BotaoAvancar onPress={handleAvancar}/>
             )}
             {index===4 && (
-            <BotaoConcluir onPress={()=>console.log("Salvar")}/>
+            <BotaoConcluir onPress={handleSalvar}/>
             )}
         </View>
-
 
     </View>
   );

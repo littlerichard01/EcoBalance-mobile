@@ -1,36 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import TransportePublico from "./transporte";
 import TransporteSeletor from "./transporte";
 
-export default function TransporteRotina() {
-    const [veiculo, setVeiculo] = useState('');
-    const [tipoTransporte, setTipoTransporte] = useState('');
-    const [combustivel, setCombustivel] = useState('');
-    const [litrosCombutivel, setLitrosCombustivel] = useState('');
+export default function TransporteRotina({ rotinaData, updateRotina }: any) {
+    const veiculo = rotinaData.usaVeiculo;
+    const tipoTransporte = rotinaData.possuiVeiculo;
+    const tipoCombustivel = rotinaData.combustivel;
+    const litrosCombutivel = rotinaData.litrosCombustivel?.toString() || '';
+    const kmRotina = rotinaData.kmTransportes || {};
 
-    const [kmRotina, setKmRotina] = useState<Record<string, number>>({});
-    const [tipoCombustivel, setTipoCombustivel]=useState<string | null>(null);
     const value = [
-        {label: 'Gasolina', value:'gasolina'},
-        {label: 'Diesel', value:'diesel'},
-        {label: 'Etanol', value:'etanol'},
-        {label: 'Eletrico', value:'gasolina'},
-        {label: 'Não usa combustivel', value:'n/a'},
-    ]
+        {label: 'Gasolina', value:'Gasolina'},
+        {label: 'Diesel', value:'Diesel'},
+        {label: 'Etanol', value:'Etanol'},
+        {label: 'Elétrico', value:'Elétrico'},
+        {label: 'Não usa combustivel', value:'Nenhum'},
+    ];
 
     const toggleRotina = (nome: string, sel: boolean) => {
-    setKmRotina(prev => {
-        const novo = { ...prev };
-        if (sel){
-            novo[nome]=0;
+        const novoKmRotina = { ...kmRotina };
+        let novosTransportes = [...(rotinaData.transportesPublicos || [])];
+
+        if (sel) {
+            novoKmRotina[nome] = 0;
+            if (!novosTransportes.includes(nome)) {
+                novosTransportes.push(nome);
+            }
         } else {
-            delete novo[nome]
+            delete novoKmRotina[nome];
+            novosTransportes = novosTransportes.filter(t => t !== nome);
         }
-        return novo;
-    });
-};
+        
+        updateRotina('kmTransportes', novoKmRotina);
+        updateRotina('transportesPublicos', novosTransportes);
+    };
 
     return (
         <ScrollView >
@@ -39,7 +43,7 @@ export default function TransporteRotina() {
             <View>
                 <Text>Você utiliza algum tipo de veículo durante a semana?</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
-                    {['Sim', 'Não'].map((tipo) => (
+                    {['sim', 'nao'].map((tipo) => (
                         <TouchableOpacity
                             key={tipo}
                             style={{
@@ -48,11 +52,13 @@ export default function TransporteRotina() {
                                 borderRadius: 5
                             }}
                             onPress={() => {
-                                setVeiculo(tipo);
-                                if (tipo === 'Não') {
-                                    setTipoTransporte('');
-                                    setCombustivel('');
-                                    setLitrosCombustivel('');
+                                updateRotina('usaVeiculo', tipo);
+                                if (tipo === 'nao') {
+                                    updateRotina('possuiVeiculo', '');
+                                    updateRotina('combustivel', '');
+                                    updateRotina('litrosCombustivel', '');
+                                    updateRotina('kmTransportes', {});
+                                    updateRotina('transportesPublicos', []);
                                 }
                             }}>
                             <Text>
@@ -63,22 +69,25 @@ export default function TransporteRotina() {
                 </View>
             </View>
 
-            {veiculo === 'Sim' && (
+            {veiculo === 'sim' && (
                 <View>
                     <Text>Você possui um veículo próprio ou utiliza transporte público?</Text>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
-                        {['Próprio', 'Publico'].map((tipo) => (
+                        {[
+                            { label: 'Próprio', value: 'proprio' },
+                            { label: 'Público', value: 'publico' }
+                        ].map((tipo) => (
                             <TouchableOpacity
-                                key={tipo}
-                                onPress={() => setTipoTransporte(tipo)}
+                                key={tipo.value}
+                                onPress={() => updateRotina('possuiVeiculo', tipo.value)}
                                 style={{
                                 padding: 10,
-                                backgroundColor: tipoTransporte === tipo ? '#2e7d32' : '#ccc',
+                                backgroundColor: tipoTransporte === tipo.value ? '#2e7d32' : '#ccc',
                                 borderRadius: 5
                             }}
                             >
                                 <Text>
-                                    {tipo}
+                                    {tipo.label}
                                 </Text>
                             </TouchableOpacity>
                         ))}
@@ -86,40 +95,57 @@ export default function TransporteRotina() {
                 </View>
             )}
 
-            {tipoTransporte === 'Próprio' && (
+            {tipoTransporte === 'proprio' && (
                 <View>
-                        <Text>Litros abastecidos por mês:</Text>
-                        <TextInput
-                            value={litrosCombutivel}
-                            onChangeText={setLitrosCombustivel}
-                            keyboardType="numeric"
-                            style={{borderWidth: 1, borderColor: '#bbb'}}
+                    <View>
+                        <Text>Tipo de Combustível:</Text>
+                        <Dropdown
+                            data={value}
+                            search
+                            labelField="label"
+                            valueField="value"
+                            value={tipoCombustivel}
+                            placeholder="Selecione o tipo de Combustível"
+                            onChange={(item) => {
+                                updateRotina('combustivel', item.value);
+                            }}
+                            style={{padding: 10, borderColor: '#000', borderWidth: 1, marginBottom: 10}}
                         />
+                    </View>
+                    {tipoCombustivel === 'Elétrico' ? (
+                        <View>
+                            <Text>Km rodados por mês no carro elétrico:</Text>
+                            <TextInput
+                                value={rotinaData.kmEletrico?.toString() || ''}
+                                onChangeText={(text) => updateRotina('kmEletrico', text)}
+                                keyboardType="numeric"
+                                style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                            />
+                        </View>
+                    ) : (
+                        <View>
+                            <Text>Litros abastecidos por mês:</Text>
+                            <TextInput
+                                value={litrosCombutivel}
+                                onChangeText={(text) => updateRotina('litrosCombustivel', text)}
+                                keyboardType="numeric"
+                                style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                            />
+                        </View>
+                    )}
                 </View>
             )}
-            {tipoTransporte === 'Publico' && (
+            {tipoTransporte === 'publico' && (
                 <View>
                     <View>
-                    <Text>Tipo de Combustível:</Text>
-                    <Dropdown
-                        data={value}
-                        search
-                        labelField="label"
-                        valueField="value"
-                        value={tipoCombustivel}
-                        placeholder="Selecione o tipo de Combustivel"
-                        onChange={(item) => {
-                            setTipoCombustivel(item.value);
-                        }}
-                        style={{padding: 10, borderColor: '#000', borderWidth: 1}}
-                    />
-                    </View>
-                    <View>
                         <TransporteSeletor 
-                        lista={['Onibus', 'Onibus Eletrico', 'Metrô', 'Trem', 'Carro(app)', 'Moto(app)']} 
+                        lista={['Ônibus', 'Ônibus elétrico', 'Metrô', 'Trem', 'Carro (app)', 'Motocicleta (app)']} 
                         dados={kmRotina}
                         onToggle={toggleRotina}
-                        onUpdateKm={(nome, val) => setKmRotina(prev => ({...prev, [nome]: parseFloat(val) || 0}))}
+                        onUpdateKm={(nome, val) => {
+                            const novoKmRotina = { ...kmRotina, [nome]: parseFloat(val) || 0 };
+                            updateRotina('kmTransportes', novoKmRotina);
+                        }}
                     />
                     </View>
                 </View>
