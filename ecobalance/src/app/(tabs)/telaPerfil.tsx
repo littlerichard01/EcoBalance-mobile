@@ -4,6 +4,9 @@ import { BotaoSair } from "../../components/botaoSair";
 import { stylesTelaPerfil } from "../../styles/telaPerfilStyles";
 import { fonte } from "@/src/styles/fontes";
 import { stylesGeral } from "@/src/styles/stylesGeral";
+import { Switch, StyleSheet } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 
 export default function TelaPerfil() {
@@ -11,6 +14,10 @@ export default function TelaPerfil() {
     const [usuario, setUsuario] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [isEnabledEmail, setIsEnabledEmail] = useState(false);
+    const [isEnabledApp, setIsEnabledApp] = useState(false);
+    const toggleSwitchEmail = () => setIsEnabledEmail(previousState => !previousState);
+    const toggleSwitchApp = () => setIsEnabledApp(previousState => !previousState);
 
 
     return (
@@ -41,7 +48,17 @@ export default function TelaPerfil() {
             />
             <View>
                 <Text>Notificações por e-mail?</Text>
+                <Switch
+                    onValueChange={toggleSwitchEmail}
+                    value={isEnabledEmail}
+                />
+            </View>
+            <View>
                 <Text>Notificações do aplicativo?</Text>
+                <Switch
+                    onValueChange={toggleSwitchApp}
+                    value={isEnabledApp}
+                />
             </View>
             <BotaoSair onPress={console.log} />
 
