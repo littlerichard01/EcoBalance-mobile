@@ -1,0 +1,167 @@
+EXEMPLOS PARA TESTAR NO SWAGGER - ECOBALANCE
+
+IMPORTANTE
+- A rota padrão GET / não está incluída neste arquivo.
+- Para rotas protegidas, clique em "Authorize" no Swagger e informe:
+  Bearer SEU_TOKEN_AQUI
+- A melhor sequência de teste é:
+  1. POST /api/auth/register
+  2. POST /api/auth/login
+  3. Copiar o token
+  4. Authorize no Swagger
+  5. Testar as demais rotas
+
+==================================================
+AUTH
+==================================================
+
+1) POST /api/auth/register
+Exemplo de body:
+{
+  "nome": "Usuário Exemplo",
+  "email": "usuario_exemplo@teste.com",
+  "senha": "123456"
+}
+
+2) POST /api/auth/login
+Exemplo de body:
+{
+  "email": "usuario_exemplo@teste.com",
+  "senha": "123456"
+}
+
+==================================================
+ROTINAS
+==================================================
+
+3) POST /api/rotinas
+Exemplo de body:
+{
+  "nome": "Rotina Base Exemplo",
+  "dieta": "onivora",
+  "porcoes": {
+    "Carne bovina": 2,
+    "Frango": 3,
+    "Frutas e vegetais": 7
+  },
+  "quantidadePessoas": 2,
+  "tipoGas": "botijao",
+  "tipoBotijao": "P13",
+  "tempoDuracaoGas": 2,
+  "usaVeiculo": "sim",
+  "possuiVeiculo": "proprio",
+  "combustivel": "Gasolina",
+  "litrosCombustivel": 80,
+  "kmEletrico": 0,
+  "transportesPublicos": [],
+  "kmTransportes": {}
+}
+
+4) GET /api/rotinas/usuario/lista
+Não precisa body.
+Só precisa estar autenticado com Bearer Token.
+
+5) GET /api/rotinas/{id}
+Exemplo de parâmetro:
+id = ID_DA_ROTINA_AQUI
+
+6) PUT /api/rotinas/{id}
+Exemplo de parâmetro:
+id = ID_DA_ROTINA_AQUI
+
+Exemplo de body:
+{
+  "nome": "Rotina Atualizada",
+  "dieta": "vegetariana",
+  "porcoes": {
+    "Leite": 2,
+    "Ovos": 6,
+    "Leguminosas": 8,
+    "Frutas e vegetais": 10,
+    "Cereais integrais": 6
+  },
+  "quantidadePessoas": 3,
+  "tipoGas": "encanado",
+  "tipoBotijao": "",
+  "tempoDuracaoGas": 0,
+  "usaVeiculo": "sim",
+  "possuiVeiculo": "publico",
+  "combustivel": "",
+  "litrosCombustivel": 0,
+  "kmEletrico": 0,
+  "transportesPublicos": [
+    "Ônibus",
+    "Metrô"
+  ],
+  "kmTransportes": {
+    "Ônibus": 25,
+    "Metrô": 15
+  }
+}
+
+7) DELETE /api/rotinas/{id}
+Exemplo de parâmetro:
+id = ID_DA_ROTINA_AQUI
+
+==================================================
+TESTES / CÁLCULOS
+==================================================
+
+8) POST /api/testes
+Exemplo de body:
+{
+  "usuario": "ID_DO_USUARIO_AQUI",
+  "rotina": "ID_DA_ROTINA_AQUI",
+  "energiaEletrica": {
+    "kwh": 180
+  },
+  "gasNatural": {
+    "m3": 12
+  },
+  "viagem": {
+    "fezViagem": true,
+    "internacional": false,
+    "veiculos": [
+      {
+        "tipo": "Carro",
+        "km": 120
+      },
+      {
+        "tipo": "Ônibus",
+        "km": 40
+      }
+    ]
+  }
+}
+
+9) GET /api/testes/usuario/{usuarioId}
+Exemplo de parâmetro:
+usuarioId = ID_DO_USUARIO_AQUI
+
+==================================================
+USUÁRIO
+==================================================
+
+10) PUT /api/users/me
+Exemplo de body:
+{
+  "nome": "Usuário Atualizado",
+  "email": "usuario_atualizado@teste.com",
+  "senha": "654321",
+  "receberLembretes": true,
+  "avatarSelecionado": 2,
+  "idioma": "pt"
+}
+
+11) DELETE /api/users/me
+Não precisa body.
+Só precisa estar autenticado com Bearer Token.
+
+==================================================
+OBSERVAÇÕES
+==================================================
+
+- Nas rotas com {id}, substitua pelo valor real retornado ao criar ou listar um registro.
+- Se você deletar o usuário em DELETE /api/users/me, o login daquele usuário deixa de funcionar.
+- Para testar /api/testes, crie antes um usuário e uma rotina.
+- Se quiser evitar conflito de e-mail ao repetir testes, troque o e-mail do register a cada execução.

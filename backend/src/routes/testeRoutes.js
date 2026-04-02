@@ -20,6 +20,8 @@ router.use(authMiddleware);
  *     summary: Cria e calcula um novo teste mensal
  *     description: Junta os dados fixos de uma rotina existente com os gastos variáveis do mês (energia, viagens).
  *     tags: [Testes]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -75,6 +77,8 @@ router.post('/', testeController.createTeste);
  *   get:
  *     summary: Lista o histórico de testes (cálculos) de um usuário
  *     tags: [Testes]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: usuarioId

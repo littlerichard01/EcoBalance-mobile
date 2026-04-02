@@ -15,6 +15,15 @@ const options = {
       version: '1.0.0',
       description: 'Documentação da API do backend EcoBalance',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
     servers: [
       {
         url: serverUrl,

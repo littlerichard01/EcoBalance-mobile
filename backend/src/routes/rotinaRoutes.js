@@ -20,6 +20,8 @@ router.use(authMiddleware);
  *     summary: Cria uma nova rotina
  *     description: Envia os dados brutos do usuário. O cálculo das emissões é feito automaticamente pelo servidor.
  *     tags: [Rotinas]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -81,6 +83,8 @@ router.post('/', rotinaController.createRotina);
  *     summary: Lista todas as rotinas do usuário logado
  *     description: Utiliza o Token JWT do cabeçalho para identificar o usuário, não precisando passar o ID na URL.
  *     tags: [Rotinas]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de rotinas do usuário.
@@ -93,6 +97,8 @@ router.get('/usuario/lista', rotinaController.getRotinasByUsuario);
  *   get:
  *     summary: Busca uma rotina específica pelo ID
  *     tags: [Rotinas]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -115,6 +121,8 @@ router.get('/:id', rotinaController.getRotinaById);
  *     summary: Atualiza uma rotina existente
  *     description: Ao atualizar os dados, o servidor recalcula as emissões automaticamente.
  *     tags: [Rotinas]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -182,6 +190,8 @@ router.put('/:id', rotinaController.updateRotina);
  *   delete:
  *     summary: Deleta uma rotina
  *     tags: [Rotinas]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

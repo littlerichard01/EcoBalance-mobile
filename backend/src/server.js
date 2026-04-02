@@ -46,11 +46,13 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 const rotinaRoutes = require('./routes/rotinaRoutes');
 const testeRoutes = require('./routes/testeRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Rotas da API
 app.use('/api/auth', authRoutes);
 app.use('/api/rotinas', rotinaRoutes);
 app.use('/api/testes', testeRoutes);
+app.use('/api/users', userRoutes);
 
 async function startServer() {
   await connectDB();
