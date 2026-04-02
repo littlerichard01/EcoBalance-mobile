@@ -20,8 +20,10 @@ const styles = StyleSheet.create({
     BotaoCriarConta: {
         backgroundColor: '#659E43',
         alignSelf: 'center',
+        paddingTop: 12,
         padding: 10,
-        width: '50%',
+        height: 50,
+        width: '70%',
         borderRadius: 50,
         alignItems: 'center',
         marginTop: 20,

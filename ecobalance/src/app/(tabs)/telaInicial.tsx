@@ -7,6 +7,7 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/stackNavigator";
 import { stylesTelaInicial } from "../../styles/telaInicialStyles";
 import { fonte } from "../../styles/fontes";
+import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "TelaCadastro">;
 
@@ -36,8 +37,10 @@ export default function TelaInicial() {
     <View style={stylesTelaInicial.container}>
 
       {/* Carrossel de imagens */}
-      <Text style={fonte.titulo}>{slides[index].texto}</Text>
-      <Text style={fonte.subtitulo}>{slides[index].texto2}</Text>
+      <Text style={[fonte.titulo, {fontWeight: 900, color: coresBase.verdeEscuro, fontSize: 35, marginTop: -20}]}>{slides[index].texto}</Text>
+      <Text style={[stylesGeral.subTituloPagina,
+        {textAlign: 'center', paddingHorizontal: 25, marginBottom: 30, fontSize: 18, fontWeight: '500'}
+      ]}>{slides[index].texto2}</Text>
 
       <Image source={slides[index].imagem} style={stylesTelaInicial.imagem} />
        

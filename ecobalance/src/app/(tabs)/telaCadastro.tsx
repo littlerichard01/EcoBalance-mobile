@@ -6,7 +6,7 @@ import { stylesTelaCadastro } from "../../styles/telaCadastroStyles";
 import { useNavigation } from "@react-navigation/core";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
-import { stylesGeral } from "@/src/styles/stylesGeral";
+import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import { fonte } from "@/src/styles/fontes";
 import api from "../../services/api";
 
@@ -53,8 +53,8 @@ export default function TelaCadastro() {
     return (
         <View style={stylesTelaCadastro.telaCadastroContainer}>
             <Image source={require("../../assets/Logo.png")} style={styles.logo} />
-            <Text style={fonte.titulo}>Seja Bem Vindo</Text>
-            <Text style={fonte.subtitulo}>Faça seu Cadastro</Text>
+            <Text style={[fonte.titulo, {fontWeight: 900, color: coresBase.verdeEscuro}]}>Seja Bem Vindo</Text>
+            <Text style={stylesGeral.subTituloPagina}>Faça seu Cadastro</Text>
 
             <Text>Nome</Text>
             <TextInput

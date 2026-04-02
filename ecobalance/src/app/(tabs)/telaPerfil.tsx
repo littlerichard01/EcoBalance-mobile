@@ -38,28 +38,28 @@ export default function TelaPerfil() {
     };
 
     return (
-        <View style={stylesTelaPerfil.container}>
+        <View style={stylesGeral.telaInteira}>
             <View>
             <Image source={require("../../assets/engrenagem.png")}/>
-            <Text style={fonte.titulo}>Perfil</Text>
+            <Text style={[stylesGeral.tituloPagina, {marginTop: 20, marginBottom: 20}]}>Perfil</Text>
             </View>
             <Text>Nome</Text>
             <TextInput
-                style={stylesGeral.textInput}
+                style={[stylesGeral.input2, {marginBottom: 30, marginTop: 5}]}
                 placeholder="Digite seu nome"
                 value={usuario}
                 onChangeText={setUsuario}
             />
             <Text>E-mail</Text>
             <TextInput
-                style={stylesGeral.textInput}
+                style={[stylesGeral.input2, {marginBottom: 30, marginTop: 5}]}
                 placeholder="Digite seu e-mail"
                 value={email}
                 onChangeText={setEmail}
             />
             <Text>Senha</Text>
             <TextInput
-                style={stylesGeral.textInput}
+                style={[stylesGeral.input2, {marginBottom: 30, marginTop: 5}]}
                 placeholder="Digite sua senha"
                 value={senha}
                 onChangeText={setSenha}
