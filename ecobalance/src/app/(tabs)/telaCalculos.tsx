@@ -15,6 +15,7 @@ import { BotaoConcluir } from "@/src/components/botaoConcluir";
 import { stylesGeral } from "@/src/styles/stylesGeral";
 import { stylesTelaCriarRotina } from "@/src/styles/telasCriarRotinaStyle";
 import { BotaoVoltar } from "@/src/components/botaoVoltarRotina";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function TelaCalculos() {
 
@@ -37,7 +38,7 @@ export default function TelaCalculos() {
 
     return (
         
-        <View style={stylesGeral.telaInteira}>
+        <ScrollView style={stylesGeral.telaInteira}>
             <View>
         <View style={stylesTelaCriarRotina.cabecario}>
             <Text style={[stylesGeral.tituloPagina, {fontSize:32}]}>Calcule sua Pegada</Text>
@@ -67,7 +68,7 @@ export default function TelaCalculos() {
                         </View>
                     </View>
             
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 90}}>
             {index > 1 && (
                 <BotaoVoltar onPress={handleVoltar}/>
             )}
@@ -78,6 +79,6 @@ export default function TelaCalculos() {
             <BotaoConcluir onPress={()=>navigation.navigate("ResultadoCalculo")}/>
             )}
                     </View>
-        </View>
+        </ScrollView>
     );
 }

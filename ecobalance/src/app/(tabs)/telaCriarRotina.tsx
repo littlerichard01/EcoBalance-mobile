@@ -17,6 +17,7 @@ import api from "../../services/api";
 import { stylesGeral } from "@/src/styles/stylesGeral";
 import { stylesTelaCriarRotina } from "@/src/styles/telasCriarRotinaStyle";
 import { BotaoVoltar } from "@/src/components/botaoVoltarRotina";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function TelaCriarRotina() {
     const [index, setIndex] = useState(1);
@@ -83,7 +84,7 @@ export default function TelaCriarRotina() {
     };
 
   return (
-    <View style={stylesGeral.telaInteira}>
+    <ScrollView style={stylesGeral.telaInteira}>
         <View>
         <View style={stylesTelaCriarRotina.cabecario}>
         <BotaoRetornar onPress={() => navigation.goBack()}/>
@@ -113,7 +114,7 @@ export default function TelaCriarRotina() {
             </View>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 120}}>
             {index > 1 && (
             <BotaoVoltar onPress={handleVoltar}/>
             )}
@@ -125,6 +126,6 @@ export default function TelaCriarRotina() {
             )}
         </View>
 
-    </View>
+    </ScrollView>
   );
 }

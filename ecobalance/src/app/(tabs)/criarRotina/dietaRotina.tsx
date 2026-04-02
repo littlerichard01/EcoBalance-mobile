@@ -96,7 +96,7 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
     )
 
     return (
-        <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+        <View>
             <View>
                 <Text style={stylesGeral.subTituloPagina}>Fale um pouco sobre sua dieta quando segue essa rotina</Text>
             </View>
@@ -126,6 +126,6 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
                 </ScrollView>
             )}
 
-        </ScrollView>
+        </View>
     );
 }

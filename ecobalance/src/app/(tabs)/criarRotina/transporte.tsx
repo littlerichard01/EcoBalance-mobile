@@ -26,8 +26,8 @@ export default function TransporteSeletor({
         const estaAtivo = item in dados;
 
         return (
-          <View key={item} style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flexDirection: 'row', gap:10, paddingVertical: 5}}>
+          <View key={item} style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}>
+            <View style={{flexDirection: 'row', gap:20, paddingVertical: 5}}>
               <Checkbox
                 value={estaAtivo}
                 onValueChange={(val) => onToggle(item, val)}
@@ -43,7 +43,7 @@ export default function TransporteSeletor({
                   placeholder="0"
                   onChangeText={(txt) => onUpdateKm(item, txt)}
                   value={dados[item]?.toString() || "0"}
-                  style={{ borderWidth: 1, borderColor: '#bbb', padding: 2, marginVertical: 2, width: 50, textAlign: 'center', borderRadius: 10, height: 40}}
+                  style={{ borderWidth: 1, borderColor: '#bbb', padding: 2, marginVertical: 2, width: 70, textAlign: 'center', borderRadius: 10, height: 40}}
                 />
               </View>
             )}
