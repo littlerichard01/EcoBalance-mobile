@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
+import { coresBase } from "../styles/stylesGeral";
 
 // Definindo o que o componente pode receber
 interface ProgressBarProps {
@@ -12,9 +13,9 @@ interface ProgressBarProps {
 
 export function ProgressBar({ 
   progresso, 
-  corFundo = "#E0E0E0", 
-  corPreenchimento = "#659E43", 
-  altura = 8,
+  corFundo = coresBase.cinza, 
+  corPreenchimento = coresBase.verdeMedio, 
+  altura = 12,
   style 
 }: ProgressBarProps) {
   
@@ -38,6 +39,7 @@ export function ProgressBar({
 
 const styles = StyleSheet.create({
   container: {
+    marginBottom: 20,
     width: "100%",
     borderRadius: 10,
     overflow: "hidden", // Importante para manter o arredondamento no preenchimento

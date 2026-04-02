@@ -14,6 +14,9 @@ import EnergiaRotina from "./criarRotina/energiaRotina";
 import ViagemRotina from "./criarRotina/viagensRotina";
 import { BotaoConcluir } from "@/src/components/botaoConcluir";
 import api from "../../services/api";
+import { stylesGeral } from "@/src/styles/stylesGeral";
+import { stylesTelaCriarRotina } from "@/src/styles/telasCriarRotinaStyle";
+import { BotaoVoltar } from "@/src/components/botaoVoltarRotina";
 
 export default function TelaCriarRotina() {
     const [index, setIndex] = useState(1);
@@ -80,21 +83,23 @@ export default function TelaCriarRotina() {
     };
 
   return (
-    <View>
-        <BotaoRetornar onPress={() => navigation.goBack()}/>
+    <View style={stylesGeral.telaInteira}>
         <View>
-            <Text>Crie sua Rotina</Text>
-            <View>
-                <View>
-                    <Text>Passo {index}: </Text>
-                    <Text>
+        <View style={stylesTelaCriarRotina.cabecario}>
+        <BotaoRetornar onPress={() => navigation.goBack()}/>
+            <Text style={stylesGeral.tituloPagina}>Crie sua Rotina</Text>
+        </View>
+            <View style={stylesGeral.containerPassosTexto}>
+                <View style={{flexDirection: 'row' }}>
+                    <Text style={stylesGeral.passosTexto}>Passo {index}: </Text>
+                    <Text style={stylesGeral.passosTexto}>
                         {index === 1 && "Nome"}
                         {index === 2 && "Dieta"}
                         {index === 3 && "Gás"}
                         {index === 4 && "Transporte"}
                     </Text>
                 </View>
-                <Text>{index}/4</Text>
+                <Text style={stylesGeral.passosTexto}>{index}/4</Text>
             </View>
             <ProgressBar progresso={index / 4} />
         </View>
@@ -108,9 +113,9 @@ export default function TelaCriarRotina() {
             </View>
         </View>
 
-        <View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             {index > 1 && (
-                <BotaoRetornar onPress={handleVoltar}/>
+            <BotaoVoltar onPress={handleVoltar}/>
             )}
             {index<4 && (
             <BotaoAvancar onPress={handleAvancar}/>

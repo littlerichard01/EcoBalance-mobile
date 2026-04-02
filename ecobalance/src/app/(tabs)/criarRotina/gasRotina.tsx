@@ -1,3 +1,4 @@
+import { stylesGeral } from "@/src/styles/stylesGeral";
 import React from "react";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 
@@ -9,19 +10,19 @@ export default function Gas({ rotinaData, updateRotina }: any) {
 
     return (
         <View>
-            <Text>Fale brevemente sobre seu consumo de gás</Text>
+            <Text style={stylesGeral.subTituloPagina}>Fale brevemente sobre seu consumo de gás</Text>
 
-            <View>
-                <Text>Quantas pessoas vivem na sua casa?</Text>
+            <View style={{marginTop: 20}}>
+                <Text style={stylesGeral.inputText}>Quantas pessoas vivem na sua casa?</Text>
                 <TextInput
                     value={pessoas}
                     onChangeText={(text) => updateRotina('quantidadePessoas', text)}
                     keyboardType="numeric"
-                    style={{ borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5 }}
+                    style={stylesGeral.input2}
                 />
             </View>
 
-            <View>
+            <View style={{marginTop: 15}}>
                 <Text>Você utiliza gás encanado ou compra botijões?</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
                     {['encanado', 'botijao'].map((tipo) => (
@@ -42,7 +43,7 @@ export default function Gas({ rotinaData, updateRotina }: any) {
 
             {tipoGas === 'encanado' && (
                 <View>
-                    <Text style={{ marginTop: 10, fontStyle: 'italic', color: '#555' }}>
+                    <Text style={[stylesGeral.inputText, {marginTop: 10}]}>
                         Como você utiliza gás encanado, o valor consumido em m³ será solicitado a cada vez que você realizar um cálculo (Teste de Usuário) mensal.
                     </Text>
                 </View>    
@@ -51,7 +52,7 @@ export default function Gas({ rotinaData, updateRotina }: any) {
             {tipoGas === 'botijao' && (
                 <View>
                     <View>
-                        <Text>Qual tipo de botijão?</Text>
+                        <Text  style={[stylesGeral.inputText, {marginTop: 10}]}>Qual tipo de botijão?</Text>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
                             {[
                                 { label: 'Comum - P13', value: 'P13' },
@@ -74,12 +75,12 @@ export default function Gas({ rotinaData, updateRotina }: any) {
                     </View>
 
                     <View>
-                        <Text>Quanto tempo dura o gás que você compra? (meses)</Text>
+                        <Text style={[stylesGeral.inputText, {marginBottom: 15}]}>Quanto tempo dura o gás que você compra? (meses)</Text>
                         <TextInput 
                             value={tempoBotijao}
                             onChangeText={(text) => updateRotina('tempoDuracaoGas', text)}
                             keyboardType="numeric"
-                            style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                            style={stylesGeral.input2}
                         />
                     </View>        
                 </View>

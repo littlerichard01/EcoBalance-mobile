@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import TransporteSeletor from "./transporte";
+import { stylesGeral } from "@/src/styles/stylesGeral";
 
 export default function TransporteRotina({ rotinaData, updateRotina }: any) {
     const veiculo = rotinaData.usaVeiculo;
@@ -38,18 +39,18 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
 
     return (
         <ScrollView >
-            <Text>Agora nos conte sobre os veículos que utiliza</Text>
+            <Text style={stylesGeral.subTituloPagina}>Agora nos conte sobre os veículos que utiliza</Text>
 
             <View>
-                <Text>Você utiliza algum tipo de veículo durante a semana?</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
+                <Text style={stylesGeral.inputText}>Você utiliza algum tipo de veículo durante a semana?</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20, marginTop: 10 }}>
                     {['sim', 'nao'].map((tipo) => (
                         <TouchableOpacity
                             key={tipo}
                             style={{
                                 padding: 10,
                                 backgroundColor: veiculo === tipo ? '#2e7d32' : '#ccc',
-                                borderRadius: 5
+                                borderRadius: 5,
                             }}
                             onPress={() => {
                                 updateRotina('usaVeiculo', tipo);
@@ -61,7 +62,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                                     updateRotina('transportesPublicos', []);
                                 }
                             }}>
-                            <Text>
+                            <Text  style={{ color: 'white', fontSize: 14 }}>
                                 {tipo.toUpperCase()}
                             </Text>
                         </TouchableOpacity>
@@ -72,7 +73,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
             {veiculo === 'sim' && (
                 <View>
                     <Text>Você possui um veículo próprio ou utiliza transporte público?</Text>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20 }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20, marginTop: 10 }}>
                         {[
                             { label: 'Próprio', value: 'proprio' },
                             { label: 'Público', value: 'publico' }
@@ -86,7 +87,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                                 borderRadius: 5
                             }}
                             >
-                                <Text>
+                                <Text style={{ color: 'white', fontSize: 14 }}>
                                     {tipo.label}
                                 </Text>
                             </TouchableOpacity>
@@ -98,7 +99,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
             {tipoTransporte === 'proprio' && (
                 <View>
                     <View>
-                        <Text>Tipo de Combustível:</Text>
+                        <Text style={stylesGeral.inputText}>Tipo de Combustível:</Text>
                         <Dropdown
                             data={value}
                             search
@@ -109,27 +110,27 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                             onChange={(item) => {
                                 updateRotina('combustivel', item.value);
                             }}
-                            style={{padding: 10, borderColor: '#000', borderWidth: 1, marginBottom: 10}}
+                            style={stylesGeral.input2}
                         />
                     </View>
                     {tipoCombustivel === 'Elétrico' ? (
                         <View>
-                            <Text>Km rodados por mês no carro elétrico:</Text>
+                            <Text style={stylesGeral.inputText}>Km rodados por mês no carro elétrico:</Text>
                             <TextInput
                                 value={rotinaData.kmEletrico?.toString() || ''}
                                 onChangeText={(text) => updateRotina('kmEletrico', text)}
                                 keyboardType="numeric"
-                                style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                                style={stylesGeral.input2}
                             />
                         </View>
                     ) : (
                         <View>
-                            <Text>Litros abastecidos por mês:</Text>
+                            <Text style={stylesGeral.inputText}>Litros abastecidos por mês:</Text>
                             <TextInput
                                 value={litrosCombutivel}
                                 onChangeText={(text) => updateRotina('litrosCombustivel', text)}
                                 keyboardType="numeric"
-                                style={{borderWidth: 1, borderColor: '#bbb', padding: 5, marginVertical: 5}}
+                                style={stylesGeral.input2}
                             />
                         </View>
                     )}
@@ -138,6 +139,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
             {tipoTransporte === 'publico' && (
                 <View>
                     <View>
+                        <Text style={[stylesGeral.inputText, {marginBottom: 20}]}>Selecione os transportes que utiliza e o KM rodados no ultimo mês</Text>
                         <TransporteSeletor 
                         lista={['Ônibus', 'Ônibus elétrico', 'Metrô', 'Trem', 'Carro (app)', 'Motocicleta (app)']} 
                         dados={kmRotina}

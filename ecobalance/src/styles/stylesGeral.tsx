@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { BotaoAvancar } from "../components/botaoAvancar";
 
 
 export const coresBase = {
@@ -38,13 +39,13 @@ export const stylesGeral = StyleSheet.create({
 
     telaInteira: {
         paddingHorizontal: 28,
-        paddingTop: 60,
+        paddingTop: 70,
         paddingBottom: 20,
         flex: 1,
-        backgroundColor: coresBase.verdeClaro
+        backgroundColor: coresBase.verdeClaro,
     },
-
     tituloPagina: {
+        marginTop: -6,
         fontSize: 35,
         fontFamily: "Jost-Bold",
         fontWeight: 900,
@@ -55,7 +56,7 @@ export const stylesGeral = StyleSheet.create({
         fontFamily: "Jost-bold",
         fontSize: 18,
         marginTop: 15,
-        marginLeft: 15,
+        marginLeft: 5,
         color: coresBase.verdeMedio,
         fontWeight: 600,
         marginBottom: 20
@@ -77,6 +78,34 @@ export const stylesGeral = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'Jost-Bold',
         fontSize: 20
+    },
+    passosTexto:{
+        fontFamily: "Jost-bold",
+        fontSize: 15,
+        marginTop: 20,
+        color: coresBase.verdeMedio,
+        fontWeight: 600,
+    },
+    containerPassosTexto: {
+        paddingHorizontal: 2,
+        marginBottom: 10,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+
+    },
+
+    inputText: {
+        fontFamily: "Jost-bold",
+        fontSize: 15,
+    },
+
+    input2: {
+        height: 50,
+        borderRadius: 10,
+        padding: 15,
+        marginBottom: 15,
+        boxShadow: '6px 6px 12px 0px #659E43',
     }
 
 });

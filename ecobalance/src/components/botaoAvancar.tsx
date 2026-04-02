@@ -11,7 +11,7 @@ export function BotaoAvancar({ onPress }: BotaoAvancarProps) {
             style={styles.botaoAvancar}
             onPress={onPress}
         >
-            <Text style={styles.texto}>Avançar</Text>
+            <Text style={styles.texto}>Avançar   ❯ </Text>
         </TouchableOpacity>
     );
 }
@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#659E43',
         alignSelf: 'center',
         padding: 10,
-        width: '50%',
+        height: 50,
+        width: '40%',
         borderRadius: 50,
         alignItems: 'center',
         marginTop: 20,

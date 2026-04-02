@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Checkbox from "expo-checkbox";
+import { stylesGeral } from "@/src/styles/stylesGeral";
 
 interface TransporteSeletorProps {
   lista: string[]; // Ex: ['Carro', 'Moto']
@@ -25,24 +26,24 @@ export default function TransporteSeletor({
         const estaAtivo = item in dados;
 
         return (
-          <View key={item}>
-            <View>
+          <View key={item} style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row', gap:10, paddingVertical: 5}}>
               <Checkbox
                 value={estaAtivo}
                 onValueChange={(val) => onToggle(item, val)}
                 color={estaAtivo ? "#2e7d32" : undefined}
               />
-              <Text>{item}</Text>
+              <Text style={[stylesGeral.inputText]}>{item}</Text>
             </View>
 
             {estaAtivo && (
-              <View>
-                <Text>Distância em KM:</Text>
+              <View style={{flexDirection: 'row'}}>
                 <TextInput
                   keyboardType="numeric"
                   placeholder="0"
                   onChangeText={(txt) => onUpdateKm(item, txt)}
                   value={dados[item]?.toString() || "0"}
+                  style={{ borderWidth: 1, borderColor: '#bbb', padding: 2, marginVertical: 2, width: 50, textAlign: 'center', borderRadius: 10, height: 40}}
                 />
               </View>
             )}

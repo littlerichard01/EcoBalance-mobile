@@ -1,3 +1,4 @@
+import { stylesGeral } from "@/src/styles/stylesGeral";
 import React from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -84,7 +85,7 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
 
     const renderInput = (label: string, value: string, onChange: (t:string) => void) =>(        
         <View>
-            <Text>{label}</Text>
+            <Text style={[stylesGeral.inputText, {marginTop: 10}]}>{label}</Text>
             <TextInput
                 value={value}
                 onChangeText={onChange}
@@ -97,11 +98,11 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
     return (
         <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
             <View>
-                <Text>Fale um pouco sobre sua dieta quando segue essa rotina</Text>
+                <Text style={stylesGeral.subTituloPagina}>Fale um pouco sobre sua dieta quando segue essa rotina</Text>
             </View>
 
             <View>
-                <Text>Selecione sua dieta:</Text>
+                <Text style={stylesGeral.inputText}>Selecione sua dieta:</Text>
                 <Dropdown
                     data={tipoDieta}
                     search
@@ -113,14 +114,14 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
                         updateRotina('dieta', item.value);
                         updateRotina('porcoes', {}); // Limpa porções ao mudar de dieta
                     }}
-                    style={{padding: 10, borderColor: '#000', borderWidth: 1}}
+                    style={[stylesGeral.input2, {marginTop: 10}]}
                 />
             </View>
 
 
             {dieta && (
                 <ScrollView>
-                    <Text style={{ marginTop: 10 }}>Porções consumidas por semana:</Text>
+                    <Text style={[stylesGeral.inputText, {marginTop: 20}]}>Porções consumidas por semana:</Text>
                     {renderCampos()}
                 </ScrollView>
             )}
