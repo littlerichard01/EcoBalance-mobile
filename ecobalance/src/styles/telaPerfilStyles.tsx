@@ -16,17 +16,17 @@ export const stylesTelaPerfil = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",   
         alignItems: "center",
-        marginBottom: 20,
+        
     },
     notificacoesApp: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: 20,
+        
     },
     avatarContainer: {
         alignItems: "center",
-        marginBottom: 30,
+        marginBottom: -20,
     },
     avatar: {
         borderColor: "#659E43",
@@ -35,5 +35,8 @@ export const stylesTelaPerfil = StyleSheet.create({
         width: 150,
         height: 150,
     },
+    inputEmailContainer: {
+
+    },   
 
 });

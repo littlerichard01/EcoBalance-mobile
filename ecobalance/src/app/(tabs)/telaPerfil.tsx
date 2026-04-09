@@ -46,7 +46,7 @@ export default function TelaPerfil() {
             <View style={stylesTelaPerfil.avatarContainer}>
                 <Image source={require("../../assets/avatar.png")} style={stylesTelaPerfil.avatar} />
                 <TouchableOpacity>
-                    <Text  style={fonte.subtitulo}>Mudar foto</Text>
+                    <Text style={fonte.subtitulo}>Mudar foto</Text>
                 </TouchableOpacity>
             </View>
             <Text>Nome</Text>
@@ -57,12 +57,16 @@ export default function TelaPerfil() {
                 onChangeText={setUsuario}
             />
             <Text>E-mail</Text>
-            <TextInput
-                style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
-                placeholder="Digite seu e-mail"
-                value={email}
-                onChangeText={setEmail}
-            />
+            <View style={stylesTelaPerfil.inputEmailContainer}>
+
+                <TextInput
+                    style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
+                    placeholder="Digite seu e-mail"
+                    value={email}
+                    onChangeText={setEmail}
+                />
+
+            </View>
             <Text>Senha</Text>
             <TextInput
                 style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
@@ -72,14 +76,14 @@ export default function TelaPerfil() {
                 secureTextEntry
             />
             <View style={stylesTelaPerfil.notificacoesEmail}>
-                <Text>Notificações por e-mail?</Text>
+                <Text style={fonte.subtitulo}>Notificações por e-mail?</Text>
                 <Switch
                     onValueChange={toggleSwitchEmail}
                     value={isEnabledEmail}
                 />
             </View>
             <View style={stylesTelaPerfil.notificacoesApp}>
-                <Text>Notificações do aplicativo?</Text>
+                <Text style={fonte.subtitulo}>Notificações do aplicativo?</Text>
                 <Switch
                     onValueChange={toggleSwitchApp}
                     value={isEnabledApp}
