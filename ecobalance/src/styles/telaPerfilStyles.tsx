@@ -7,4 +7,20 @@ export const stylesTelaPerfil = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#fff",
     },
+    cabecalho: {
+        flexDirection: "row",
+        alignItems: "center",   
+},
+    notificacoesEmail: {
+        flexDirection: "row",
+        justifyContent: "space-between",   
+        alignItems: "center",
+        marginBottom: 20,
+    },
+    notificacoesApp: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 20,
+    },
 });

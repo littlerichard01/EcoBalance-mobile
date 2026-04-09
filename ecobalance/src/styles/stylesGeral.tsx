@@ -29,12 +29,15 @@ export const stylesGeral = StyleSheet.create({
     },
 
     textInput : {
+        
         height: 40,
         borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 100,
         marginBottom: 15,
+        marginTop: 5,
+        boxShadow: '6px 6px 12px 0px #659E43',
     },
 
     telaInteira: {

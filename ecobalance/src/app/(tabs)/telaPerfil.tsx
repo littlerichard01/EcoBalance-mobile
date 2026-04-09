@@ -39,7 +39,7 @@ export default function TelaPerfil() {
 
     return (
         <View style={stylesGeral.telaInteira}>
-            <View>
+            <View style={stylesTelaPerfil.cabecalho}>
             <Image source={require("../../assets/engrenagem.png")}/>
             <Text style={[stylesGeral.tituloPagina, {marginTop: 20, marginBottom: 20}]}>Perfil</Text>
             </View>
@@ -65,14 +65,14 @@ export default function TelaPerfil() {
                 onChangeText={setSenha}
                 secureTextEntry
             />
-            <View>
+            <View style={stylesTelaPerfil.notificacoesEmail}>
                 <Text>Notificações por e-mail?</Text>
                 <Switch
                     onValueChange={toggleSwitchEmail}
                     value={isEnabledEmail}
                 />
             </View>
-            <View>
+            <View style={stylesTelaPerfil.notificacoesApp}>
                 <Text>Notificações do aplicativo?</Text>
                 <Switch
                     onValueChange={toggleSwitchApp}
