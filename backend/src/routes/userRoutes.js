@@ -67,6 +67,9 @@ router.get('/me/conquistas', userController.getMinhasConquistas);
  *               receberLembretes:
  *                 type: boolean
  *                 example: true
+ *               receberNotificacoesApp:
+ *                 type: boolean
+ *                 example: false
  *               avatarSelecionado:
  *                 type: number
  *                 example: 2

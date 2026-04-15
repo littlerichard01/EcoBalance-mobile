@@ -4,13 +4,14 @@ const User = require('../models/User');
 const Rotina = require('../models/Rotina');
 const TesteDeUsuario = require('../models/TesteDeUsuario');
 
-const camposPermitidos = ['nome', 'email', 'senha', 'receberLembretes', 'avatarSelecionado', 'idioma'];
+const camposPermitidos = ['nome', 'email', 'senha', 'receberLembretes', 'receberNotificacoesApp', 'avatarSelecionado', 'idioma'];
 
 const sanitizeUser = (user) => ({
     _id: user._id,
     nome: user.nome,
     email: user.email,
     receberLembretes: user.receberLembretes,
+    receberNotificacoesApp: user.receberNotificacoesApp,
     avatarSelecionado: user.avatarSelecionado,
     conquistas: user.conquistas,
     idioma: user.idioma,

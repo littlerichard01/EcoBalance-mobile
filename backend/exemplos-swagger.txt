@@ -156,6 +156,7 @@ Exemplo de body:
   "email": "usuario_atualizado@teste.com",
   "senha": "654321",
   "receberLembretes": true,
+  "receberNotificacoesApp": false,
   "avatarSelecionado": 2,
   "idioma": "pt"
 }

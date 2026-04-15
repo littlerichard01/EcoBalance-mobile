@@ -17,10 +17,12 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(senha, 10);
 
     //Cria usuário
+    const avatarSelecionado = Math.floor(Math.random() * 9) + 1;
     const user = new User({
       nome,
       email,
-      senha: hashedPassword
+      senha: hashedPassword,
+      avatarSelecionado
     });
 
     await user.save();

@@ -1,10 +1,27 @@
 import { stylesGeral } from "@/src/styles/stylesGeral";
-import React from "react";
-import { View, Text, FlatList } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, FlatList, Image, Alert } from "react-native";
 import { StylesTelaHome } from "../../styles/telaHomeStyles";
-import { Image } from "react-native";
 import { fonte } from "@/src/styles/fontes";
-import Conquistas from "./telaConquistas";
+import api from "@/src/services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../navigation/stackNavigator";
+
+type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
+
+const avatarSources = [
+    require("../../assets/avatars/avatar1.png"),
+    require("../../assets/avatars/avatar2.png"),
+    require("../../assets/avatars/avatar3.png"),
+    require("../../assets/avatars/avatar4.png"),
+    require("../../assets/avatars/avatar5.png"),
+    require("../../assets/avatars/avatar6.png"),
+    require("../../assets/avatars/avatar7.png"),
+    require("../../assets/avatars/avatar8.png"),
+    require("../../assets/avatars/avatar9.png"),
+];
 
 const conquistas = [
     {
@@ -45,15 +62,43 @@ const niveis = [
     }
 ];
 
-export default function home() {
+export default function TelaHome() {
+    const navigation = useNavigation<NavigationProp>();
+    const [nomeUsuario, setNomeUsuario] = useState('');
+    const [avatarSelecionado, setAvatarSelecionado] = useState(1);
+
+    const carregarUsuario = useCallback(async () => {
+        try {
+            const response = await api.get('/users/me');
+            setNomeUsuario(response.data?.usuario?.nome ?? '');
+            setAvatarSelecionado(Number(response.data?.usuario?.avatarSelecionado) || 1);
+        } catch (error: any) {
+            const status = error?.response?.status;
+
+            if (status === 401) {
+                await AsyncStorage.removeItem('@EcoBalance:token');
+                navigation.navigate("TelaCarregamento" as never);
+                return;
+            }
+
+            Alert.alert("Erro", "Não foi possível carregar seus dados.");
+        }
+    }, [navigation]);
+
+    useFocusEffect(
+        useCallback(() => {
+            void carregarUsuario();
+        }, [carregarUsuario])
+    );
+
     return (
         <View style={stylesGeral.telaInteira}>
             <View>
                 <Text>Bem vindo ao EcoBalance</Text>
             </View>
             <View style={StylesTelaHome.cabecalho}>
-                <Image source={require("../../assets/avatar.png")} style={StylesTelaHome.avatar} />
-                <Text style={fonte.titulo}>Olá, usuário!</Text>
+                <Image source={avatarSources[(avatarSelecionado || 1) - 1]} style={StylesTelaHome.avatar} />
+                <Text style={fonte.titulo}>{nomeUsuario ? `Olá, ${nomeUsuario}!` : "Olá!"}</Text>
             </View>
             <FlatList
 

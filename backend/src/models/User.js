@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   senha: { type: String, required: true },
   receberLembretes: { type: Boolean, default: false },
+  receberNotificacoesApp: { type: Boolean, default: false },
   avatarSelecionado: { type: Number, default: 1 },
   conquistas: { type: [ConquistaSchema], default: [] },
   resetToken: { type: String },
