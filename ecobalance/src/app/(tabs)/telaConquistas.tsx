@@ -125,11 +125,14 @@ export default function Conquistas() {
 
 
     <View style={[StylesTelaConquistas.cabecalho, {marginTop: 50}]}>
+      
+        <View style={[stylesTelaRotina.rotinaIconContainer, {width: 50, height: 50  }]}>
         <Image
-          source={require("../../assets/trofeu.png")}
-          style={stylesTelaRotina.rotinaIcon}
+          source={require("../../assets/icongrafico.png")}
+          style={[stylesTelaRotina.rotinaIcon, {width: 35, height: 35}]}
         />
-        <Text style={[stylesGeral.tituloPagina, { marginLeft: 20 }]}>
+        </View>
+        <Text style={[stylesGeral.tituloPagina]}>
           Gráficos:
         </Text>
       </View>

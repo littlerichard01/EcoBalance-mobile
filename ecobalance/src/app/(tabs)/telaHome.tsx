@@ -225,6 +225,8 @@ export default function TelaHome() {
           </View>
         </View>
       </View>
+
+      <Text style={[StylesTelaHome.subtitulo, {marginTop: 40}]}>Gráficos: </Text>
     </ScrollView>
   );
 }

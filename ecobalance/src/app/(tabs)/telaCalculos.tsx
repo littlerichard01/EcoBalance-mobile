@@ -143,11 +143,11 @@ export default function TelaCalculos() {
                     <View style={stylesTelaRotina.cabecarioTela}>
                         <View style={stylesTelaRotina.rotinaIconContainer}>
                         <Image 
-                            source={require('../../assets/calculo_icon.png')}
-                            style={stylesTelaRotina.rotinaIcon}
+                            source={require('../../assets/icongrafico.png')}
+                            style={[stylesTelaRotina.rotinaIcon, {width: 40, height: 40}]}
                         />
                         </View>
-                        <Text style={stylesGeral.tituloPagina}>Rotinas</Text>
+                        <Text style={stylesGeral.tituloPagina}>Calcule: </Text>
                     </View>
             <View style={stylesGeral.containerPassosTexto}>
                 <View style={{flexDirection: 'row' }}>
