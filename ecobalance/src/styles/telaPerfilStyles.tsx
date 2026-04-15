@@ -77,6 +77,7 @@ export const stylesTelaPerfil = StyleSheet.create({
     },
     modalCloseButton: {
         marginTop: 8,
+        marginBottom: 30,
         paddingVertical: 12,
         borderRadius: 10,
         backgroundColor: "#659E43",

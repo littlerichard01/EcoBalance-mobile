@@ -10,14 +10,14 @@ export const stylesTelaRotina = StyleSheet.create({
     rotinaIcon:{
         width: 50, 
         height: 50,
-        tintColor: coresBase.verdeEscuro,
+        tintColor: coresBase.verdeMedio,
     },
     rotinaIconContainer: {
         width: 60, 
         height: 60,
         borderRadius: 35,
         borderWidth: 3,
-        borderColor: coresBase.verdeEscuro,
+        borderColor: coresBase.verdeMedio,
         alignItems: 'center',    
         justifyContent: 'center', 
         backgroundColor: 'transparent',

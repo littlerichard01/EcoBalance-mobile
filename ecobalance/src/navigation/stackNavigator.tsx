@@ -30,7 +30,7 @@ export type RootStackParamList = {
     TelaCriarRotina: undefined;
     TelaCalculos: undefined;
     TelaPerfil: undefined;
-    TelaConquistas: undefined;
+    Conquistas: undefined;
     TelaEsqueciSenha: undefined;
     TelaRecuperacaoSenha: undefined;
     ResultadoCalculo: {
@@ -42,7 +42,7 @@ export type RootStackParamList = {
             emissaoVeiculos: number;
         };
     };
-    MainTabs: undefined;
+    MainTabs: { screen: keyof RootStackParamList } | undefined;
 
 };
 
@@ -55,16 +55,18 @@ export default function MyStack() {
             <Stack.Screen name="TelaLogin" component={TelaLogin} />
             <Stack.Screen name="TelaCadastro" component={TelaCadastro} />
             <Stack.Screen name="TelaCarregamento" component={TelaCarregamento} />
-            <Stack.Screen name="TelaCalculos" component={TelaCalculos} />
-            <Stack.Screen name="TelaConquistas" component={TelaConquistas} />
             <Stack.Screen name="TelaEsqueciSenha" component={TelaEsqueciSenha} />
             <Stack.Screen name="TelaRecuperacaoSenha" component={TelaRecuperacaoSenha} />
+
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Screen name="TelaCalculos" component={TelaCalculos} />
+            <Stack.Screen name="Conquistas" component={TelaConquistas} />
              <Stack.Screen name="TelaRotina" component={TelaRotina} />
             <Stack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
             <Stack.Screen name="ResultadoCalculo" component={ResultadoCalculo} />
 
             {/* A tela "MainTabs" é onde o Tab Navigator é renderizado, permitindo a navegação entre as abas principais do aplicativo */}
-            <Stack.Screen name="MainTabs" component={TabNavigator} />
+        
 
 
         </Stack.Navigator>

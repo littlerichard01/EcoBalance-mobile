@@ -35,11 +35,24 @@ export const StylesTelaHome = StyleSheet.create({
         fontStyle: "italic"
     },
     trofeuIcon: {
-        width: 52, 
-        height: 52, 
+        width: 60, 
+        height: 60, 
         marginRight: 20,
         alignSelf: "center",
-        marginVertical: 5
+    },
+    iconeTexto: { 
+        fontWeight: "500",
+        marginRight: 20, 
+        marginTop: 10, 
+        fontSize: 13 
+    },
+    subtitulo: {
+        fontSize: 24,
+        fontFamily: "Jost-Bold",
+        fontWeight: 900,
+        color: coresBase.verdeMedio,
+        marginTop: 30, 
+        marginBottom: 15
     }
 });
 

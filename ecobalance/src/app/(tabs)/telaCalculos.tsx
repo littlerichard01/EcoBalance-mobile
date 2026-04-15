@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
@@ -16,6 +16,7 @@ import { stylesTelaCriarRotina } from "@/src/styles/telasCriarRotinaStyle";
 import { BotaoVoltar } from "@/src/components/botaoVoltarRotina";
 import { ScrollView } from "react-native-gesture-handler";
 import api from "@/src/services/api";
+import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 
 export default function TelaCalculos() {
         const [index, setIndex] = useState(1);
@@ -139,9 +140,15 @@ export default function TelaCalculos() {
         
         <ScrollView style={stylesGeral.telaInteira}>
             <View>
-        <View style={stylesTelaCriarRotina.cabecario}>
-            <Text style={[stylesGeral.tituloPagina, {marginTop: 20}]}>Calcule</Text>
-        </View>
+                    <View style={stylesTelaRotina.cabecarioTela}>
+                        <View style={stylesTelaRotina.rotinaIconContainer}>
+                        <Image 
+                            source={require('../../assets/calculo_icon.png')}
+                            style={stylesTelaRotina.rotinaIcon}
+                        />
+                        </View>
+                        <Text style={stylesGeral.tituloPagina}>Rotinas</Text>
+                    </View>
             <View style={stylesGeral.containerPassosTexto}>
                 <View style={{flexDirection: 'row' }}>
                     <Text style={stylesGeral.passosTexto}>Passo {index}: </Text>

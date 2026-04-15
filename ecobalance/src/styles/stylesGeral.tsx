@@ -53,7 +53,7 @@ export const stylesGeral = StyleSheet.create({
         fontSize: 35,
         fontFamily: "Jost-Bold",
         fontWeight: 900,
-        color: coresBase.verdeEscuro
+        color: coresBase.verdeMedio
     },
 
     subTituloPagina: {
