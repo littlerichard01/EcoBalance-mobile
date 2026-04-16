@@ -40,6 +40,16 @@ export type RootStackParamList = {
             emissaoAlimentos: number;
             emissaoGas: number;
             emissaoVeiculos: number;
+            energiaEletrica?: {
+                emissao?: number;
+            };
+            viagem?: {
+                veiculos?: {
+                    emissao?: number;
+                }[];
+            };
+            dataRealizacao?: string;
+            createdAt?: string;
         };
     };
     MainTabs: { screen: keyof RootStackParamList } | undefined;

@@ -137,6 +137,10 @@ Exemplo de body:
 Exemplo de parâmetro:
 usuarioId = ID_DO_USUARIO_AQUI
 
+9.1) GET /api/testes/me
+Não precisa body.
+Só precisa estar autenticado com Bearer Token.
+
 ==================================================
 USUÁRIO
 ==================================================

@@ -70,6 +70,20 @@ router.post('/', testeController.createTeste);
 
 /**
  * @swagger
+ * /api/testes/me:
+ *   get:
+ *     summary: Lista o histórico de testes (cálculos) do usuário autenticado
+ *     tags: [Testes]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Histórico de testes retornado.
+ */
+router.get('/me', testeController.getMyTestes);
+
+/**
+ * @swagger
  * /api/testes/usuario/{usuarioId}:
  *   get:
  *     summary: Lista o histórico de testes (cálculos) de um usuário

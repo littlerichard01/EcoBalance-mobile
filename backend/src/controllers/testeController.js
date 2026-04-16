@@ -147,3 +147,25 @@ exports.getTestesByUsuario = async (req, res) => {
         res.status(500).json({ message: 'Erro interno ao buscar histórico', error: error.message });
     }
 };
+
+/**
+ * Buscar todos os testes do usuário autenticado (Histórico)
+ */
+exports.getMyTestes = async (req, res) => {
+    try {
+        const usuarioId = req.authUserId;
+
+        if (!usuarioId) {
+            return res.status(401).json({ message: 'Usuário não autenticado.' });
+        }
+
+        const testes = await TesteDeUsuario.find({ usuario: usuarioId })
+            .populate('rotina', 'nome')
+            .sort({ dataRealizacao: -1 });
+
+        return res.status(200).json(testes);
+    } catch (error) {
+        console.error('Erro ao buscar histórico de testes do usuário autenticado:', error);
+        return res.status(500).json({ message: 'Erro interno ao buscar histórico', error: error.message });
+    }
+};
