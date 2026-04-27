@@ -22,7 +22,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=SUA_ORG_AQUI
-            -Dsonar.projectKey=SUA_PROJECT_KEY_AQUI
+            -Dsonar.organization=Lucas Aguena Gatto
+            -Dsonar.projectKey=lucas-gatto
             -Dsonar.sources=backend,ecobalance
             -Dsonar.host.url=https://sonarcloud.io
