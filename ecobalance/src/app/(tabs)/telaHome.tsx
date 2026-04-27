@@ -116,8 +116,8 @@ export default function TelaHome() {
 
   useFocusEffect(
     useCallback(() => {
-      void carregarUsuario();
-      void carregarTestes();
+      carregarUsuario();
+      carregarTestes();
     }, [carregarUsuario, carregarTestes]),
   );
   const [scrollOffset, setScrollOffset] = useState(0);

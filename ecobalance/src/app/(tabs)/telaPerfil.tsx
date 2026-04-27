@@ -73,7 +73,7 @@ export default function TelaPerfil() {
 
   useFocusEffect(
     useCallback(() => {
-      void carregarPerfil();
+      carregarPerfil();
     }, [carregarPerfil]),
   );
 
@@ -252,7 +252,7 @@ export default function TelaPerfil() {
               {avatarSources.map((source, idx) => (
                 <TouchableOpacity
                   key={idx}
-                  onPress={() => void selecionarAvatar(idx + 1)}
+                  onPress={() => { selecionarAvatar(idx + 1); }}
                   disabled={carregandoPreferencias}
                 >
                   <Image
