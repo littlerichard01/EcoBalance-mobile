@@ -55,6 +55,17 @@ export type RootStackParamList = {
     MainTabs: { screen: keyof RootStackParamList } | undefined;
 
 };
+const CalculoStack = createNativeStackNavigator<RootStackParamList>();
+
+export function CalculoFlow() {
+    return (
+        <CalculoStack.Navigator screenOptions={{ headerShown: false }}>
+            {/* Esta será a tela inicial da aba de cálculos */}
+            <CalculoStack.Screen name="TelaCalculos" component={TelaCalculos} />
+            <CalculoStack.Screen name="ResultadoCalculo" component={ResultadoCalculo} />
+        </CalculoStack.Navigator>
+    );
+}
 
 // Configurando o Stack Navigator
 export default function MyStack() {
@@ -69,11 +80,9 @@ export default function MyStack() {
             <Stack.Screen name="TelaRecuperacaoSenha" component={TelaRecuperacaoSenha} />
 
             <Stack.Screen name="MainTabs" component={TabNavigator} />
-            <Stack.Screen name="TelaCalculos" component={TelaCalculos} />
             <Stack.Screen name="Conquistas" component={TelaConquistas} />
              <Stack.Screen name="TelaRotina" component={TelaRotina} />
             <Stack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
-            <Stack.Screen name="ResultadoCalculo" component={ResultadoCalculo} />
 
             {/* A tela "MainTabs" é onde o Tab Navigator é renderizado, permitindo a navegação entre as abas principais do aplicativo */}
         

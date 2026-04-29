@@ -6,6 +6,7 @@ import TelaCalculos from "../app/(tabs)/telaCalculos";
 import TelaRotina from "../app/(tabs)/telaRotina";
 import { Image } from 'react-native';
 import { coresBase, stylesGeral } from "../styles/stylesGeral";
+import { CalculoFlow } from "./stackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ export function TabNavigator() {
     >
       <Tab.Screen 
   name="Calculos" 
-  component={TelaCalculos} 
+  component={CalculoFlow} 
   options={{
     tabBarIcon: ({ focused }) => (
       <Image

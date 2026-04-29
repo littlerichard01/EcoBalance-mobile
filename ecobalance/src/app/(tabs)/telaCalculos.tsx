@@ -19,173 +19,205 @@ import api from "@/src/services/api";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 
 export default function TelaCalculos() {
-        const [index, setIndex] = useState(1);
-        const [enviando, setEnviando] = useState(false);
-        const [calculoData, setCalculoData] = useState({
-            rotinaId: '',
-            rotinaNome: '',
-            rotinaTipoGas: '',
-            energiaEletrica: {
-                kwh: ''
-            },
-            gasNatural: {
-                m3: ''
-            },
-            viagem: {
-                fezViagem: false,
-                internacional: false,
-                veiculos: [] as { tipo: string; km: number }[]
-            }
-        });
+  const [index, setIndex] = useState(1);
+  const [enviando, setEnviando] = useState(false);
+  const [calculoData, setCalculoData] = useState({
+    rotinaId: "",
+    rotinaNome: "",
+    rotinaTipoGas: "",
+    energiaEletrica: {
+      kwh: "",
+    },
+    gasNatural: {
+      m3: "",
+    },
+    viagem: {
+      fezViagem: false,
+      internacional: false,
+      veiculos: [] as { tipo: string; km: number }[],
+    },
+  });
 
-        const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-        const updateCalculo = (key: string, value: any) => {
-            setCalculoData((prev) => ({ ...prev, [key]: value }));
-        };
+  const updateCalculo = (key: string, value: any) => {
+    setCalculoData((prev) => ({ ...prev, [key]: value }));
+  };
 
-        const totalPassos = calculoData.rotinaTipoGas && calculoData.rotinaTipoGas !== 'encanado' ? 3 : 4;
-        const passoAtual = totalPassos === 3 && index === 4 ? 3 : index;
+  const totalPassos =
+    calculoData.rotinaTipoGas && calculoData.rotinaTipoGas !== "encanado"
+      ? 3
+      : 4;
+  const passoAtual = totalPassos === 3 && index === 4 ? 3 : index;
 
-        const handleAvancar = () => {
-            if (index === 1 && !calculoData.rotinaId) {
-                Alert.alert("Aviso", "Selecione uma rotina para continuar.");
-                return;
-            }
+  const handleAvancar = () => {
+    if (index === 1 && !calculoData.rotinaId) {
+      Alert.alert("Aviso", "Selecione uma rotina para continuar.");
+      return;
+    }
 
-            if (index === 2 && !calculoData.energiaEletrica.kwh) {
-                Alert.alert("Aviso", "Informe o consumo de energia elétrica.");
-                return;
-            }
+    if (index === 2 && !calculoData.energiaEletrica.kwh) {
+      Alert.alert("Aviso", "Informe o consumo de energia elétrica.");
+      return;
+    }
 
-            if (index === 2 && calculoData.rotinaTipoGas !== 'encanado') {
-                setIndex(4);
-                return;
-            }
+    if (index === 2 && calculoData.rotinaTipoGas !== "encanado") {
+      setIndex(4);
+      return;
+    }
 
-            if (index === 3 && !calculoData.gasNatural.m3) {
-                Alert.alert("Aviso", "Informe o consumo de gás natural.");
-                return;
-            }
+    if (index === 3 && !calculoData.gasNatural.m3) {
+      Alert.alert("Aviso", "Informe o consumo de gás natural.");
+      return;
+    }
 
-            if (index < 4){
-                setIndex(index + 1);
-            }
-        };
+    if (index < 4) {
+      setIndex(index + 1);
+    }
+  };
 
-        const handleVoltar = () => {
-            if (index === 4 && totalPassos === 3) {
-                setIndex(2);
-                return;
-            }
+  const handleVoltar = () => {
+    if (index === 4 && totalPassos === 3) {
+      setIndex(2);
+      return;
+    }
 
-            if (index > 1){
-                setIndex(index - 1);
-            }
-        };
+    if (index > 1) {
+      setIndex(index - 1);
+    }
+  };
 
-        const handleConcluir = async () => {
-            if (!calculoData.rotinaId) {
-                Alert.alert("Aviso", "Selecione uma rotina para continuar.");
-                return;
-            }
+  const handleConcluir = async () => {
+    if (!calculoData.rotinaId) {
+      Alert.alert("Aviso", "Selecione uma rotina para continuar.");
+      return;
+    }
 
-            if (!calculoData.energiaEletrica.kwh) {
-                Alert.alert("Aviso", "Informe o consumo de energia elétrica.");
-                return;
-            }
+    if (!calculoData.energiaEletrica.kwh) {
+      Alert.alert("Aviso", "Informe o consumo de energia elétrica.");
+      return;
+    }
 
-            if (calculoData.rotinaTipoGas === 'encanado' && !calculoData.gasNatural.m3) {
-                Alert.alert("Aviso", "Informe o consumo de gás natural.");
-                return;
-            }
+    if (
+      calculoData.rotinaTipoGas === "encanado" &&
+      !calculoData.gasNatural.m3
+    ) {
+      Alert.alert("Aviso", "Informe o consumo de gás natural.");
+      return;
+    }
 
-            setEnviando(true);
+    setEnviando(true);
 
-            // #region Conexão Front-Back (Criar Teste)
-            try {
-                const payload = {
-                    rotina: calculoData.rotinaId,
-                    energiaEletrica: {
-                        kwh: Number(calculoData.energiaEletrica.kwh) || 0
-                    },
-                    gasNatural: {
-                        m3: calculoData.rotinaTipoGas === 'encanado' ? Number(calculoData.gasNatural.m3) || 0 : 0
-                    },
-                    viagem: {
-                        fezViagem: calculoData.viagem.fezViagem,
-                        internacional: calculoData.viagem.internacional,
-                        veiculos: calculoData.viagem.veiculos.map((veiculo) => ({
-                            tipo: veiculo.tipo,
-                            km: Number(veiculo.km) || 0
-                        }))
-                    }
-                };
+    // #region Conexão Front-Back (Criar Teste)
+    try {
+      const payload = {
+        rotina: calculoData.rotinaId,
+        energiaEletrica: {
+          kwh: Number(calculoData.energiaEletrica.kwh) || 0,
+        },
+        gasNatural: {
+          m3:
+            calculoData.rotinaTipoGas === "encanado"
+              ? Number(calculoData.gasNatural.m3) || 0
+              : 0,
+        },
+        viagem: {
+          fezViagem: calculoData.viagem.fezViagem,
+          internacional: calculoData.viagem.internacional,
+          veiculos: calculoData.viagem.veiculos.map((veiculo) => ({
+            tipo: veiculo.tipo,
+            km: Number(veiculo.km) || 0,
+          })),
+        },
+      };
 
-                const response = await api.post('/testes', payload);
+      const response = await api.post("/testes", payload);
 
-                navigation.navigate("ResultadoCalculo", {
-                    teste: response.data.teste,
-                    rotinaNome: calculoData.rotinaNome
-                });
-            } catch (error: any) {
-                Alert.alert("Erro", error.response?.data?.message || "Não foi possível calcular o teste.");
-            } finally {
-                setEnviando(false);
-            }
-            // #endregion
-        };
+      navigation.navigate("ResultadoCalculo", {
+        teste: response.data.teste,
+        rotinaNome: calculoData.rotinaNome,
+      });
+    } catch (error: any) {
+      Alert.alert(
+        "Erro",
+        error.response?.data?.message || "Não foi possível calcular o teste.",
+      );
+    } finally {
+      setEnviando(false);
+    }
+    // #endregion
+  };
 
-    return (
-        
-        <ScrollView style={stylesGeral.telaInteira}>
-            <View>
-                    <View style={stylesTelaRotina.cabecarioTela}>
-                        <View style={stylesTelaRotina.rotinaIconContainer}>
-                        <Image 
-                            source={require('../../assets/icongrafico.png')}
-                            style={[stylesTelaRotina.rotinaIcon, {width: 40, height: 40}]}
-                        />
-                        </View>
-                        <Text style={stylesGeral.tituloPagina}>Calcule: </Text>
-                    </View>
-            <View style={stylesGeral.containerPassosTexto}>
-                <View style={{flexDirection: 'row' }}>
-                    <Text style={stylesGeral.passosTexto}>Passo {index}: </Text>
-                    <Text style={stylesGeral.passosTexto}>
-                        {index === 1 && "Rotina"}
-                        {index === 2 && "Energia Elétrica"}
-                        {index === 3 && "Gás Natural"}
-                        {index === 4 && "Viagens"}
-                    </Text>
-                </View>
-                <Text style={stylesGeral.passosTexto}>{passoAtual}/{totalPassos}</Text>
-            </View>
-            <ProgressBar progresso={passoAtual / totalPassos} />
+  return (
+    <ScrollView style={stylesGeral.telaInteira}>
+      <View>
+        <View style={stylesTelaRotina.cabecarioTela}>
+          <View style={stylesTelaRotina.rotinaIconContainer}>
+            <Image
+              source={require("../../assets/icongrafico.png")}
+              style={[stylesTelaRotina.rotinaIcon, { width: 40, height: 40 }]}
+            />
+          </View>
+          <Text style={stylesGeral.tituloPagina}>Calcule: </Text>
         </View>
+        <View style={stylesGeral.containerPassosTexto}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={stylesGeral.passosTexto}>Passo {index}: </Text>
+            <Text style={stylesGeral.passosTexto}>
+              {index === 1 && "Rotina"}
+              {index === 2 && "Energia Elétrica"}
+              {index === 3 && "Gás Natural"}
+              {index === 4 && "Viagens"}
+            </Text>
+          </View>
+          <Text style={stylesGeral.passosTexto}>
+            {passoAtual}/{totalPassos}
+          </Text>
+        </View>
+        <ProgressBar progresso={passoAtual / totalPassos} />
+      </View>
 
-                    <View>
-                        <View>
-                            {index === 1 && <SelecionaRotina calculoData={calculoData} updateCalculo={updateCalculo} />}
-                            {index === 2 && <EnergiaRotina calculoData={calculoData} updateCalculo={updateCalculo} />}
-                            {index === 3 && <GasEncanado calculoData={calculoData} updateCalculo={updateCalculo} />}
-                            {index === 4 && <ViagemRotina calculoData={calculoData} updateCalculo={updateCalculo} />}
-                
-                        </View>
-                    </View>
-            
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 90}}>
-            {index > 1 && (
-                <BotaoVoltar onPress={handleVoltar}/>
-            )}
-            {index<4 && (
-            <BotaoAvancar onPress={handleAvancar}/>
-            )}
-            {index===4 && (
-            <BotaoConcluir onPress={handleConcluir}/>
-            )}
-            {enviando && <Text>Calculando...</Text>}
-                    </View>
-        </ScrollView>
-    );
+      <View>
+        <View>
+          {index === 1 && (
+            <SelecionaRotina
+              calculoData={calculoData}
+              updateCalculo={updateCalculo}
+            />
+          )}
+          {index === 2 && (
+            <EnergiaRotina
+              calculoData={calculoData}
+              updateCalculo={updateCalculo}
+            />
+          )}
+          {index === 3 && (
+            <GasEncanado
+              calculoData={calculoData}
+              updateCalculo={updateCalculo}
+            />
+          )}
+          {index === 4 && (
+            <ViagemRotina
+              calculoData={calculoData}
+              updateCalculo={updateCalculo}
+            />
+          )}
+        </View>
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 90,
+        }}
+      >
+        {index > 1 && <BotaoVoltar onPress={handleVoltar} />}
+        {index < 4 && <BotaoAvancar onPress={handleAvancar} />}
+        {index === 4 && <BotaoConcluir onPress={handleConcluir} />}
+        {enviando && <Text>Calculando...</Text>}
+      </View>
+    </ScrollView>
+  );
 }

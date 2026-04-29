@@ -4,8 +4,9 @@ import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
 import { styleTelaResultado } from "@/src/styles/telaResultadoStyles";
+import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 
 const MEDIA_GLOBAL = {
   total: 243.19,
@@ -97,9 +98,17 @@ export default function ResultadoCalculo() {
 
   return (
     <ScrollView style={stylesGeral.telaInteira}>
-      <View style={{ flexDirection: "row", marginBottom: 20 }}>
-        <BotaoRetornar onPress={() => navigation.goBack()} />
-      </View>
+      <View>
+              <View style={stylesTelaRotina.cabecarioTela}>
+                <View style={stylesTelaRotina.rotinaIconContainer}>
+                  <Image
+                    source={require("../../assets/icongrafico.png")}
+                    style={[stylesTelaRotina.rotinaIcon, { width: 40, height: 40 }]}
+                  />
+                </View>
+                <Text style={stylesGeral.tituloPagina}>Resultado: </Text>
+              </View>
+              </View>
 
       <View
         style={[
