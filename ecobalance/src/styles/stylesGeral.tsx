@@ -5,7 +5,7 @@ import { BotaoAvancar } from "../components/botaoAvancar";
 export const coresBase = {
     verdeMedio: '#659E43',
     verdeEscuro: '#255f27',
-    verdeClaro: '#f9fff9',
+    verdeClaro: '#fafffa',
     cinza: '#D9D9D9',
     verdeBebe: '#f3faef',
     verdeSaturado: '#2a6906'
