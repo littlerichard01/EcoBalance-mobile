@@ -204,7 +204,7 @@ export default function TelaHome() {
             >
               <Image
                 source={item.imagemNivel}
-                style={{ width: 350, height: 190, marginBottom: 10 }}
+                style={{ width: 360, height: 195, marginBottom: 10 }}
               />
             </View>
           )}
@@ -303,7 +303,7 @@ export default function TelaHome() {
           paddingHorizontal: 10,
         }}
       >
-        <Text style={[StylesTelaHome.subtitulo, { marginTop: 40 }]}>
+        <Text style={[StylesTelaHome.subtitulo, { marginTop: 50 }]}>
           Seu avanço:
         </Text>
       </View>
@@ -425,7 +425,7 @@ export default function TelaHome() {
           paddingHorizontal: 10,
         }}
       >
-        <Text style={[StylesTelaHome.subtitulo, { marginTop: 40 }]}>
+        <Text style={StylesTelaHome.subtitulo}>
           Gráficos:
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Conquistas")}>
@@ -435,10 +435,9 @@ export default function TelaHome() {
               fontSize: 12,
               fontStyle: "italic",
               textDecorationLine: "underline",
-              marginBottom: 0,
             }}
           >
-            Ver todas
+            Ver todos
           </Text>
         </TouchableOpacity>
       </View>
@@ -446,7 +445,6 @@ export default function TelaHome() {
       <FlatList
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 10,
           alignItems: "flex-start",
         }}
         horizontal={true}
@@ -467,9 +465,6 @@ export default function TelaHome() {
 
           return (
             <View style={StylesTelaHome.graficoCard}>
-              <Text style={StylesTelaHome.graficoData}>
-                {formatarDataRealizacao(item?.dataRealizacao || item?.createdAt)}
-              </Text>
               <View style={StylesTelaHome.barrasContainer}>
                 {bars.map((b) => {
                   const height = Math.max(6, (b.value / b.max) * alturaMax);
@@ -489,6 +484,9 @@ export default function TelaHome() {
                   );
                 })}
               </View>
+                         <Text style={StylesTelaHome.graficoData}>
+                {formatarDataRealizacao(item?.dataRealizacao || item?.createdAt)}
+              </Text>
             </View>
           );
         }}
@@ -501,17 +499,16 @@ export default function TelaHome() {
           backgroundColor: coresBase.verdeClaro,
           alignSelf: "center",
           borderRadius: 25,
-          marginTop: 10,
-          marginBottom: 18,
+          marginBottom: 110,
         }}
       >
         <View
           style={{
-            width: "80%",
+            width: "40%",
             height: "100%",
             backgroundColor: coresBase.verdeMedio,
             borderRadius: 25,
-            marginLeft: scrollOffsetGraficos * 70,
+            marginLeft: scrollOffsetGraficos * 200,
           }}
         />
       </View>
