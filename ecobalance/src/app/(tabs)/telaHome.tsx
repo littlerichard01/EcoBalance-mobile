@@ -499,7 +499,7 @@ export default function TelaHome() {
           backgroundColor: coresBase.verdeClaro,
           alignSelf: "center",
           borderRadius: 25,
-          marginBottom: 110,
+          marginBottom: 100,
         }}
       >
         <View

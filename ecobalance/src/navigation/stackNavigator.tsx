@@ -55,6 +55,7 @@ export type RootStackParamList = {
     MainTabs: { screen: keyof RootStackParamList } | undefined;
 
 };
+
 const CalculoStack = createNativeStackNavigator<RootStackParamList>();
 
 export function CalculoFlow() {
@@ -64,6 +65,18 @@ export function CalculoFlow() {
             <CalculoStack.Screen name="TelaCalculos" component={TelaCalculos} />
             <CalculoStack.Screen name="ResultadoCalculo" component={ResultadoCalculo} />
         </CalculoStack.Navigator>
+    );
+}
+
+const RotinaStack = createNativeStackNavigator<RootStackParamList>();
+
+export function RotinaFlow() {
+    return (
+        <RotinaStack.Navigator screenOptions={{ headerShown: false }}>
+            {/* Esta será a tela inicial da aba de rotinas */}
+            <RotinaStack.Screen name="TelaRotina" component={TelaRotina} />
+            <RotinaStack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
+        </RotinaStack.Navigator>
     );
 }
 
@@ -81,8 +94,6 @@ export default function MyStack() {
 
             <Stack.Screen name="MainTabs" component={TabNavigator} />
             <Stack.Screen name="Conquistas" component={TelaConquistas} />
-             <Stack.Screen name="TelaRotina" component={TelaRotina} />
-            <Stack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
 
             {/* A tela "MainTabs" é onde o Tab Navigator é renderizado, permitindo a navegação entre as abas principais do aplicativo */}
         
