@@ -48,7 +48,7 @@ exports.createTeste = async (req, res) => {
         }
 
         // 1. Busca a rotina base para pegar as emissões já calculadas nela
-        const rotinaBase = await Rotina.findOne({ _id: rotinaId, usuarioId });
+        const rotinaBase = await Rotina.findOne({ _id: String(rotinaId), usuarioId: String(usuarioId) });
         if (!rotinaBase) {
             return res.status(404).json({ message: 'Rotina base não encontrada.' });
         }

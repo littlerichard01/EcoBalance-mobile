@@ -87,7 +87,7 @@ export default function Conquistas() {
 
   useFocusEffect(
     useCallback(() => {
-      void carregarTestes();
+      carregarTestes();
     }, [carregarTestes]),
   );
 

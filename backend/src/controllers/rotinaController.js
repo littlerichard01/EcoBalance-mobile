@@ -36,56 +36,60 @@ const FATORES_EMISSAO = {
     eletrico: 0.0891
 };
 
-// Função auxiliar para calcular as emissões da rotina
+// Funções auxiliares para reduzir a complexidade da principal
+const calcularAlimentos = (porcoes) => {
+    if (!porcoes) return 0;
+    return Object.entries(porcoes).reduce((total, [alimento, quantidade]) => {
+        const fator = FATORES_EMISSAO.alimentos[alimento] || 0;
+        return total + (quantidade * fator) * 4;
+    }, 0);
+};
+
+const calcularVeiculosProprios = (dados) => {
+    if (dados.combustivel === 'Elétrico') {
+        return ((dados.kmEletrico || 0) * FATORES_EMISSAO.eletrico) * 4;
+    }
+    const fatorCombustivel = FATORES_EMISSAO.combustiveis[dados.combustivel] || 0;
+    return (dados.litrosCombustivel || 0) * fatorCombustivel;
+};
+
+const calcularTransportePublico = (transportes, kms) => {
+    if (!transportes || !kms) return 0;
+    const total = transportes.reduce((acc, tipo) => {
+        const km = kms[tipo] || 0;
+        const fator = FATORES_EMISSAO.transportes[tipo] || 0;
+        return acc + (km * fator);
+    }, 0);
+    return total * 4;
+};
+
+// Função principal agora simplificada (Complexidade < 15)
 const calcularEmissoesRotina = (dados) => {
-    let alimentosTotal = 0;
     let gasTotal = 0;
     let veiculosTotal = 0;
 
-    // 1. Cálculo de Alimentos (* 4 semanas no mês)
-    if (dados.porcoes) {
-        for (const [alimento, quantidade] of Object.entries(dados.porcoes)) {
-            const fator = FATORES_EMISSAO.alimentos[alimento] || 0;
-            alimentosTotal += (quantidade * fator) * 4;
-        }
-    }
+    const alimentosTotal = calcularAlimentos(dados.porcoes);
 
-    // 2. Cálculo de Gás Botijão
-    // Se for encanado, o valor na rotina é null/0 (será calculado no TesteDeUsuario)
     const usaGasEncanado = dados.tipoGas === 'encanado';
     const qtdPessoas = dados.quantidadePessoas || 1;
-    
     if (!usaGasEncanado && dados.tipoBotijao && dados.tempoDuracaoGas) {
         const fatorGas = FATORES_EMISSAO.gas[dados.tipoBotijao] || 0;
         gasTotal = (fatorGas / dados.tempoDuracaoGas) / qtdPessoas;
     }
 
-    // 3. Cálculo de Veículos
     if (dados.usaVeiculo === 'sim') {
-        if (dados.possuiVeiculo === 'proprio') {
-            if (dados.combustivel === 'Elétrico') {
-                veiculosTotal += ((dados.kmEletrico || 0) * FATORES_EMISSAO.eletrico) * 4;
-            } else {
-                const fatorCombustivel = FATORES_EMISSAO.combustiveis[dados.combustivel] || 0;
-                veiculosTotal += (dados.litrosCombustivel || 0) * fatorCombustivel;
-            }
-        } else if (dados.possuiVeiculo === 'publico') {
-            if (dados.transportesPublicos && dados.kmTransportes) {
-                dados.transportesPublicos.forEach((tipo) => {
-                    const km = dados.kmTransportes[tipo] || 0;
-                    const fator = FATORES_EMISSAO.transportes[tipo] || 0;
-                    veiculosTotal += km * fator;
-                });
-                veiculosTotal = veiculosTotal * 4; // * 4 semanas
-            }
-        }
+        veiculosTotal = dados.possuiVeiculo === 'proprio'
+            ? calcularVeiculosProprios(dados)
+            : calcularTransportePublico(dados.transportesPublicos, dados.kmTransportes);
     }
+
+    const totalGeral = alimentosTotal + gasTotal + veiculosTotal;
 
     return {
         alimentos: parseFloat(alimentosTotal.toFixed(2)),
         gas: parseFloat(gasTotal.toFixed(2)),
         veiculos: parseFloat(veiculosTotal.toFixed(2)),
-        total: parseFloat((alimentosTotal + gasTotal + veiculosTotal).toFixed(2))
+        total: parseFloat(totalGeral.toFixed(2))
     };
 };
 
@@ -133,8 +137,9 @@ exports.createRotina = async (req, res) => {
             return res.status(401).json({ message: 'Usuário não autenticado.' });
         }
 
-        dadosRotina.usuarioId = usuarioId;
-        
+        // Garante o ID do usuário como String
+        dadosRotina.usuarioId = String(usuarioId);
+
         // Formatar valores numéricos que podem vir como string vazia do front
         if (dadosRotina.quantidadePessoas === '') delete dadosRotina.quantidadePessoas;
         if (dadosRotina.tempoDuracaoGas === '') delete dadosRotina.tempoDuracaoGas;
@@ -143,9 +148,24 @@ exports.createRotina = async (req, res) => {
 
         // Realiza o cálculo no Backend!
         const emissoesCalculadas = calcularEmissoesRotina(dadosRotina);
-        
+
+        // Criando o objeto explicitamente com TODOS os campos do Schema
         const novaRotina = new Rotina({
-            ...dadosRotina,
+            usuarioId: dadosRotina.usuarioId,
+            nome: dadosRotina.nome, 
+            dieta: dadosRotina.dieta, 
+            porcoes: dadosRotina.porcoes,
+            quantidadePessoas: dadosRotina.quantidadePessoas, 
+            tipoGas: dadosRotina.tipoGas,
+            tipoBotijao: dadosRotina.tipoBotijao,
+            tempoDuracaoGas: dadosRotina.tempoDuracaoGas,
+            usaVeiculo: dadosRotina.usaVeiculo,
+            possuiVeiculo: dadosRotina.possuiVeiculo,
+            combustivel: dadosRotina.combustivel,
+            kmEletrico: dadosRotina.kmEletrico,
+            litrosCombustivel: dadosRotina.litrosCombustivel,
+            transportesPublicos: dadosRotina.transportesPublicos,
+            kmTransportes: dadosRotina.kmTransportes,
             emissoes: emissoesCalculadas
         });
 
@@ -169,7 +189,7 @@ exports.getRotinasByUsuario = async (req, res) => {
         }
 
         const rotinas = await Rotina.find({ usuarioId }).sort({ dataCriacao: -1 });
-        
+
         res.status(200).json(rotinas);
     } catch (error) {
         console.error('Erro ao buscar rotinas:', error);
@@ -184,11 +204,11 @@ exports.getRotinaById = async (req, res) => {
     try {
         const { id } = req.params;
         const rotina = await Rotina.findById(id);
-        
+
         if (!rotina) {
             return res.status(404).json({ message: 'Rotina não encontrada.' });
         }
-        
+
         res.status(200).json(rotina);
     } catch (error) {
         console.error('Erro ao buscar rotina:', error);
@@ -209,7 +229,7 @@ exports.updateRotina = async (req, res) => {
         dadosAtualizados.emissoes = emissoesCalculadas;
 
         const rotina = await Rotina.findByIdAndUpdate(
-            id, 
+            id,
             { $set: dadosAtualizados },
             { new: true, runValidators: true }
         );
