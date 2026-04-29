@@ -64,7 +64,7 @@ const conquistas = [
 const niveis = [
   {
     id: 1,
-    imagemNivel: require("../../assets/nivel.png"),
+    imagemNivel: require("../../assets/niveis/bannerNivel1.png"),
     desbloqueado: false,
   },
 ];
@@ -204,7 +204,7 @@ export default function TelaHome() {
             >
               <Image
                 source={item.imagemNivel}
-                style={{ width: 360, height: 195, marginBottom: 10 }}
+                style={{ width:"100%", height: 180 }}
               />
             </View>
           )}
