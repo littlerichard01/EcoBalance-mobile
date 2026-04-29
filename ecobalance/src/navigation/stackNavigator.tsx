@@ -53,6 +53,7 @@ export type RootStackParamList = {
         };
     };
     MainTabs: { screen: keyof RootStackParamList } | undefined;
+    
 
 };
 
