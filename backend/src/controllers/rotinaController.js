@@ -137,7 +137,8 @@ exports.createRotina = async (req, res) => {
             return res.status(401).json({ message: 'Usuário não autenticado.' });
         }
 
-        dadosRotina.usuarioId = usuarioId;
+        // Garante o ID do usuário como String
+        dadosRotina.usuarioId = String(usuarioId);
 
         // Formatar valores numéricos que podem vir como string vazia do front
         if (dadosRotina.quantidadePessoas === '') delete dadosRotina.quantidadePessoas;
@@ -148,12 +149,16 @@ exports.createRotina = async (req, res) => {
         // Realiza o cálculo no Backend!
         const emissoesCalculadas = calcularEmissoesRotina(dadosRotina);
 
+        // Criando o objeto explicitamente com TODOS os campos do Schema
         const novaRotina = new Rotina({
             usuarioId: dadosRotina.usuarioId,
+            nome: dadosRotina.nome, 
+            dieta: dadosRotina.dieta, 
+            porcoes: dadosRotina.porcoes,
+            quantidadePessoas: dadosRotina.quantidadePessoas, 
             tipoGas: dadosRotina.tipoGas,
             tipoBotijao: dadosRotina.tipoBotijao,
             tempoDuracaoGas: dadosRotina.tempoDuracaoGas,
-            porcoes: dadosRotina.porcoes,
             usaVeiculo: dadosRotina.usaVeiculo,
             possuiVeiculo: dadosRotina.possuiVeiculo,
             combustivel: dadosRotina.combustivel,
