@@ -21,6 +21,7 @@ import { RootStackParamList } from "../../navigation/stackNavigator";
 import api from "@/src/services/api";
 import { ScrollView } from "react-native-gesture-handler";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
+import { setLembreteTesteHabilitado } from "@/src/services/testeReminderNotifications";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
 
@@ -126,6 +127,7 @@ export default function TelaPerfil() {
       setIsEnabledApp(valor);
       try {
         await atualizarPreferencias({ receberNotificacoesApp: valor });
+        await setLembreteTesteHabilitado(valor);
       } catch {
         setIsEnabledApp(anterior);
         Alert.alert("Erro", "Não foi possível salvar sua preferência.");

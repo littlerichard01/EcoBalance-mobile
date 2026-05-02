@@ -17,6 +17,7 @@ import { BotaoVoltar } from "@/src/components/botaoVoltarRotina";
 import { ScrollView } from "react-native-gesture-handler";
 import api from "@/src/services/api";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
+import { reagendarLembreteTesteSeHabilitado } from "@/src/services/testeReminderNotifications";
 
 export default function TelaCalculos() {
   const [index, setIndex] = useState(1);
@@ -159,6 +160,10 @@ export default function TelaCalculos() {
         .filter((c: any) => Boolean(c?.ativa) && !ativasAntes.has(c?.nome))
         .map((c: any) => c?.nome)
         .filter(Boolean);
+
+      try {
+        await reagendarLembreteTesteSeHabilitado();
+      } catch {}
 
       navigation.navigate("ResultadoCalculo", {
         teste: response.data.teste,

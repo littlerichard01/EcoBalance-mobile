@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./database/connection');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const { startTesteReminderJob } = require('./jobs/testeReminderJob');
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ app.use('/api/users', userRoutes);
 
 async function startServer() {
   await connectDB();
+  startTesteReminderJob();
   app.listen(port, () => {
     const isProduction = process.env.NODE_ENV === 'production';
     const serverUrl = isProduction 
