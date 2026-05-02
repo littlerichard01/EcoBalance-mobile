@@ -1,10 +1,10 @@
 import { BotaoRetornar } from "@/src/components/botaoRetornar";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
 import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { CommonActions, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
-import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { styleTelaResultado } from "@/src/styles/telaResultadoStyles";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 
@@ -20,7 +20,8 @@ const MEDIA_GLOBAL = {
 export default function ResultadoCalculo() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, "ResultadoCalculo">>();
-  const { teste, rotinaNome } = route.params;
+  const { teste, rotinaNome, novasConquistas } = route.params;
+  const [filaConquistas, setFilaConquistas] = useState<string[]>([]);
 
   const emissaoAlimentos = Number(teste?.emissaoAlimentos) || 0;
   const emissaoGas = Number(teste?.emissaoGas) || 0;
@@ -96,19 +97,71 @@ export default function ResultadoCalculo() {
   const totalUsuario = Number(teste?.emissaoTotal || 0);
   const ehSustentavel = totalUsuario < MEDIA_GLOBAL.total;
 
+  const conquistasInfo = useMemo(
+    () => ({
+      primeiro_teste: {
+        titulo: "Primeiro teste",
+        imagem: require("../../assets/conquistas/conquistaPrimeiroTeste.png"),
+      },
+      abaixo_media_global: {
+        titulo: "Abaixo da média global",
+        imagem: require("../../assets/conquistas/conquistaAbaixoMedia.png"),
+      },
+      abaixo_media_global_2: {
+        titulo: "Abaixo da média global II",
+        imagem: require("../../assets/conquistas/conquistaAbaixoMedia2.png"),
+      },
+      melhoria_pessoal: {
+        titulo: "Melhoria pessoal",
+        imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal.png"),
+      },
+      melhoria_pessoal_2: {
+        titulo: "Melhoria pessoal II",
+        imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal2.png"),
+      },
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    if (Array.isArray(novasConquistas) && novasConquistas.length > 0) {
+      setFilaConquistas(novasConquistas.filter(Boolean));
+    }
+  }, [novasConquistas]);
+
+  const conquistaAtual = filaConquistas[0] || null;
+  const modalVisivel = Boolean(conquistaAtual);
+  const infoConquistaAtual = conquistaAtual
+    ? (conquistasInfo as any)[conquistaAtual] || { titulo: conquistaAtual, imagem: null }
+    : null;
+
+  const fecharModal = () => {
+    setFilaConquistas((prev) => prev.slice(1));
+  };
+
+  const reiniciarTeste = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "TelaCalculos" as never }],
+      }),
+    );
+  };
+
   return (
     <ScrollView style={stylesGeral.telaInteira}>
       <View>
-              <View style={stylesTelaRotina.cabecarioTela}>
-                <View style={stylesTelaRotina.rotinaIconContainer}>
-                  <Image
-                    source={require("../../assets/icongrafico.png")}
-                    style={[stylesTelaRotina.rotinaIcon, { width: 40, height: 40 }]}
-                  />
-                </View>
-                <Text style={stylesGeral.tituloPagina}>Resultado: </Text>
-              </View>
-              </View>
+        <View style={stylesTelaRotina.cabecarioTela}>
+          <BotaoRetornar onPress={reiniciarTeste} />
+          <View style={stylesTelaRotina.rotinaIconContainer}>
+            <Image
+              source={require("../../assets/icongrafico.png")}
+              style={[stylesTelaRotina.rotinaIcon, { width: 40, height: 40 }]}
+            />
+          </View>
+          <Text style={stylesGeral.tituloPagina}>Resultado: </Text>
+        </View>
+      </View>
 
       <View
         style={[
@@ -120,33 +173,31 @@ export default function ResultadoCalculo() {
           },
         ]}
       >
-        <Text>
-          {ehSustentavel ? (
-            <View>
-              <Text
-                style={[
-                  styleTelaResultado.feedbackTextoTitulo,
-                  { color: coresBase.verdeMedio },
-                ]}
-              >
-                Parabéns!
-              </Text>
-              <Text style={styleTelaResultado.feedbackTexto}>
-                Sua pegada está abaixo da média global. Continue assim!
-              </Text>
-              <Text style={styleTelaResultado.feedbackEmoji}>🌱</Text>
-            </View>
-          ) : (
-            <View>
-              <Text style={styleTelaResultado.feedbackTextoTitulo}>Cuidado!</Text>
-              <Text style={styleTelaResultado.feedbackTexto}>
-                Sua pegada está acima da média global. Veja algumas de nossas
-                recomendações que podem te ajudar!
-              </Text>
-              <Text style={styleTelaResultado.feedbackEmoji}>⚠️</Text>
-            </View>
-          )}
-        </Text>
+        {ehSustentavel ? (
+          <View>
+            <Text
+              style={[
+                styleTelaResultado.feedbackTextoTitulo,
+                { color: coresBase.verdeMedio },
+              ]}
+            >
+              Parabéns!
+            </Text>
+            <Text style={styleTelaResultado.feedbackTexto}>
+              Sua pegada está abaixo da média global. Continue assim!
+            </Text>
+            <Text style={styleTelaResultado.feedbackEmoji}>🌱</Text>
+          </View>
+        ) : (
+          <View>
+            <Text style={styleTelaResultado.feedbackTextoTitulo}>Cuidado!</Text>
+            <Text style={styleTelaResultado.feedbackTexto}>
+              Sua pegada está acima da média global. Veja algumas de nossas
+              recomendações que podem te ajudar!
+            </Text>
+            <Text style={styleTelaResultado.feedbackEmoji}>⚠️</Text>
+          </View>
+        )}
       </View>
 
       <Text style={styleTelaResultado.secaoTitulo}>Seu teste:</Text>
@@ -167,11 +218,11 @@ export default function ResultadoCalculo() {
           );
         })}
       </View>
-              <View style={styleTelaResultado.totalComparacao}>
-          <Text style={styleTelaResultado.totalComparacaoLabel}>Seu total:  
-            {Number(teste?.emissaoTotal || 0).toFixed(2)} kgCO₂
-          </Text>
-        </View>
+      <View style={styleTelaResultado.totalComparacao}>
+        <Text style={styleTelaResultado.totalComparacaoLabel}>
+          Seu total: {Number(teste?.emissaoTotal || 0).toFixed(2)} kgCO₂
+        </Text>
+      </View>
 
       <Text style={styleTelaResultado.secaoTitulo}>Média global:</Text>
       <View style={styleTelaResultado.graficoContainer}>
@@ -206,7 +257,79 @@ export default function ResultadoCalculo() {
           <Text style={styleTelaResultado.resultadoMeta}>Data: {dataRealizacao}</Text>
         ) : null}
       </View>
+
+      <Modal
+        visible={modalVisivel}
+        transparent
+        animationType="fade"
+        onRequestClose={fecharModal}
+      >
+        <View style={stylesModal.overlay}>
+          <View style={stylesModal.card}>
+            <Text style={stylesModal.titulo}>Parabéns! você obteve uma conquista!</Text>
+            {infoConquistaAtual?.imagem ? (
+              <Image source={infoConquistaAtual.imagem} style={stylesModal.imagem} />
+            ) : null}
+            <Text style={stylesModal.nome}>{infoConquistaAtual?.titulo}</Text>
+            <TouchableOpacity style={stylesModal.botao} onPress={fecharModal}>
+              <Text style={stylesModal.botaoTexto}>
+                {filaConquistas.length > 1 ? "Próxima" : "OK"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
 
+const stylesModal = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  card: {
+    width: "100%",
+    maxWidth: 340,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    alignItems: "center",
+  },
+  titulo: {
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 14,
+    color: "#111",
+  },
+  imagem: {
+    width: 110,
+    height: 110,
+    marginBottom: 10,
+    resizeMode: "contain",
+  },
+  nome: {
+    fontSize: 14,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 16,
+    color: "#111",
+  },
+  botao: {
+    minWidth: 140,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    backgroundColor: coresBase.verdeMedio,
+  },
+  botaoTexto: {
+    color: "#fff",
+    fontWeight: "700",
+    textAlign: "center",
+  },
+});

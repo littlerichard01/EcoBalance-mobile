@@ -110,6 +110,14 @@ export default function TelaCalculos() {
 
     // #region Conexão Front-Back (Criar Teste)
     try {
+      let conquistasAntes: any[] = [];
+      try {
+        const responseConquistas = await api.get("/users/me/conquistas");
+        conquistasAntes = Array.isArray(responseConquistas.data?.conquistas)
+          ? responseConquistas.data.conquistas
+          : [];
+      } catch {}
+
       const payload = {
         rotina: calculoData.rotinaId,
         energiaEletrica: {
@@ -133,9 +141,29 @@ export default function TelaCalculos() {
 
       const response = await api.post("/testes", payload);
 
+      let conquistasDepois: any[] = [];
+      try {
+        const responseConquistas = await api.get("/users/me/conquistas");
+        conquistasDepois = Array.isArray(responseConquistas.data?.conquistas)
+          ? responseConquistas.data.conquistas
+          : [];
+      } catch {}
+
+      const ativasAntes = new Set(
+        conquistasAntes
+          .filter((c: any) => Boolean(c?.ativa))
+          .map((c: any) => c?.nome)
+          .filter(Boolean),
+      );
+      const novasConquistas = conquistasDepois
+        .filter((c: any) => Boolean(c?.ativa) && !ativasAntes.has(c?.nome))
+        .map((c: any) => c?.nome)
+        .filter(Boolean);
+
       navigation.navigate("ResultadoCalculo", {
         teste: response.data.teste,
         rotinaNome: calculoData.rotinaNome,
+        novasConquistas,
       });
     } catch (error: any) {
       Alert.alert(

@@ -1,36 +1,39 @@
 import { stylesGeral } from "@/src/styles/stylesGeral";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, ActivityIndicator, Alert } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import api from "@/src/services/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function SelecionaRotina({ calculoData, updateCalculo }: any){
     const [listaRotinas, setListaRotinas] = useState<any[]>([]);
     const [carregando, setCarregando] = useState(false);
 
-    useEffect(() => {
-        const carregarRotinas = async () => {
-            setCarregando(true);
+    const carregarRotinas = useCallback(async () => {
+        setCarregando(true);
 
-            // #region Conexão Front-Back (Buscar Rotinas para Cálculo)
-            try {
-                const response = await api.get('/rotinas/usuario/lista');
-                const rotinasFormatadas = response.data.map((rotina: any) => ({
-                    label: rotina.nome,
-                    value: rotina._id,
-                    rotina
-                }));
-                setListaRotinas(rotinasFormatadas);
-            } catch (error: any) {
-                Alert.alert("Erro", "Não foi possível carregar suas rotinas.");
-            } finally {
-                setCarregando(false);
-            }
-            // #endregion
-        };
-
-        carregarRotinas();
+        // #region Conexão Front-Back (Buscar Rotinas para Cálculo)
+        try {
+            const response = await api.get('/rotinas/usuario/lista');
+            const rotinasFormatadas = response.data.map((rotina: any) => ({
+                label: rotina.nome,
+                value: rotina._id,
+                rotina
+            }));
+            setListaRotinas(rotinasFormatadas);
+        } catch {
+            Alert.alert("Erro", "Não foi possível carregar suas rotinas.");
+        } finally {
+            setCarregando(false);
+        }
+        // #endregion
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarRotinas();
+        }, [carregarRotinas])
+    );
 
     return (
 

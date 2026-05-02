@@ -35,6 +35,7 @@ export type RootStackParamList = {
     TelaRecuperacaoSenha: undefined;
     ResultadoCalculo: {
         rotinaNome?: string;
+        novasConquistas?: string[];
         teste: {
             emissaoTotal: number;
             emissaoAlimentos: number;

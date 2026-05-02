@@ -43,6 +43,11 @@ const garantirConquistasPadrao = (usuario) => {
     let mudou = false;
 
     for (const def of CONQUISTAS_DEFINICOES) {
+        const existente = atuais.find((c) => c?.nome === def.nome);
+        if (existente && existente.descricao !== def.descricao) {
+            existente.descricao = def.descricao;
+            mudou = true;
+        }
         if (!nomesAtuais.has(def.nome)) {
             atuais.push({
                 nome: def.nome,
