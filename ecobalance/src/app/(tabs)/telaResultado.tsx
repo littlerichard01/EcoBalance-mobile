@@ -249,6 +249,44 @@ export default function ResultadoCalculo() {
         </Text>
       </View>
 
+      <View style={stylesRecomendacoes.container}>
+        {[
+          { key: "Alimentos", usuario: emissaoAlimentos, media: MEDIA_GLOBAL.alimentos },
+          { key: "Gás", usuario: emissaoGas, media: MEDIA_GLOBAL.gas },
+          { key: "Veículos", usuario: emissaoVeiculosRotina, media: MEDIA_GLOBAL.veiculos },
+          { key: "Energia elétrica", usuario: emissaoEnergia, media: MEDIA_GLOBAL.energia },
+        ].map((item) => {
+          const usuario = Number(item.usuario) || 0;
+          const media = Number(item.media) || 0;
+          const acimaDaMedia = usuario > media;
+          const abaixoDaMedia = usuario < media;
+
+          return (
+            <View key={item.key} style={stylesRecomendacoes.item}>
+              <Text style={stylesRecomendacoes.tituloCategoria}>{item.key}</Text>
+              {acimaDaMedia ? (
+                <Text style={stylesRecomendacoes.texto}>
+                  Sua emissão nesta categoria está acima da média global:{" "}
+                  {usuario.toFixed(2)} kgCO₂, acima da média global de{" "}
+                  {media.toFixed(2)} kgCO₂.
+                </Text>
+              ) : abaixoDaMedia ? (
+                <Text style={stylesRecomendacoes.texto}>
+                  Ótima notícia! Sua emissão está abaixo da média global:{" "}
+                  {usuario.toFixed(2)} kgCO₂, abaixo da média global de{" "}
+                  {media.toFixed(2)} kgCO₂.
+                </Text>
+              ) : (
+                <Text style={stylesRecomendacoes.texto}>
+                  Sua emissão nesta categoria está igual à média global:{" "}
+                  {usuario.toFixed(2)} kgCO₂.
+                </Text>
+              )}
+            </View>
+          );
+        })}
+      </View>
+
       <View style={styleTelaResultado.containerInfo}>
         {rotinaNome ? (
           <Text style={styleTelaResultado.resultadoMeta}>Rotina: {rotinaNome}</Text>
@@ -331,5 +369,30 @@ const stylesModal = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     textAlign: "center",
+  },
+});
+
+const stylesRecomendacoes = StyleSheet.create({
+  container: {
+    marginTop: 12,
+    paddingHorizontal: 6,
+  },
+  item: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+  },
+  tituloCategoria: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#111",
+    marginBottom: 4,
+  },
+  texto: {
+    fontSize: 12,
+    color: "#111",
+    lineHeight: 16,
   },
 });
