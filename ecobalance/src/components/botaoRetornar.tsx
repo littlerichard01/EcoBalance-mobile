@@ -22,16 +22,16 @@ export function BotaoRetornar({ onPress }: BotaoRetornarProps) {
 
 const styles = StyleSheet.create({
     imagemVoltar:{
-        tintColor: coresBase.verdeEscuro,
-        width: 30,
-        height: 30
+        tintColor: coresBase.verdeMedio,
+        width: 28,
+        height: 28
      },
      voltarContainer: {
         width: 45, 
         height: 45,
         borderRadius: 35,
         borderWidth: 3,
-        borderColor: coresBase.verdeEscuro,
+        borderColor: coresBase.verdeMedio,
         alignItems: 'center',    
         justifyContent: 'center', 
         backgroundColor: 'transparent',

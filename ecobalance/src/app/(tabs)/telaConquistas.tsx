@@ -52,6 +52,7 @@ const conquistas: Conquista[] = [
   },
 ];
 
+
 const agruparEmColunas = <T,>(data: T[], numRows: number): T[][] => {
   const colunas: T[][] = [];
   for (let i = 0; i < data.length; i += numRows) {
@@ -118,6 +119,7 @@ export default function Conquistas() {
       { key: "Ener", label: "Ener", value: energia, color: "#8BC34A", max },
     ];
   };
+  
 
   return (
     <ScrollView style={stylesGeral.telaInteira}>
@@ -215,8 +217,8 @@ export default function Conquistas() {
       <FlatList
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 10,
-          alignItems: "flex-start",
+          paddingRight: 10,
+          marginTop: 15
         }}
         horizontal={true}
         data={testes}
@@ -234,9 +236,6 @@ export default function Conquistas() {
 
           return (
             <View style={StylesTelaHome.graficoCard}>
-              <Text style={StylesTelaHome.graficoData}>
-                {formatarDataRealizacao(item?.dataRealizacao || item?.createdAt)}
-              </Text>
               <View style={StylesTelaHome.barrasContainer}>
                 {bars.map((b) => {
                   const height = Math.max(6, (b.value / b.max) * alturaMax);
@@ -256,6 +255,9 @@ export default function Conquistas() {
                   );
                 })}
               </View>
+                            <Text style={StylesTelaHome.graficoData}>
+                {formatarDataRealizacao(item?.dataRealizacao || item?.createdAt)}
+              </Text>
             </View>
           );
         }}
@@ -268,8 +270,7 @@ export default function Conquistas() {
           backgroundColor: coresBase.verdeClaro,
           alignSelf: "center",
           borderRadius: 25,
-          marginTop: 10,
-          marginBottom: 18,
+          marginBottom: 100,
         }}
       >
         <View
@@ -279,6 +280,7 @@ export default function Conquistas() {
             backgroundColor: coresBase.verdeMedio,
             borderRadius: 25,
             marginLeft: scrollOffsetGraficos * 70,
+
           }}
         />
       </View>
