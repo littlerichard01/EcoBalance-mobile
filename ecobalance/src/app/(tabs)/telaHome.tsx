@@ -92,6 +92,26 @@ export default function TelaHome() {
     return 1;
   }, [experiencia]);
 
+  const proximoLimite = useMemo(() => {
+    if (nivelAtual === 1) return 2;
+    if (nivelAtual === 2) return 5;
+    if (nivelAtual === 3) return 9;
+    return null;
+  }, [nivelAtual]);
+
+  const faltamTestes = useMemo(() => {
+    if (proximoLimite === null) return 0;
+    return Math.max(proximoLimite - experiencia, 0);
+  }, [experiencia, proximoLimite]);
+
+  const mensagemProximoNivel = useMemo(() => {
+    if (proximoLimite === null) return "Você já está no nível máximo!";
+    if (faltamTestes === 1) {
+      return "Quase lá! falta só 1 teste para o próximo level.";
+    }
+    return `Faltam ${faltamTestes} testes para o próximo level!`;
+  }, [faltamTestes, proximoLimite]);
+
   const carregarUsuario = useCallback(async () => {
     try {
       const response = await api.get("/users/me");
@@ -255,6 +275,18 @@ export default function TelaHome() {
             style={{ width: "100%", height: 180 }}
           />
         </View>
+        <Text
+          style={{
+            marginTop: 8,
+            alignSelf: "center",
+            color: coresBase.verdeEscuro,
+            fontSize: 13,
+            fontStyle: "italic",
+            fontWeight: "500",
+          }}
+        >
+          {mensagemProximoNivel}
+        </Text>
         <View>
           <View
             style={{
