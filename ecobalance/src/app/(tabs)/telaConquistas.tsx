@@ -15,40 +15,49 @@ import { ScrollView } from "react-native-gesture-handler";
 // 1. Mova a Interface para o topo para que tudo possa usá-la
 interface Conquista {
   id: number;
+  nome: string;
   titulo: string;
   descricao: string;
   imagem: any;
   desbloqueado: boolean;
+  data?: string | null;
 }
 
-const conquistas: Conquista[] = [
+const conquistasDef = [
   {
     id: 1,
+    nome: "primeiro_teste",
     titulo: "Primeiro teste",
-    descricao: "Realizou seu primeiro teste de pegada de carbono",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    descricao: "Obtida quando o usuário faz o seu primeiro teste",
+    imagem: require("../../assets/conquistas/conquistaPrimeiroTeste.png"),
   },
   {
     id: 2,
-    titulo: "Primeira Redução",
-    descricao: "Reduziu sua pegada de carbono pela primeira vez",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "abaixo_media_global",
+    titulo: "Abaixo da média global",
+    descricao: "Quando o total de emissão é menor que a média global",
+    imagem: require("../../assets/conquistas/conquistaAbaixoMedia.png"),
   },
   {
     id: 3,
-    titulo: "1º Mês Sustentável",
-    descricao: "Manteve uma pegada de carbono reduzida por um mês",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "abaixo_media_global_2",
+    titulo: "Abaixo da média global 2",
+    descricao: "Quando faz 2 testes seguidos abaixo da média global",
+    imagem: require("../../assets/conquistas/conquistaAbaixoMedia2.png"),
   },
   {
     id: 4,
-    titulo: "3º Mês Sustentável",
-    descricao: "Manteve uma pegada de carbono reduzida por três meses",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "melhoria_pessoal",
+    titulo: "Melhoria pessoal",
+    descricao: "Quando a emissão é menor do que o último teste",
+    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal.png"),
+  },
+  {
+    id: 5,
+    nome: "melhoria_pessoal_2",
+    titulo: "Melhoria pessoal 2",
+    descricao: "Quando a emissão é menor que os dois últimos testes",
+    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal2.png"),
   },
 ];
 
@@ -62,11 +71,10 @@ const agruparEmColunas = <T,>(data: T[], numRows: number): T[][] => {
 };
 
 export default function Conquistas() {
-  // 2. Chame a função de agrupamento aqui dentro
-  const dadosAgrupados = agruparEmColunas<Conquista>(conquistas, 3);
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [testes, setTestes] = useState<any[]>([]);
+  const [conquistasUsuario, setConquistasUsuario] = useState<any[]>([]);
   const [scrollOffsetGraficos, setScrollOffsetGraficos] = useState(0);
 
   const carregarTestes = useCallback(async () => {
@@ -86,11 +94,44 @@ export default function Conquistas() {
     }
   }, [navigation]);
 
+  const carregarConquistas = useCallback(async () => {
+    try {
+      const response = await api.get("/users/me/conquistas");
+      setConquistasUsuario(
+        Array.isArray(response.data?.conquistas) ? response.data.conquistas : [],
+      );
+    } catch (error: any) {
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        await AsyncStorage.removeItem("@EcoBalance:token");
+        navigation.navigate("TelaCarregamento" as never);
+        return;
+      }
+
+      Alert.alert("Erro", "Não foi possível carregar suas conquistas.");
+    }
+  }, [navigation]);
+
   useFocusEffect(
     useCallback(() => {
       carregarTestes();
-    }, [carregarTestes]),
+      carregarConquistas();
+    }, [carregarTestes, carregarConquistas]),
   );
+
+  const mapaConquistas = new Map(
+    (Array.isArray(conquistasUsuario) ? conquistasUsuario : []).map((c: any) => [c?.nome, c]),
+  );
+  const conquistasComStatus: Conquista[] = conquistasDef.map((c) => {
+    const server = mapaConquistas.get(c.nome);
+    return {
+      ...c,
+      desbloqueado: Boolean(server?.ativa),
+      data: server?.data ?? null,
+    };
+  });
+  const dadosAgrupados = agruparEmColunas<Conquista>(conquistasComStatus, 3);
 
   const formatarDataRealizacao = (data: any) => {
     const date = new Date(data);

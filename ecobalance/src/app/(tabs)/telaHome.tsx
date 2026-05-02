@@ -30,34 +30,41 @@ const avatarSources = [
   require("../../assets/avatars/avatar9.png"),
 ];
 
-const conquistas = [
+const conquistasDef = [
   {
     id: 1,
+    nome: "primeiro_teste",
     titulo: "Primeiro teste",
-    descricao: "Realizou seu primeiro teste de pegada de carbono",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    descricao: "Obtida quando o usuário faz o seu primeiro teste",
+    imagem: require("../../assets/conquistas/conquistaPrimeiroTeste.png"),
   },
   {
     id: 2,
-    titulo: "Primeira Redução",
-    descricao: "Reduziu sua pegada de carbono pela primeira vez",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "abaixo_media_global",
+    titulo: "Abaixo da média global",
+    descricao: "Quando o total de emissão é menor que a média global",
+    imagem: require("../../assets/conquistas/conquistaAbaixoMedia.png"),
   },
   {
     id: 3,
-    titulo: "1º Mês Sustentável",
-    descricao: "Manteve uma pegada de carbono reduzida por um mês",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "abaixo_media_global_2",
+    titulo: "Abaixo da média global 2",
+    descricao: "Quando faz 2 testes seguidos abaixo da média global",
+    imagem: require("../../assets/conquistas/conquistaAbaixoMedia2.png"),
   },
   {
     id: 4,
-    titulo: "3º Mês Sustentável",
-    descricao: "Manteve uma pegada de carbono reduzida por três meses",
-    imagem: require("../../assets/trofeu.png"),
-    desbloqueado: false,
+    nome: "melhoria_pessoal",
+    titulo: "Melhoria pessoal",
+    descricao: "Quando a emissão é menor do que o último teste",
+    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal.png"),
+  },
+  {
+    id: 5,
+    nome: "melhoria_pessoal_2",
+    titulo: "Melhoria pessoal 2",
+    descricao: "Quando a emissão é menor que os dois últimos testes",
+    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal2.png"),
   },
 ];
 
@@ -74,6 +81,7 @@ export default function TelaHome() {
   const [nomeUsuario, setNomeUsuario] = useState("");
   const [avatarSelecionado, setAvatarSelecionado] = useState(1);
   const [testes, setTestes] = useState<any[]>([]);
+  const [conquistasUsuario, setConquistasUsuario] = useState<any[]>([]);
   const [scrollOffsetGraficos, setScrollOffsetGraficos] = useState(0);
   const [avancoChartWidth, setAvancoChartWidth] = useState(0);
 
@@ -114,11 +122,29 @@ export default function TelaHome() {
     }
   }, [navigation]);
 
+  const carregarConquistas = useCallback(async () => {
+    try {
+      const response = await api.get("/users/me/conquistas");
+      setConquistasUsuario(Array.isArray(response.data?.conquistas) ? response.data.conquistas : []);
+    } catch (error: any) {
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        await AsyncStorage.removeItem("@EcoBalance:token");
+        navigation.navigate("TelaCarregamento" as never);
+        return;
+      }
+
+      Alert.alert("Erro", "Não foi possível carregar suas conquistas.");
+    }
+  }, [navigation]);
+
   useFocusEffect(
     useCallback(() => {
       carregarUsuario();
       carregarTestes();
-    }, [carregarUsuario, carregarTestes]),
+      carregarConquistas();
+    }, [carregarUsuario, carregarTestes, carregarConquistas]),
   );
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -154,6 +180,26 @@ export default function TelaHome() {
   const valoresAvanco = ultimosTestesAvanco.map((t) => Number(t?.emissaoTotal) || 0);
   const minAvanco = Math.min(...valoresAvanco, 0);
   const maxAvanco = Math.max(...valoresAvanco, 1);
+
+  const mapaConquistas = new Map(
+    (Array.isArray(conquistasUsuario) ? conquistasUsuario : []).map((c: any) => [c?.nome, c]),
+  );
+  const conquistasComStatus = conquistasDef.map((c) => {
+    const server = mapaConquistas.get(c.nome);
+    return {
+      ...c,
+      desbloqueado: Boolean(server?.ativa),
+      data: server?.data ?? null,
+    };
+  });
+  const ultimasConquistas = (() => {
+    const desbloqueadas = conquistasComStatus
+      .filter((c) => c.desbloqueado && c.data)
+      .sort((a: any, b: any) => new Date(b.data).getTime() - new Date(a.data).getTime());
+
+    if (desbloqueadas.length > 0) return desbloqueadas.slice(0, 4);
+    return conquistasComStatus.slice(0, 4);
+  })();
 
   const getPontoAvanco = (index: number, value: number) => {
     const count = ultimosTestesAvanco.length;
@@ -242,7 +288,7 @@ export default function TelaHome() {
               alignItems: "center",
             }}
             horizontal={true}
-            data={conquistas}
+            data={ultimasConquistas}
             keyExtractor={(item) => item.id.toString()}
             onScroll={(event) => {
               const totalWidth =

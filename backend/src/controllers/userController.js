@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const Rotina = require('../models/Rotina');
 const TesteDeUsuario = require('../models/TesteDeUsuario');
+const { CONQUISTAS_DEFINICOES } = require('../config/conquistas');
 
 const camposPermitidos = ['nome', 'email', 'senha', 'receberLembretes', 'receberNotificacoesApp', 'avatarSelecionado', 'idioma'];
 
@@ -19,6 +20,30 @@ const sanitizeUser = (user) => ({
     updatedAt: user.updatedAt
 });
 
+const garantirConquistasPadrao = (usuario) => {
+    const atuais = Array.isArray(usuario.conquistas) ? usuario.conquistas : [];
+    const nomesAtuais = new Set(atuais.map((c) => c?.nome));
+    let mudou = false;
+
+    for (const def of CONQUISTAS_DEFINICOES) {
+        if (!nomesAtuais.has(def.nome)) {
+            atuais.push({
+                nome: def.nome,
+                descricao: def.descricao,
+                ativa: false,
+                data: null
+            });
+            mudou = true;
+        }
+    }
+
+    if (!Array.isArray(usuario.conquistas) || mudou) {
+        usuario.conquistas = atuais;
+    }
+
+    return mudou;
+};
+
 exports.getMe = async (req, res) => {
     try {
         const usuarioId = req.authUserId;
@@ -31,6 +56,11 @@ exports.getMe = async (req, res) => {
 
         if (!usuario) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const mudou = garantirConquistasPadrao(usuario);
+        if (mudou) {
+            await usuario.save();
         }
 
         return res.status(200).json({
@@ -56,6 +86,11 @@ exports.getMinhasConquistas = async (req, res) => {
 
         if (!usuario) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        const mudou = garantirConquistasPadrao(usuario);
+        if (mudou) {
+            await usuario.save();
         }
 
         return res.status(200).json({

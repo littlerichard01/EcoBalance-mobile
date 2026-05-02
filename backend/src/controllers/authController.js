@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { CONQUISTAS_DEFINICOES } = require("../config/conquistas");
 
 //Cadastro
 const registerUser = async (req, res) => {
@@ -22,7 +23,13 @@ const registerUser = async (req, res) => {
       nome,
       email,
       senha: hashedPassword,
-      avatarSelecionado
+      avatarSelecionado,
+      conquistas: CONQUISTAS_DEFINICOES.map((c) => ({
+        nome: c.nome,
+        descricao: c.descricao,
+        ativa: false,
+        data: null,
+      })),
     });
 
     await user.save();

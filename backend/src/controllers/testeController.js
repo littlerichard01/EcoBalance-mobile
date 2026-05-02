@@ -1,5 +1,7 @@
 const TesteDeUsuario = require('../models/TesteDeUsuario');
 const Rotina = require('../models/Rotina');
+const User = require('../models/User');
+const { CONQUISTAS_DEFINICOES, MEDIA_GLOBAL_TOTAL } = require('../config/conquistas');
 
 // Fatores de emissão específicos do Teste (Mensais)
 const FATORES_TESTE = {
@@ -33,6 +35,101 @@ const getFatorViagem = (tipo) => {
     };
     const tipoTraduzido = mapaIngles[tipo] || tipo;
     return FATORES_TESTE.viagens[tipoTraduzido] || 0;
+};
+
+const garantirConquistasPadrao = (usuario) => {
+    const atuais = Array.isArray(usuario.conquistas) ? usuario.conquistas : [];
+    const nomesAtuais = new Set(atuais.map((c) => c?.nome));
+    let mudou = false;
+
+    for (const def of CONQUISTAS_DEFINICOES) {
+        if (!nomesAtuais.has(def.nome)) {
+            atuais.push({
+                nome: def.nome,
+                descricao: def.descricao,
+                ativa: false,
+                data: null
+            });
+            mudou = true;
+        }
+    }
+
+    if (!Array.isArray(usuario.conquistas) || mudou) {
+        usuario.conquistas = atuais;
+    }
+
+    return mudou;
+};
+
+const ativarConquista = (usuario, nomeConquista) => {
+    const agora = new Date();
+    const conquista = (usuario.conquistas || []).find((c) => c?.nome === nomeConquista);
+    if (!conquista) {
+        const def = CONQUISTAS_DEFINICOES.find((d) => d.nome === nomeConquista);
+        usuario.conquistas = [
+            ...(usuario.conquistas || []),
+            {
+                nome: nomeConquista,
+                descricao: def?.descricao || nomeConquista,
+                ativa: true,
+                data: agora
+            }
+        ];
+        return true;
+    }
+
+    if (conquista.ativa) return false;
+
+    conquista.ativa = true;
+    conquista.data = agora;
+    return true;
+};
+
+const atualizarConquistasDoUsuario = async (usuarioId) => {
+    const usuario = await User.findById(usuarioId).select('conquistas');
+    if (!usuario) return;
+
+    let mudou = garantirConquistasPadrao(usuario);
+
+    const testesRecentes = await TesteDeUsuario.find({ usuario: usuarioId })
+        .sort({ dataRealizacao: -1, createdAt: -1 })
+        .limit(3)
+        .select('emissaoTotal dataRealizacao createdAt');
+
+    if (!testesRecentes || testesRecentes.length === 0) {
+        if (mudou) await usuario.save();
+        return;
+    }
+
+    const totalAtual = Number(testesRecentes[0]?.emissaoTotal) || 0;
+    const totalAnterior = testesRecentes[1] ? Number(testesRecentes[1]?.emissaoTotal) || 0 : null;
+    const totalAnterior2 = testesRecentes[2] ? Number(testesRecentes[2]?.emissaoTotal) || 0 : null;
+
+    const countTestes = await TesteDeUsuario.countDocuments({ usuario: usuarioId });
+
+    if (countTestes === 1) {
+        mudou = ativarConquista(usuario, 'primeiro_teste') || mudou;
+    }
+
+    if (totalAtual < MEDIA_GLOBAL_TOTAL) {
+        mudou = ativarConquista(usuario, 'abaixo_media_global') || mudou;
+    }
+
+    if (totalAnterior !== null && totalAtual < MEDIA_GLOBAL_TOTAL && totalAnterior < MEDIA_GLOBAL_TOTAL) {
+        mudou = ativarConquista(usuario, 'abaixo_media_global_2') || mudou;
+    }
+
+    if (totalAnterior !== null && totalAtual < totalAnterior) {
+        mudou = ativarConquista(usuario, 'melhoria_pessoal') || mudou;
+    }
+
+    if (totalAnterior !== null && totalAnterior2 !== null && totalAtual < totalAnterior && totalAtual < totalAnterior2) {
+        mudou = ativarConquista(usuario, 'melhoria_pessoal_2') || mudou;
+    }
+
+    if (mudou) {
+        await usuario.save();
+    }
 };
 
 /**
@@ -119,6 +216,8 @@ exports.createTeste = async (req, res) => {
         });
 
         await novoTeste.save();
+
+        await atualizarConquistasDoUsuario(usuarioId);
 
         res.status(201).json({ 
             message: 'Teste calculado e salvo com sucesso!', 
