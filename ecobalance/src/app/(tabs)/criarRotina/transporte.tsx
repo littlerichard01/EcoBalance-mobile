@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Checkbox from "expo-checkbox";
 import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
+import { sanitizeNonNegativeNumberText } from "@/src/utils/numericInput";
 
 interface TransporteSeletorProps {
   lista: string[]; // Ex: ['Carro', 'Moto']
@@ -42,7 +43,7 @@ export default function TransporteSeletor({
                 <TextInput
                   keyboardType="numeric"
                   placeholder="0"
-                  onChangeText={(txt) => onUpdateKm(item, txt)}
+                  onChangeText={(txt) => onUpdateKm(item, sanitizeNonNegativeNumberText(txt))}
                   value={dados[item]?.toString() || "0"}
                   style={{ borderWidth: 1, borderColor: coresBase.verdeMedio, padding: 2, marginVertical: 2, width: 70, textAlign: 'center', borderRadius: 10, height: 40}}
                 />

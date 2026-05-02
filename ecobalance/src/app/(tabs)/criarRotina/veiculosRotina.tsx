@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 
 import { Dropdown } from "react-native-element-dropdown";
 import TransporteSeletor from "./transporte";
 import { stylesGeral } from "@/src/styles/stylesGeral";
+import { parseNonNegativeNumber, sanitizeNonNegativeNumberText } from "@/src/utils/numericInput";
 
 export default function TransporteRotina({ rotinaData, updateRotina }: any) {
     const veiculo = rotinaData.usaVeiculo;
@@ -118,7 +119,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                             <Text style={stylesGeral.inputText}>Km rodados por mês no carro elétrico:</Text>
                             <TextInput
                                 value={rotinaData.kmEletrico?.toString() || ''}
-                                onChangeText={(text) => updateRotina('kmEletrico', text)}
+                                onChangeText={(text) => updateRotina('kmEletrico', sanitizeNonNegativeNumberText(text))}
                                 keyboardType="numeric"
                                 style={stylesGeral.input2}
                             />
@@ -128,7 +129,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                             <Text style={stylesGeral.inputText}>Litros abastecidos por mês:</Text>
                             <TextInput
                                 value={litrosCombutivel}
-                                onChangeText={(text) => updateRotina('litrosCombustivel', text)}
+                                onChangeText={(text) => updateRotina('litrosCombustivel', sanitizeNonNegativeNumberText(text))}
                                 keyboardType="numeric"
                                 style={[stylesGeral.input2, {marginTop: 10}]}
                             />
@@ -145,7 +146,7 @@ export default function TransporteRotina({ rotinaData, updateRotina }: any) {
                         dados={kmRotina}
                         onToggle={toggleRotina}
                         onUpdateKm={(nome, val) => {
-                            const novoKmRotina = { ...kmRotina, [nome]: parseFloat(val) || 0 };
+                            const novoKmRotina = { ...kmRotina, [nome]: parseNonNegativeNumber(val) };
                             updateRotina('kmTransportes', novoKmRotina);
                         }}
                     />

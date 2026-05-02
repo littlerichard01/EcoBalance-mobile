@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import TransporteSeletor from "./transporte";
 import { stylesGeral } from "@/src/styles/stylesGeral";
+import { parseNonNegativeNumber } from "@/src/utils/numericInput";
 
 export default function ViagemRotina({ calculoData, updateCalculo }: any) {
   const viagem = calculoData.viagem;
@@ -31,7 +32,7 @@ export default function ViagemRotina({ calculoData, updateCalculo }: any) {
   const atualizarKm = (nome: string, val: string) => {
     const veiculosAtualizados = viagem.veiculos.map((veiculo: any) =>
       veiculo.tipo === nome
-        ? { ...veiculo, km: parseFloat(val) || 0 }
+        ? { ...veiculo, km: parseNonNegativeNumber(val) }
         : veiculo
     );
 

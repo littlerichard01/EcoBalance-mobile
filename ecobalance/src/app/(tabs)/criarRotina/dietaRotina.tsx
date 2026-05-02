@@ -1,4 +1,5 @@
 import { stylesGeral } from "@/src/styles/stylesGeral";
+import { parseNonNegativeNumber, sanitizeNonNegativeNumberText } from "@/src/utils/numericInput";
 import React from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -8,7 +9,7 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
     const porcoes = rotinaData.porcoes || {};
 
     const updatePorcao = (alimento: string, valor: string) => {
-        const num = parseFloat(valor) || 0;
+        const num = parseNonNegativeNumber(valor);
         updateRotina('porcoes', { ...porcoes, [alimento]: num });
     };
 
@@ -88,7 +89,7 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
             <Text style={[stylesGeral.inputText, {marginTop: 10}]}>{label}</Text>
             <TextInput
                 value={value}
-                onChangeText={onChange}
+                onChangeText={(t) => onChange(sanitizeNonNegativeNumberText(t))}
                 keyboardType="numeric"
                 style={stylesGeral.subInputText}
             />

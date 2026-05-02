@@ -1,4 +1,5 @@
 import { stylesGeral } from "@/src/styles/stylesGeral";
+import { sanitizeNonNegativeIntText } from "@/src/utils/numericInput";
 import React from "react";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 
@@ -16,7 +17,7 @@ export default function Gas({ rotinaData, updateRotina }: any) {
                 <Text style={stylesGeral.inputText}>Quantas pessoas vivem na sua casa?</Text>
                 <TextInput
                     value={pessoas}
-                    onChangeText={(text) => updateRotina('quantidadePessoas', text)}
+                    onChangeText={(text) => updateRotina('quantidadePessoas', sanitizeNonNegativeIntText(text))}
                     keyboardType="numeric"
                     style={[stylesGeral.input2, {marginTop: 10}]}
                 />
@@ -80,7 +81,7 @@ export default function Gas({ rotinaData, updateRotina }: any) {
                         <Text style={[stylesGeral.inputText, {marginBottom: 15}]}>Quanto tempo dura o gás que você compra? (meses)</Text>
                         <TextInput 
                             value={tempoBotijao}
-                            onChangeText={(text) => updateRotina('tempoDuracaoGas', text)}
+                            onChangeText={(text) => updateRotina('tempoDuracaoGas', sanitizeNonNegativeIntText(text))}
                             keyboardType="numeric"
                             style={stylesGeral.input2}
                         />
