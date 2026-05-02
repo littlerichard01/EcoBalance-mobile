@@ -1,5 +1,5 @@
 import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -68,12 +68,11 @@ const conquistasDef = [
   },
 ];
 
-const niveis = [
-  {
-    id: 1,
-    imagemNivel: require("../../assets/niveis/bannerNivel1.png"),
-    desbloqueado: false,
-  },
+const bannerNivelSources = [
+  require("../../assets/niveis/bannerNivel1.png"),
+  require("../../assets/niveis/bannerNivel2.png"),
+  require("../../assets/niveis/bannerNivel3.png"),
+  require("../../assets/niveis/bannerNivel4.png"),
 ];
 
 export default function TelaHome() {
@@ -84,6 +83,14 @@ export default function TelaHome() {
   const [conquistasUsuario, setConquistasUsuario] = useState<any[]>([]);
   const [scrollOffsetGraficos, setScrollOffsetGraficos] = useState(0);
   const [avancoChartWidth, setAvancoChartWidth] = useState(0);
+  const experiencia = testes.length;
+
+  const nivelAtual = useMemo(() => {
+    if (experiencia >= 9) return 4;
+    if (experiencia >= 5) return 3;
+    if (experiencia >= 2) return 2;
+    return 1;
+  }, [experiencia]);
 
   const carregarUsuario = useCallback(async () => {
     try {
@@ -236,25 +243,18 @@ export default function TelaHome() {
             </Text>
           </View>
         </View>
-        <FlatList
-          data={niveis}
-          keyExtractor={(item) => item.id.toString()}
-          scrollEnabled={false}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                justifyContent: "center",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={item.imagemNivel}
-                style={{ width:"100%", height: 180 }}
-              />
-            </View>
-          )}
-        />
+        <View
+          style={{
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={bannerNivelSources[nivelAtual - 1]}
+            style={{ width: "100%", height: 180 }}
+          />
+        </View>
         <View>
           <View
             style={{
