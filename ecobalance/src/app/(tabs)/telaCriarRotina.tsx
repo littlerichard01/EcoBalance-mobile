@@ -74,7 +74,7 @@ export default function TelaCriarRotina() {
                 kmEletrico: Number(rotinaData.kmEletrico) || 0,
             };
 
-            const response = await api.post('/rotinas', payload);
+            await api.post('/rotinas', payload);
             Alert.alert("Sucesso", "Rotina criada com sucesso!");
             navigation.goBack(); // Volta para a tela de listar rotinas
         } catch (error: any) {

@@ -167,9 +167,7 @@ export default function ResultadoCalculo() {
         style={[
           styleTelaResultado.feedbackContainer,
           {
-            backgroundColor: ehSustentavel
-              ? coresBase.verdeBebe
-              : coresBase.verdeBebe,
+            backgroundColor: coresBase.verdeBebe,
           },
         ]}
       >
@@ -260,28 +258,17 @@ export default function ResultadoCalculo() {
           const media = Number(item.media) || 0;
           const acimaDaMedia = usuario > media;
           const abaixoDaMedia = usuario < media;
+          let textoRecomendacao = `Sua emissão nesta categoria está igual à média global: ${usuario.toFixed(2)} kgCO₂.`;
+          if (acimaDaMedia) {
+            textoRecomendacao = `Sua emissão nesta categoria está acima da média global: ${usuario.toFixed(2)} kgCO₂, acima da média global de ${media.toFixed(2)} kgCO₂.`;
+          } else if (abaixoDaMedia) {
+            textoRecomendacao = `Ótima notícia! Sua emissão está abaixo da média global: ${usuario.toFixed(2)} kgCO₂, abaixo da média global de ${media.toFixed(2)} kgCO₂.`;
+          }
 
           return (
             <View key={item.key} style={stylesRecomendacoes.item}>
               <Text style={stylesRecomendacoes.tituloCategoria}>{item.key}</Text>
-              {acimaDaMedia ? (
-                <Text style={stylesRecomendacoes.texto}>
-                  Sua emissão nesta categoria está acima da média global:{" "}
-                  {usuario.toFixed(2)} kgCO₂, acima da média global de{" "}
-                  {media.toFixed(2)} kgCO₂.
-                </Text>
-              ) : abaixoDaMedia ? (
-                <Text style={stylesRecomendacoes.texto}>
-                  Ótima notícia! Sua emissão está abaixo da média global:{" "}
-                  {usuario.toFixed(2)} kgCO₂, abaixo da média global de{" "}
-                  {media.toFixed(2)} kgCO₂.
-                </Text>
-              ) : (
-                <Text style={stylesRecomendacoes.texto}>
-                  Sua emissão nesta categoria está igual à média global:{" "}
-                  {usuario.toFixed(2)} kgCO₂.
-                </Text>
-              )}
+              <Text style={stylesRecomendacoes.texto}>{textoRecomendacao}</Text>
             </View>
           );
         })}

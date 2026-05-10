@@ -8,11 +8,6 @@ import { stylesTelaEsqueciSenha } from "../../styles/telaEsqueciSenhaStyles";
 export default function TelaEsqueciSenha() {
   const [email, setEmail] = useState('');
 
-  const handleLogin = () => {
-
-    console.log("Usuário logado com sucesso!");
-  };
-
   return (
     <View style={stylesTelaEsqueciSenha.container}>
       <Text style={fonte.titulo}>Recupere sua senha</Text>

@@ -1,20 +1,48 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const dns = require('node:dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']); // Google Public DNS
+const dnsServers = (process.env.DNS_SERVERS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+if (dnsServers.length > 0) dns.setServers(dnsServers);
 
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const { connectDB } = require('./database/connection');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const { startTesteReminderJob } = require('./jobs/testeReminderJob');
 
-dotenv.config();
-
 const app = express();
+app.disable('x-powered-by');
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+const isProduction = process.env.NODE_ENV === 'production';
+const serverUrl = isProduction
+  ? process.env.PROD_API_URL || 'https://producao.com'
+  : `http://localhost:${port}`;
+
+let prodOrigin = null;
+if (isProduction && process.env.PROD_API_URL) {
+  try {
+    prodOrigin = new URL(process.env.PROD_API_URL).origin;
+  } catch {
+    prodOrigin = null;
+  }
+}
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!isProduction) return callback(null, true);
+      if (!origin) return callback(null, true);
+      if (!prodOrigin) return callback(null, false);
+      return callback(null, origin === prodOrigin);
+    },
+  })
+);
 app.use(express.json());
 
 // Configuração do Swagger UI
@@ -59,11 +87,6 @@ async function startServer() {
   await connectDB();
   startTesteReminderJob();
   app.listen(port, () => {
-    const isProduction = process.env.NODE_ENV === 'production';
-    const serverUrl = isProduction 
-      ? process.env.PROD_API_URL || 'https://producao.com' // @PLACEHOLDER para a URL de produção futura
-      : `http://localhost:${port}`;
-      
     console.log(`🚀 Servidor rodando na porta ${port} (${isProduction ? 'Produção' : 'Desenvolvimento'})`);
     console.log(`Swagger UI disponível em ${serverUrl}/api-docs`);
   });

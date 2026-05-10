@@ -1,14 +1,16 @@
 export const sanitizeNonNegativeIntText = (text: string) => {
-  return String(text ?? "").replace(/\D+/g, "");
+  return String(text ?? "").replaceAll(/\D+/g, "");
 };
 
 export const sanitizeNonNegativeNumberText = (text: string) => {
-  const normalized = String(text ?? "").replace(",", ".");
-  let out = normalized.replace(/[^0-9.]+/g, "");
+  const normalized = String(text ?? "").replaceAll(",", ".");
+  let out = normalized.replaceAll(/[^0-9.]+/g, "");
 
   const firstDot = out.indexOf(".");
   if (firstDot !== -1) {
-    out = out.slice(0, firstDot + 1) + out.slice(firstDot + 1).replace(/\./g, "");
+    out =
+      out.slice(0, firstDot + 1) +
+      out.slice(firstDot + 1).replaceAll(/\./g, "");
   }
 
   return out;

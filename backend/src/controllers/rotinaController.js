@@ -86,10 +86,10 @@ const calcularEmissoesRotina = (dados) => {
     const totalGeral = alimentosTotal + gasTotal + veiculosTotal;
 
     return {
-        alimentos: parseFloat(alimentosTotal.toFixed(2)),
-        gas: parseFloat(gasTotal.toFixed(2)),
-        veiculos: parseFloat(veiculosTotal.toFixed(2)),
-        total: parseFloat(totalGeral.toFixed(2))
+        alimentos: Number.parseFloat(alimentosTotal.toFixed(2)),
+        gas: Number.parseFloat(gasTotal.toFixed(2)),
+        veiculos: Number.parseFloat(veiculosTotal.toFixed(2)),
+        total: Number.parseFloat(totalGeral.toFixed(2))
     };
 };
 

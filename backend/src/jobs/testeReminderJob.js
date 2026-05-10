@@ -29,6 +29,37 @@ const buscarDataBase = async (userId) => {
   return null;
 };
 
+const deveEnviarLembrete = (agora, base, ultimoLembrete) => {
+  const diasDesdeBase = diffDias(agora, base);
+  if (diasDesdeBase < DIAS_PARA_LEMBRETE) return false;
+
+  if (ultimoLembrete && !Number.isNaN(ultimoLembrete.getTime())) {
+    const diasDesdeUltimoLembrete = diffDias(agora, ultimoLembrete);
+    if (diasDesdeUltimoLembrete < DIAS_PARA_LEMBRETE) return false;
+  }
+
+  return true;
+};
+
+const processarUsuarioParaLembrete = async (u, agora) => {
+  if (!u?.email) return;
+
+  const base = await buscarDataBase(u._id);
+  if (!base) return;
+
+  const ultimo = u.ultimoLembreteTesteEmailEm ? new Date(u.ultimoLembreteTesteEmailEm) : null;
+  if (!deveEnviarLembrete(agora, base, ultimo)) return;
+
+  try {
+    await enviarEmailLembreteTeste({ para: u.email, nome: u.nome });
+    await User.updateOne(
+      { _id: u._id },
+      { $set: { ultimoLembreteTesteEmailEm: agora } }
+    );
+  } catch (err) {
+  }
+};
+
 const enviarLembretesEmail = async () => {
   const agora = new Date();
   const users = await User.find({ receberLembretes: true })
@@ -36,28 +67,7 @@ const enviarLembretesEmail = async () => {
     .lean();
 
   for (const u of users) {
-    if (!u?.email) continue;
-
-    const base = await buscarDataBase(u._id);
-    if (!base) continue;
-
-    const diasDesdeBase = diffDias(agora, base);
-    if (diasDesdeBase < DIAS_PARA_LEMBRETE) continue;
-
-    const ultimo = u.ultimoLembreteTesteEmailEm ? new Date(u.ultimoLembreteTesteEmailEm) : null;
-    if (ultimo && !Number.isNaN(ultimo.getTime())) {
-      const diasDesdeUltimoLembrete = diffDias(agora, ultimo);
-      if (diasDesdeUltimoLembrete < DIAS_PARA_LEMBRETE) continue;
-    }
-
-    try {
-      await enviarEmailLembreteTeste({ para: u.email, nome: u.nome });
-      await User.updateOne(
-        { _id: u._id },
-        { $set: { ultimoLembreteTesteEmailEm: agora } }
-      );
-    } catch (err) {
-    }
+    await processarUsuarioParaLembrete(u, agora);
   }
 };
 

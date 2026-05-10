@@ -253,7 +253,7 @@ export default function TelaPerfil() {
             <View style={stylesTelaPerfil.avatarGrid}>
               {avatarSources.map((source, idx) => (
                 <TouchableOpacity
-                  key={idx}
+                  key={`avatar-${idx + 1}`}
                   onPress={() => { selecionarAvatar(idx + 1); }}
                   disabled={carregandoPreferencias}
                 >

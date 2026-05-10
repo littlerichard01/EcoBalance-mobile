@@ -10,6 +10,27 @@ import { CalculoFlow, RotinaFlow } from "./stackNavigator";
 
 const Tab = createBottomTabNavigator();
 
+const TabIcon = ({
+  source,
+  focused,
+  size,
+}: {
+  source: any;
+  focused: boolean;
+  size?: { width: number; height: number };
+}) => {
+  return (
+    <Image
+      source={source}
+      style={[
+        stylesGeral.icon,
+        size ? { width: size.width, height: size.height } : null,
+        { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe },
+      ]}
+    />
+  );
+};
+
 export function TabNavigator() {
   return (
     <Tab.Navigator
@@ -26,14 +47,8 @@ export function TabNavigator() {
   component={CalculoFlow} 
   options={{
     tabBarIcon: ({ focused }) => (
-      <Image
-        source={require("../assets/iconCalculo.png")} 
-        style={[
-          stylesGeral.icon,
-          { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe }
-        ]}
-      />
-    )
+      <TabIcon source={require("../assets/iconCalculo.png")} focused={focused} />
+    ),
   }}
 />
       <Tab.Screen 
@@ -41,15 +56,12 @@ export function TabNavigator() {
         component={RotinaFlow} 
         options={{
     tabBarIcon: ({ focused }) => (
-      <Image
-        source={require("../assets/iconRotina.png")} 
-        style={[
-          stylesGeral.icon,
-          { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe },
-          {width: 42, height: 42}
-        ]}
+      <TabIcon
+        source={require("../assets/iconRotina.png")}
+        focused={focused}
+        size={{ width: 42, height: 42 }}
       />
-    )
+    ),
   }}
         />
       <Tab.Screen 
@@ -57,45 +69,32 @@ export function TabNavigator() {
         component={Home} 
           options={{
     tabBarIcon: ({ focused }) => (
-      <Image
-        source={require("../assets/iconMenu.png")} 
-        style={[
-          stylesGeral.icon,
-          { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe }
-        ]}
-      />
-    )
+      <TabIcon source={require("../assets/iconMenu.png")} focused={focused} />
+    ),
   }}/>
       <Tab.Screen 
         name="Conquistas" 
         component={TelaConquistas} 
           options={{
     tabBarIcon: ({ focused }) => (
-      <Image
-        source={require("../assets/iconConquistas.png")} 
-        style={[
-          stylesGeral.icon,
-          { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe },
-          {width: 38, height: 38}
-        ]}
+      <TabIcon
+        source={require("../assets/iconConquistas.png")}
+        focused={focused}
+        size={{ width: 38, height: 38 }}
       />
-    )
+    ),
   }}/>
       <Tab.Screen 
         name="Perfil" 
         component={TelaPerfil} 
           options={{
     tabBarIcon: ({ focused }) => (
-      <Image
-        source={require("../assets/iconPerfil.png")} 
-        style={[
-          stylesGeral.icon,
-          { width: 30
-            , height: 30 },
-          { tintColor: focused ? coresBase.verdeSaturado : coresBase.verdeBebe }
-        ]}
+      <TabIcon
+        source={require("../assets/iconPerfil.png")}
+        focused={focused}
+        size={{ width: 30, height: 30 }}
       />
-    )
+    ),
   }}/>
       
    

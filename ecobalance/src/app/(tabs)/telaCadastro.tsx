@@ -36,7 +36,7 @@ export default function TelaCadastro() {
 
         // #region Conexão Front-Back (Cadastro)
         try {
-            const response = await api.post('/auth/register', {
+            await api.post('/auth/register', {
                 nome,
                 email,
                 senha

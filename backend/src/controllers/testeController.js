@@ -160,19 +160,19 @@ exports.createTeste = async (req, res) => {
         let emissaoViagens = 0;
 
         // 2. Cálculo da Energia Elétrica (kWh mensal)
-        if (energiaEletrica && energiaEletrica.kwh) {
+        if (energiaEletrica?.kwh) {
             emissaoEnergia = energiaEletrica.kwh * FATORES_TESTE.energia;
         }
 
         // 3. Cálculo do Gás Natural (só faz sentido se a rotina usa encanado)
-        if (rotinaBase.tipoGas === 'encanado' && gasNatural && gasNatural.m3) {
+        if (rotinaBase.tipoGas === 'encanado' && gasNatural?.m3) {
             const qtdPessoas = rotinaBase.quantidadePessoas || 1;
             emissaoGasMensal = (gasNatural.m3 * FATORES_TESTE.gasNatural) / qtdPessoas;
         }
 
         // 4. Cálculo das Viagens do mês
         let veiculosProcessados = [];
-        if (viagem && viagem.fezViagem && viagem.veiculos && viagem.veiculos.length > 0) {
+        if (viagem?.fezViagem && viagem?.veiculos?.length > 0) {
             viagem.veiculos.forEach(v => {
                 const fator = getFatorViagem(v.tipo);
                 const emissaoVeiculo = (v.km || 0) * fator;
@@ -181,7 +181,7 @@ exports.createTeste = async (req, res) => {
                 veiculosProcessados.push({
                     tipo: v.tipo,
                     km: v.km,
-                    emissao: parseFloat(emissaoVeiculo.toFixed(2))
+                    emissao: Number.parseFloat(emissaoVeiculo.toFixed(2))
                 });
             });
         }
@@ -203,21 +203,21 @@ exports.createTeste = async (req, res) => {
             rotina: rotinaId,
             energiaEletrica: {
                 kwh: energiaEletrica?.kwh || 0,
-                emissao: parseFloat(emissaoEnergia.toFixed(2))
+                emissao: Number.parseFloat(emissaoEnergia.toFixed(2))
             },
             gasNatural: {
                 m3: gasNatural?.m3 || 0,
-                emissao: parseFloat(emissaoGasMensal.toFixed(2))
+                emissao: Number.parseFloat(emissaoGasMensal.toFixed(2))
             },
             viagem: {
                 fezViagem: viagem?.fezViagem || false,
                 internacional: viagem?.internacional || false,
                 veiculos: veiculosProcessados
             },
-            emissaoAlimentos: parseFloat(totalAlimentos.toFixed(2)),
-            emissaoGas: parseFloat(totalGas.toFixed(2)),
-            emissaoVeiculos: parseFloat(totalVeiculos.toFixed(2)),
-            emissaoTotal: parseFloat(emissaoTotal.toFixed(2))
+            emissaoAlimentos: Number.parseFloat(totalAlimentos.toFixed(2)),
+            emissaoGas: Number.parseFloat(totalGas.toFixed(2)),
+            emissaoVeiculos: Number.parseFloat(totalVeiculos.toFixed(2)),
+            emissaoTotal: Number.parseFloat(emissaoTotal.toFixed(2))
         });
 
         await novoTeste.save();

@@ -208,6 +208,14 @@ export default function TelaHome() {
   const minAvanco = Math.min(...valoresAvanco, 0);
   const maxAvanco = Math.max(...valoresAvanco, 1);
 
+  const getTesteKey = (t: any) => {
+    const raw = t?._id || t?.id || t?.dataRealizacao || t?.createdAt;
+    if (raw) return String(raw);
+    const emissao = Number(t?.emissaoTotal);
+    if (Number.isFinite(emissao)) return `emissao-${emissao}`;
+    return "teste";
+  };
+
   const mapaConquistas = new Map(
     (Array.isArray(conquistasUsuario) ? conquistasUsuario : []).map((c: any) => [c?.nome, c]),
   );
@@ -400,11 +408,15 @@ export default function TelaHome() {
               style={StylesTelaHome.avancoChart}
               onLayout={(event) => setAvancoChartWidth(event.nativeEvent.layout.width)}
             >
-              {[maxAvanco, (maxAvanco + minAvanco) / 2, minAvanco].map((v, idx) => {
-                const y = getPontoAvanco(0, v).y;
+              {[
+                { id: "max", value: maxAvanco },
+                { id: "mid", value: (maxAvanco + minAvanco) / 2 },
+                { id: "min", value: minAvanco },
+              ].map(({ id, value }) => {
+                const y = getPontoAvanco(0, value).y;
                 return (
                   <View
-                    key={`grid-${idx}`}
+                    key={`grid-${id}`}
                     style={[StylesTelaHome.avancoGridLine, { top: y }]}
                   />
                 );
@@ -414,6 +426,8 @@ export default function TelaHome() {
                 ? null
                 : ultimosTestesAvanco.map((t, i) => {
                     if (i === 0) return null;
+                    const prevKey = getTesteKey(ultimosTestesAvanco[i - 1]);
+                    const curKey = getTesteKey(t);
                     const valuePrev =
                       Number(ultimosTestesAvanco[i - 1]?.emissaoTotal) || 0;
                     const valueCur = Number(t?.emissaoTotal) || 0;
@@ -428,7 +442,7 @@ export default function TelaHome() {
 
                     return (
                       <View
-                        key={`linha-${i}`}
+                        key={`linha-${prevKey}-${curKey}`}
                         style={[
                           StylesTelaHome.avancoLine,
                           {
@@ -461,11 +475,12 @@ export default function TelaHome() {
                 </View>
               ) : (
                 ultimosTestesAvanco.map((t, i) => {
+                  const testeKey = getTesteKey(t);
                   const value = Number(t?.emissaoTotal) || 0;
                   const p = getPontoAvanco(i, value);
                   return (
                     <View
-                      key={`ponto-${i}`}
+                      key={`ponto-${testeKey}`}
                       style={[
                         StylesTelaHome.avancoDot,
                         { left: p.x - 5, top: p.y - 5 },
