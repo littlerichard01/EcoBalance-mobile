@@ -1,13 +1,10 @@
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
-import { coresBase } from "../styles/stylesGeral";
-import { Image } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 type BotaoRetornarProps = { // Define os tipos de props que o componente espera. Assim, quando alguém usar o BotaoConcluir, o TypeScript vai garantir que a função onPress seja passada corretamente.
   onPress: () => void;
-  navigation?: any;
 };
 
-export function BotaoVoltar({ onPress }: BotaoRetornarProps) {
+export function BotaoVoltar({ onPress }: Readonly<BotaoRetornarProps>) {
     return (
             <TouchableOpacity
                 style={styles.voltarContainer}

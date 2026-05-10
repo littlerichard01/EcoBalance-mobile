@@ -1,16 +1,16 @@
 import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import Checkbox from "expo-checkbox";
 import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import { sanitizeNonNegativeNumberText } from "@/src/utils/numericInput";
 
-interface TransporteSeletorProps {
+type TransporteSeletorProps = Readonly<{
   lista: string[]; // Ex: ['Carro', 'Moto']
   dados: Record<string, number>; // O estado (Map)
   onToggle: (nome: string, selecionado: boolean) => void;
   onUpdateKm: (nome: string, valor: string) => void;
   titulo?: string;
-}
+}>;
 
 export default function TransporteSeletor({ 
   lista, 

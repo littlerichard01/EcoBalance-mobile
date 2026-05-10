@@ -11,7 +11,7 @@ import { fonte } from "@/src/styles/fontes";
 import api from "../../services/api";
 import { stylesTelaLogin } from "@/src/styles/telaLoginStyles";
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
+type NavigationProp = StackNavigationProp<RootStackParamList, "TelaCadastro">;
 
 export default function TelaCadastro() {
 
@@ -43,7 +43,7 @@ export default function TelaCadastro() {
             });
 
             Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
-            navigation.navigate("TelaLogin" as never); // Volta para tela de login
+            navigation.navigate("TelaLogin"); // Volta para tela de login
         } catch (error: any) {
             console.error("Erro ao cadastrar:", error.response?.data || error.message);
             Alert.alert("Erro", error.response?.data?.message || "Ocorreu um erro ao cadastrar.");
@@ -92,7 +92,7 @@ export default function TelaCadastro() {
 
             <BotaoCriarConta onPress={handleCadastro} />
 
-            <TouchableOpacity onPress={() => navigation.navigate("TelaLogin" as never)} style={{ marginTop: 10 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("TelaLogin")} style={{ marginTop: 10 }}>
                 <Text style={{textDecorationLine: 'underline', fontStyle: 'italic'}}>Já tem uma conta? Faça Login</Text>
             </TouchableOpacity>
         </View>

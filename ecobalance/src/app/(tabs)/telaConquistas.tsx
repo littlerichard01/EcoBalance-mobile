@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, Image, FlatList, Alert } from "react-native";
+import { View, Text, Image, FlatList, Alert, Animated } from "react-native";
 import { StylesTelaConquistas } from "../../styles/telaConquistasStyles";
 import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 import { StylesTelaHome } from "@/src/styles/telaHomeStyles";
-import { Animated } from 'react-native';
 import api from "@/src/services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -72,7 +71,8 @@ const agruparEmColunas = <T,>(data: T[], numRows: number): T[][] => {
 
 export default function Conquistas() {
   const scrollX = React.useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  type NavigationProp = StackNavigationProp<RootStackParamList, "Conquistas">;
+  const navigation = useNavigation<NavigationProp>();
   const [testes, setTestes] = useState<any[]>([]);
   const [conquistasUsuario, setConquistasUsuario] = useState<any[]>([]);
   const [scrollOffsetGraficos, setScrollOffsetGraficos] = useState(0);
@@ -86,7 +86,7 @@ export default function Conquistas() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 
@@ -105,7 +105,7 @@ export default function Conquistas() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 

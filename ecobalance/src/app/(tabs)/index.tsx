@@ -1,6 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { View } from "react-native";
 import MyStack from "../../navigation/stackNavigator";
 import { IndexStyles } from "@/src/styles";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

@@ -10,7 +10,7 @@ export const sanitizeNonNegativeNumberText = (text: string) => {
   if (firstDot !== -1) {
     out =
       out.slice(0, firstDot + 1) +
-      out.slice(firstDot + 1).replaceAll(/\./g, "");
+      out.slice(firstDot + 1).replaceAll(".", "");
   }
 
   return out;

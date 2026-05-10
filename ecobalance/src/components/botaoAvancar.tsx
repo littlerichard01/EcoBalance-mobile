@@ -2,10 +2,9 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 type BotaoAvancarProps = { // Define os tipos de props que o componente espera. Assim, quando alguém usar o BotaoConcluir, o TypeScript vai garantir que a função onPress seja passada corretamente.
   onPress: () => void;
-  navigation?: any;
 };
 
-export function BotaoAvancar({ onPress }: BotaoAvancarProps) {
+export function BotaoAvancar({ onPress }: Readonly<BotaoAvancarProps>) {
     return (
         <TouchableOpacity
             style={styles.botaoAvancar}

@@ -37,6 +37,7 @@ const authMiddleware = async (req, res, next) => {
     next(); //Continua pra rota
 
   } catch (error) {
+    console.warn("Falha na verificação do token", error?.name || "");
     return res.status(401).json({ message: "Token inválido" });
   }
 };

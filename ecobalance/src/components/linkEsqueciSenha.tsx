@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigation/stackNavigator"
-import { fonte } from "../styles/fontes";
 import { stylesTelaLogin } from "../styles/telaLoginStyles";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "TelaLogin">;

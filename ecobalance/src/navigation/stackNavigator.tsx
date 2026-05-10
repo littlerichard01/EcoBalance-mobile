@@ -3,11 +3,9 @@ import TelaInicial from '../app/(tabs)/telaInicial';
 import TelaLogin from "../app/(tabs)/telaLogin"
 import TelaCadastro from "../app/(tabs)/telaCadastro"
 import TelaCarregamento from "../app/(tabs)/telaCarregamento";
-import Home from "../app/(tabs)/telaHome";
 import TelaRotina from "../app/(tabs)/telaRotina";
 import TelaCriarRotina from "../app/(tabs)/telaCriarRotina";
 import TelaCalculos from "../app/(tabs)/telaCalculos";
-import TelaPerfil from "../app/(tabs)/telaPerfil";
 import TelaConquistas from "../app/(tabs)/telaConquistas";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TelaEsqueciSenha from '../app/(tabs)/telaEsqueciSenha';

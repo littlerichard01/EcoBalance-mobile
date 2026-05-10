@@ -57,6 +57,10 @@ const processarUsuarioParaLembrete = async (u, agora) => {
       { $set: { ultimoLembreteTesteEmailEm: agora } }
     );
   } catch (err) {
+    console.error('Falha ao enviar lembrete de teste', {
+      userId: String(u._id),
+      error: err?.message || String(err),
+    });
   }
 };
 
@@ -78,6 +82,8 @@ exports.startTesteReminderJob = () => {
   cron.schedule('0 9 * * *', async () => {
     try {
       await enviarLembretesEmail();
-    } catch (e) {}
+    } catch (e) {
+      console.error('Erro ao executar job de lembrete de teste', e?.message || String(e));
+    }
   });
 };

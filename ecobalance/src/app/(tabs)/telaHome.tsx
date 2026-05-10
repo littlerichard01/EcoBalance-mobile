@@ -124,7 +124,7 @@ export default function TelaHome() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 
@@ -141,7 +141,7 @@ export default function TelaHome() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 
@@ -158,7 +158,7 @@ export default function TelaHome() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 
@@ -435,7 +435,7 @@ export default function TelaHome() {
                     const p2 = getPontoAvanco(i, valueCur);
                     const dx = p2.x - p1.x;
                     const dy = p2.y - p1.y;
-                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const length = Math.hypot(dx, dy);
                     const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
                     const midX = (p1.x + p2.x) / 2;
                     const midY = (p1.y + p2.y) / 2;

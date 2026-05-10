@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import TransporteSeletor from "./transporte";
 import { stylesGeral } from "@/src/styles/stylesGeral";

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { coresBase, stylesGeral } from './stylesGeral';
+import { coresBase } from './stylesGeral';
 
 export const StylesTelaHome = StyleSheet.create({
     container: {

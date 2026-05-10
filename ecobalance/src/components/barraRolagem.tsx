@@ -3,13 +3,13 @@ import { View, StyleSheet, ViewStyle } from "react-native";
 import { coresBase } from "../styles/stylesGeral";
 
 // Definindo o que o componente pode receber
-interface ProgressBarProps {
+type ProgressBarProps = Readonly<{
   progresso: number;  
   corFundo?: string;     
   corPreenchimento?: string; 
   altura?: number;        
   style?: ViewStyle;     
-}
+}>;
 
 export function ProgressBar({ 
   progresso, 

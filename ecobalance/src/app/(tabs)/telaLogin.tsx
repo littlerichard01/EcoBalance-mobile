@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Button, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { Image, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/stackNavigator"
@@ -12,7 +12,7 @@ import { LinkEsqueciSenha } from "@/src/components/linkEsqueciSenha";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from "../../services/api";
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
+type NavigationProp = StackNavigationProp<RootStackParamList, "TelaLogin">;
 
 export default function TelaLogin() {
   const [email, setEmail] = useState('');
@@ -74,7 +74,7 @@ export default function TelaLogin() {
 
       <LinkEsqueciSenha />
 
-      <TouchableOpacity onPress={() => navigation.navigate("TelaCadastro" as never)} style={{ marginTop: 20, alignItems: 'center' }}>
+      <TouchableOpacity onPress={() => navigation.navigate("TelaCadastro")} style={{ marginTop: 20, alignItems: 'center' }}>
         <Text style={{textDecorationLine: 'underline', fontStyle: 'italic'}}>Ainda não tem conta? Cadastre-se</Text>
       </TouchableOpacity>
     </View>

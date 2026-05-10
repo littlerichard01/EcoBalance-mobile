@@ -1,7 +1,7 @@
 import { BotaoCriarConta } from "../../components/botaoCriarConta";
 import { LinkTenhoConta } from "../../components/linkTenhoConta";
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/stackNavigator";
@@ -51,5 +51,4 @@ export default function TelaInicial() {
     </View>
   );
 }
-
 

@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { LinkTenhoConta } from '../components/linkTenhoConta';
 
 export const stylesTelaInicial = StyleSheet.create({
     container: {

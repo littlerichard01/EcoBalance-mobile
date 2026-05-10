@@ -23,7 +23,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 import { setLembreteTesteHabilitado } from "@/src/services/testeReminderNotifications";
 
-type NavigationProp = StackNavigationProp<RootStackParamList, "MainTabs">;
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const avatarSources = [
   require("../../assets/avatars/avatar1.png"),
@@ -64,7 +64,7 @@ export default function TelaPerfil() {
 
       if (status === 401) {
         await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento" as never);
+        navigation.navigate("TelaCarregamento");
         return;
       }
 
@@ -95,7 +95,7 @@ export default function TelaPerfil() {
 
         if (status === 401) {
           await AsyncStorage.removeItem("@EcoBalance:token");
-          navigation.navigate("TelaCarregamento" as never);
+          navigation.navigate("TelaCarregamento");
           return;
         }
 

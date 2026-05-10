@@ -1,5 +1,4 @@
 import { BotaoCriarRotina } from "@/src/components/botaoCriarRotina";
-import { fonte } from "@/src/styles/fontes";
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, FlatList, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -44,7 +43,8 @@ export default function TelaRotina() {
                             await api.delete(`/rotinas/${id}`);
                             Alert.alert("Sucesso", "Rotina excluída.");
                             carregarRotinas(); // Recarrega a lista
-                        } catch (error) {
+                        } catch (error: any) {
+                            console.error("Erro ao excluir rotina:", error?.response?.data || error?.message || error);
                             Alert.alert("Erro", "Não foi possível excluir a rotina.");
                         }
                     }

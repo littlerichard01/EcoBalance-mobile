@@ -2,7 +2,7 @@ import { BotaoConcluir } from "@/src/components/botaoConcluir";
 import { fonte } from "@/src/styles/fontes";
 import { stylesGeral } from "@/src/styles/stylesGeral";
 import React, { useState } from "react";
-import { Button, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import { stylesTelaEsqueciSenha } from "../../styles/telaEsqueciSenhaStyles";
 
 export default function TelaEsqueciSenha() {

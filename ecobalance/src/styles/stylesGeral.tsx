@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { BotaoAvancar } from "../components/botaoAvancar";
 
 
 export const coresBase = {
