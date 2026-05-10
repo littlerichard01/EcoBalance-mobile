@@ -18,7 +18,7 @@ export default function TelaCadastro() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [confirmarSenha, setConfirmaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
 
     const navigation = useNavigation<NavigationProp>();
 
@@ -86,7 +86,7 @@ export default function TelaCadastro() {
                 style={stylesGeral.textInput}
                 placeholder="Confirme sua senha"
                 value={confirmarSenha}
-                onChangeText={setConfirmaSenha}
+                onChangeText={setConfirmarSenha}
                 secureTextEntry
             />
 

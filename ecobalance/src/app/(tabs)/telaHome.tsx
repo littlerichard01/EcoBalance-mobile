@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { StylesTelaHome } from "../../styles/telaHomeStyles";
-import api from "@/src/services/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../navigation/stackNavigator";
 import { ScrollView } from "react-native-gesture-handler";
+import { conquistasDef } from "@/src/constants/conquistas";
+import { buildTesteBars } from "@/src/utils/testeBars";
+import { fetchConquistasMe, fetchTestesMe, fetchUsuarioMe } from "@/src/services/meApi";
+import { loadOrLogout } from "@/src/utils/loadOrLogout";
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -28,44 +30,6 @@ const avatarSources = [
   require("../../assets/avatars/avatar7.png"),
   require("../../assets/avatars/avatar8.png"),
   require("../../assets/avatars/avatar9.png"),
-];
-
-const conquistasDef = [
-  {
-    id: 1,
-    nome: "primeiro_teste",
-    titulo: "Primeiro teste",
-    descricao: "Obtida quando o usuário faz o seu primeiro teste",
-    imagem: require("../../assets/conquistas/conquistaPrimeiroTeste.png"),
-  },
-  {
-    id: 2,
-    nome: "abaixo_media_global",
-    titulo: "Abaixo da média global I",
-    descricao: "Quando o total de emissão é menor que a média global",
-    imagem: require("../../assets/conquistas/conquistaAbaixoMedia.png"),
-  },
-  {
-    id: 3,
-    nome: "abaixo_media_global_2",
-    titulo: "Abaixo da média global II",
-    descricao: "Quando faz 2 testes seguidos abaixo da média global",
-    imagem: require("../../assets/conquistas/conquistaAbaixoMedia2.png"),
-  },
-  {
-    id: 4,
-    nome: "melhoria_pessoal",
-    titulo: "Melhoria pessoal I",
-    descricao: "Quando a emissão é menor do que o último teste",
-    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal.png"),
-  },
-  {
-    id: 5,
-    nome: "melhoria_pessoal_2",
-    titulo: "Melhoria pessoal II",
-    descricao: "Quando a emissão é menor que os dois últimos testes",
-    imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal2.png"),
-  },
 ];
 
 const bannerNivelSources = [
@@ -113,57 +77,33 @@ export default function TelaHome() {
   }, [faltamTestes, proximoLimite]);
 
   const carregarUsuario = useCallback(async () => {
-    try {
-      const response = await api.get("/users/me");
-      setNomeUsuario(response.data?.usuario?.nome ?? "");
-      setAvatarSelecionado(
-        Number(response.data?.usuario?.avatarSelecionado) || 1,
-      );
-    } catch (error: any) {
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento");
-        return;
-      }
-
-      Alert.alert("Erro", "Não foi possível carregar seus dados.");
-    }
+    await loadOrLogout(
+      navigation,
+      fetchUsuarioMe,
+      (usuario) => {
+        setNomeUsuario(usuario?.nome ?? "");
+        setAvatarSelecionado(Number(usuario?.avatarSelecionado) || 1);
+      },
+      "Não foi possível carregar seus dados.",
+    );
   }, [navigation]);
 
   const carregarTestes = useCallback(async () => {
-    try {
-      const response = await api.get("/testes/me");
-      setTestes(Array.isArray(response.data) ? response.data : []);
-    } catch (error: any) {
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento");
-        return;
-      }
-
-      Alert.alert("Erro", "Não foi possível carregar seus testes.");
-    }
+    await loadOrLogout(
+      navigation,
+      fetchTestesMe,
+      setTestes,
+      "Não foi possível carregar seus testes.",
+    );
   }, [navigation]);
 
   const carregarConquistas = useCallback(async () => {
-    try {
-      const response = await api.get("/users/me/conquistas");
-      setConquistasUsuario(Array.isArray(response.data?.conquistas) ? response.data.conquistas : []);
-    } catch (error: any) {
-      const status = error?.response?.status;
-
-      if (status === 401) {
-        await AsyncStorage.removeItem("@EcoBalance:token");
-        navigation.navigate("TelaCarregamento");
-        return;
-      }
-
-      Alert.alert("Erro", "Não foi possível carregar suas conquistas.");
-    }
+    await loadOrLogout(
+      navigation,
+      fetchConquistasMe,
+      setConquistasUsuario,
+      "Não foi possível carregar suas conquistas.",
+    );
   }, [navigation]);
 
   useFocusEffect(
@@ -179,28 +119,6 @@ export default function TelaHome() {
     const date = new Date(data);
     if (Number.isNaN(date.getTime())) return "";
     return date.toLocaleDateString("pt-BR");
-  };
-
-  const buildBars = (teste: any) => {
-    const alimentos = Number(teste?.emissaoAlimentos) || 0;
-    const gas = Number(teste?.emissaoGas) || 0;
-    const veiculosTotal = Number(teste?.emissaoVeiculos) || 0;
-    const energia = Number(teste?.energiaEletrica?.emissao) || 0;
-    const viagens = Array.isArray(teste?.viagem?.veiculos)
-      ? teste.viagem.veiculos.reduce((acc: number, v: any) => {
-          return acc + (Number(v?.emissao) || 0);
-        }, 0)
-      : 0;
-    const veiculosRotina = Math.max(veiculosTotal - viagens, 0);
-    const max = Math.max(alimentos, gas, veiculosRotina, viagens, energia, 1);
-
-    return [
-      { key: "Alim", label: "Alim", value: alimentos, color: coresBase.verdeMedio, max },
-      { key: "Gás", label: "Gás", value: gas, color: "#4C9F70", max },
-      { key: "Veíc", label: "Veíc", value: veiculosRotina, color: "#2C6E49", max },
-      { key: "Viag", label: "Viag", value: viagens, color: "#1B4332", max },
-      { key: "Ener", label: "Ener", value: energia, color: "#8BC34A", max },
-    ];
   };
 
   const ultimosTestesAvanco = testes.slice(0, 6).reverse();
@@ -553,7 +471,7 @@ export default function TelaHome() {
           setScrollOffsetGraficos(totalWidth > 0 ? currentPos / totalWidth : 0);
         }}
         renderItem={({ item }) => {
-          const bars = buildBars(item);
+          const bars = buildTesteBars(item);
           const alturaMax = 112;
 
           return (

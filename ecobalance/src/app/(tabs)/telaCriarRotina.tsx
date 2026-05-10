@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
@@ -10,8 +10,6 @@ import  DietaRotina  from "./criarRotina/dietaRotina";
 import { BotaoRetornar } from "@/src/components/botaoRetornar";
 import Gas from "./criarRotina/gasRotina";
 import TransporteRotina from "./criarRotina/veiculosRotina";
-import EnergiaRotina from "./criarRotina/energiaRotina";
-import ViagemRotina from "./criarRotina/viagensRotina";
 import { BotaoConcluir } from "@/src/components/botaoConcluir";
 import api from "../../services/api";
 import { stylesGeral } from "@/src/styles/stylesGeral";

@@ -7,6 +7,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { styleTelaResultado } from "@/src/styles/telaResultadoStyles";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
+import { conquistasDef } from "@/src/constants/conquistas";
 
 const MEDIA_GLOBAL = {
   total: 243.19,
@@ -97,31 +98,13 @@ export default function ResultadoCalculo() {
   const totalUsuario = Number(teste?.emissaoTotal || 0);
   const ehSustentavel = totalUsuario < MEDIA_GLOBAL.total;
 
-  const conquistasInfo = useMemo(
-    () => ({
-      primeiro_teste: {
-        titulo: "Primeiro teste",
-        imagem: require("../../assets/conquistas/conquistaPrimeiroTeste.png"),
-      },
-      abaixo_media_global: {
-        titulo: "Abaixo da média global",
-        imagem: require("../../assets/conquistas/conquistaAbaixoMedia.png"),
-      },
-      abaixo_media_global_2: {
-        titulo: "Abaixo da média global II",
-        imagem: require("../../assets/conquistas/conquistaAbaixoMedia2.png"),
-      },
-      melhoria_pessoal: {
-        titulo: "Melhoria pessoal",
-        imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal.png"),
-      },
-      melhoria_pessoal_2: {
-        titulo: "Melhoria pessoal II",
-        imagem: require("../../assets/conquistas/conquistaMelhoriaPessoal2.png"),
-      },
-    }),
-    [],
-  );
+  const conquistasInfo = useMemo(() => {
+    const map: Record<string, { titulo: string; imagem: any }> = {};
+    for (const c of conquistasDef) {
+      map[c.nome] = { titulo: c.titulo, imagem: c.imagem };
+    }
+    return map;
+  }, []);
 
   useEffect(() => {
     if (Array.isArray(novasConquistas) && novasConquistas.length > 0) {
@@ -145,6 +128,28 @@ export default function ResultadoCalculo() {
         index: 0,
         routes: [{ name: "TelaCalculos" as never }],
       }),
+    );
+  };
+
+  const renderGraficoBarras = (barras: any[], max: number) => {
+    return (
+      <View style={styleTelaResultado.graficoContainer}>
+        {barras.map((b) => {
+          const altura = Math.max(10, (b.value / max) * 165);
+          return (
+            <View key={b.key} style={styleTelaResultado.barraColuna}>
+              <Text style={styleTelaResultado.barraValor}>{b.value.toFixed(1)}</Text>
+              <View
+                style={[
+                  styleTelaResultado.barra,
+                  { height: altura, backgroundColor: b.color },
+                ]}
+              />
+              <Text style={styleTelaResultado.barraLabel}>{b.label}</Text>
+            </View>
+          );
+        })}
+      </View>
     );
   };
 
@@ -199,23 +204,7 @@ export default function ResultadoCalculo() {
       </View>
 
       <Text style={styleTelaResultado.secaoTitulo}>Seu teste:</Text>
-      <View style={styleTelaResultado.graficoContainer}>
-        {barrasUsuario.map((b) => {
-          const altura = Math.max(10, (b.value / maxUsuario) * 165);
-          return (
-            <View key={b.key} style={styleTelaResultado.barraColuna}>
-              <Text style={styleTelaResultado.barraValor}>{b.value.toFixed(1)}</Text>
-              <View
-                style={[
-                  styleTelaResultado.barra,
-                  { height: altura, backgroundColor: b.color },
-                ]}
-              />
-              <Text style={styleTelaResultado.barraLabel}>{b.label}</Text>
-            </View>
-          );
-        })}
-      </View>
+      {renderGraficoBarras(barrasUsuario, maxUsuario)}
       <View style={styleTelaResultado.totalComparacao}>
         <Text style={styleTelaResultado.totalComparacaoLabel}>
           Seu total: {Number(teste?.emissaoTotal || 0).toFixed(2)} kgCO₂
@@ -223,23 +212,7 @@ export default function ResultadoCalculo() {
       </View>
 
       <Text style={styleTelaResultado.secaoTitulo}>Média global:</Text>
-      <View style={styleTelaResultado.graficoContainer}>
-        {barrasGlobal.map((b) => {
-          const altura = Math.max(10, (b.value / maxGlobal) * 165);
-          return (
-            <View key={b.key} style={styleTelaResultado.barraColuna}>
-              <Text style={styleTelaResultado.barraValor}>{b.value.toFixed(1)}</Text>
-              <View
-                style={[
-                  styleTelaResultado.barra,
-                  { height: altura, backgroundColor: b.color },
-                ]}
-              />
-              <Text style={styleTelaResultado.barraLabel}>{b.label}</Text>
-            </View>
-          );
-        })}
-      </View>
+      {renderGraficoBarras(barrasGlobal, maxGlobal)}
 
       <View style={styleTelaResultado.totalComparacao}>
         <Text style={styleTelaResultado.totalComparacaoLabel}>

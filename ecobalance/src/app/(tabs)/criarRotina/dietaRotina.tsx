@@ -4,6 +4,26 @@ import React from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
+const CAMPOS_PADRAO = [
+    "Carne bovina",
+    "Carne suína",
+    "Frango",
+    "Peixe",
+    "Leite",
+    "Ovos",
+    "Leguminosas",
+    "Frutas e vegetais",
+    "Cereais integrais",
+] as const;
+
+const CAMPOS_POR_DIETA: Record<string, readonly string[]> = {
+    carnivora: ["Carne bovina", "Carne suína", "Frango", "Peixe", "Leite", "Ovos"],
+    pescetariana: ["Peixe", "Leite", "Ovos", "Leguminosas", "Frutas e vegetais", "Cereais integrais"],
+    vegana: ["Leguminosas", "Frutas e vegetais", "Cereais integrais"],
+    vegetariana: ["Leite", "Ovos", "Leguminosas", "Frutas e vegetais", "Cereais integrais"],
+    onivora: CAMPOS_PADRAO,
+};
+
 export default function DietaRotina({ rotinaData, updateRotina }: any) {
     const dieta = rotinaData.dieta;
     const porcoes = rotinaData.porcoes || {};
@@ -26,62 +46,16 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
     ];
 
     const renderCampos = () => {
-        switch (dieta){
-            case "carnivora":
-                return (
-                    <>
-                        {renderInput("Carne bovina", getPorcao("Carne bovina"), (v) => updatePorcao("Carne bovina", v))}
-                        {renderInput("Carne suína", getPorcao("Carne suína"), (v) => updatePorcao("Carne suína", v))}
-                        {renderInput("Frango", getPorcao("Frango"), (v) => updatePorcao("Frango", v))}
-                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
-                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
-                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
-                    </>
-                )
-            case "pescetariana":
-                return (
-                    <>
-                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
-                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
-                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
-                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
-                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
-                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
-                    </>
-                )
-            case "vegana":
-                return (
-                    <>
-                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
-                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
-                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
-                    </>
-                )
-            case "vegetariana":
-                return (
-                    <>
-                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
-                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
-                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
-                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
-                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
-                    </>
-                )
-            default: 
-                return (
-                    <>
-                        {renderInput("Carne bovina", getPorcao("Carne bovina"), (v) => updatePorcao("Carne bovina", v))}
-                        {renderInput("Carne suína", getPorcao("Carne suína"), (v) => updatePorcao("Carne suína", v))}
-                        {renderInput("Frango", getPorcao("Frango"), (v) => updatePorcao("Frango", v))}
-                        {renderInput("Peixe", getPorcao("Peixe"), (v) => updatePorcao("Peixe", v))}
-                        {renderInput("Leite", getPorcao("Leite"), (v) => updatePorcao("Leite", v))}
-                        {renderInput("Ovos", getPorcao("Ovos"), (v) => updatePorcao("Ovos", v))}
-                        {renderInput("Leguminosas", getPorcao("Leguminosas"), (v) => updatePorcao("Leguminosas", v))}
-                        {renderInput("Frutas e vegetais", getPorcao("Frutas e vegetais"), (v) => updatePorcao("Frutas e vegetais", v))}
-                        {renderInput("Cereais integrais", getPorcao("Cereais integrais"), (v) => updatePorcao("Cereais integrais", v))}
-                    </>
-                );
-        }
+        const campos = CAMPOS_POR_DIETA[dieta] || CAMPOS_PADRAO;
+        return (
+            <>
+                {campos.map((alimento) =>
+                    renderInput(alimento, getPorcao(alimento), (v) =>
+                        updatePorcao(alimento, v),
+                    ),
+                )}
+            </>
+        );
     }
 
     const renderInput = (label: string, value: string, onChange: (t:string) => void) =>(        
