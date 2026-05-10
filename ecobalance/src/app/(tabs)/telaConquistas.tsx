@@ -9,9 +9,9 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/src/navigation/stackNavigator";
 import { ScrollView } from "react-native-gesture-handler";
 import { conquistasDef, type ConquistaDef } from "@/src/constants/conquistas";
-import { buildTesteBars } from "@/src/utils/testeBars";
 import { fetchConquistasMe, fetchTestesMe } from "@/src/services/meApi";
 import { loadOrLogout } from "@/src/utils/loadOrLogout";
+import { GraficoTestesHorizontal } from "@/src/components/graficoTestesHorizontal";
 
 type Conquista = ConquistaDef & {
   desbloqueado: boolean;
@@ -33,7 +33,6 @@ export default function Conquistas() {
   const navigation = useNavigation<NavigationProp>();
   const [testes, setTestes] = useState<any[]>([]);
   const [conquistasUsuario, setConquistasUsuario] = useState<any[]>([]);
-  const [scrollOffsetGraficos, setScrollOffsetGraficos] = useState(0);
 
   const carregarTestes = useCallback(() => {
     return loadOrLogout(
@@ -73,12 +72,6 @@ export default function Conquistas() {
   });
   const dadosAgrupados = agruparEmColunas<Conquista>(conquistasComStatus, 3);
 
-  const formatarDataRealizacao = (data: any) => {
-    const date = new Date(data);
-    if (Number.isNaN(date.getTime())) return "";
-    return date.toLocaleDateString("pt-BR");
-  };
-  
 
   return (
     <ScrollView style={stylesGeral.telaInteira}>
@@ -173,76 +166,12 @@ export default function Conquistas() {
         <Text style={stylesGeral.tituloPagina}>Gráficos:</Text>
       </View>
 
-      <FlatList
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingRight: 10,
-          marginTop: 15
-        }}
-        horizontal={true}
-        data={testes}
-        keyExtractor={(item, index) => (item?._id || item?.id || index).toString()}
-        onScroll={(event) => {
-          const totalWidth =
-            event.nativeEvent.contentSize.width -
-            event.nativeEvent.layoutMeasurement.width;
-          const currentPos = event.nativeEvent.contentOffset.x;
-          setScrollOffsetGraficos(totalWidth > 0 ? currentPos / totalWidth : 0);
-        }}
-        renderItem={({ item }) => {
-          const bars = buildTesteBars(item);
-          const alturaMax = 112;
-
-          return (
-            <View style={StylesTelaHome.graficoCard}>
-              <View style={StylesTelaHome.barrasContainer}>
-                {bars.map((b) => {
-                  const height = Math.max(6, (b.value / b.max) * alturaMax);
-                  return (
-                    <View key={b.key} style={StylesTelaHome.barraColuna}>
-                      <Text style={StylesTelaHome.barraValor}>
-                        {b.value.toFixed(1)}
-                      </Text>
-                      <View
-                        style={[
-                          StylesTelaHome.barra,
-                          { height, backgroundColor: b.color },
-                        ]}
-                      />
-                      <Text style={StylesTelaHome.barraLabel}>{b.label}</Text>
-                    </View>
-                  );
-                })}
-              </View>
-                            <Text style={StylesTelaHome.graficoData}>
-                {formatarDataRealizacao(item?.dataRealizacao || item?.createdAt)}
-              </Text>
-            </View>
-          );
-        }}
+      <GraficoTestesHorizontal
+        testes={testes}
+        indicadorLarguraFator={0.8}
+        contentContainerStyle={{ paddingRight: 10, marginTop: 15 }}
+        marginBottom={100}
       />
-
-      <View
-        style={{
-          width: "100%",
-          height: 9,
-          backgroundColor: coresBase.verdeClaro,
-          alignSelf: "center",
-          borderRadius: 25,
-          marginBottom: 100,
-        }}
-      >
-        <View
-          style={{
-            width: "80%",
-            height: "100%",
-            backgroundColor: coresBase.verdeMedio,
-            borderRadius: 25,
-            marginLeft: scrollOffsetGraficos * 70,
-
-          }}
-        />
-      </View>
     </ScrollView>
   );
 }
