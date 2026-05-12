@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Rotina = require('../models/Rotina');
 const TesteDeUsuario = require('../models/TesteDeUsuario');
 const { garantirConquistasPadrao } = require('../services/conquistasPadrao');
+const { isStrongPassword } = require('../utils/passwordPolicy');
 
 const camposPermitidos = ['nome', 'email', 'senha', 'receberLembretes', 'receberNotificacoesApp', 'avatarSelecionado', 'idioma'];
 
@@ -112,6 +113,10 @@ exports.updateMe = async (req, res) => {
         }
 
         if (updates.senha) {
+            const senhaCheck = isStrongPassword(updates.senha);
+            if (!senhaCheck.ok) {
+                return res.status(400).json({ message: senhaCheck.failures[0] });
+            }
             updates.senha = await bcrypt.hash(updates.senha, 10);
         }
 

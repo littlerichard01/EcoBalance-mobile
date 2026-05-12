@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { TouchableOpacity, Image, View, Text, TextInput, Alert } from "react-native";
 import { BotaoCriarConta } from "../../components/botaoCriarConta";
 import { styles } from "../../styles/logo";
@@ -10,6 +10,8 @@ import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import { fonte } from "@/src/styles/fontes";
 import api from "../../services/api";
 import { stylesTelaLogin } from "@/src/styles/telaLoginStyles";
+import { validateStrongPassword } from "@/src/utils/passwordPolicy";
+import { SenhaRequisitosDropdown } from "@/src/components/senhaRequisitosDropdown";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "TelaCadastro">;
 
@@ -19,6 +21,8 @@ export default function TelaCadastro() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [senhaFocada, setSenhaFocada] = useState(false);
+    const senhaForte = useMemo(() => validateStrongPassword(senha).ok, [senha]);
 
     const navigation = useNavigation<NavigationProp>();
 
@@ -31,6 +35,12 @@ export default function TelaCadastro() {
 
         if (senha !== confirmarSenha) {
             Alert.alert("Erro", "As senhas não coincidem.");
+            return;
+        }
+
+        const senhaCheck = validateStrongPassword(senha);
+        if (!senhaCheck.ok) {
+            Alert.alert("Erro", senhaCheck.failures[0]);
             return;
         }
 
@@ -80,7 +90,10 @@ export default function TelaCadastro() {
                 value={senha}
                 onChangeText={setSenha}
                 secureTextEntry
+                onFocus={() => setSenhaFocada(true)}
+                onBlur={() => setSenhaFocada(false)}
             />
+            <SenhaRequisitosDropdown senha={senha} visible={senhaFocada && !senhaForte} />
             <Text style={stylesTelaLogin.inputText}>Confirme sua senha</Text>
             <TextInput
                 style={stylesGeral.textInput}

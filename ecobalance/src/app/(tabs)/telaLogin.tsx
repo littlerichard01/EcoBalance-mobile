@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Image, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
@@ -11,13 +11,17 @@ import { stylesGeral } from "@/src/styles/stylesGeral";
 import { LinkEsqueciSenha } from "@/src/components/linkEsqueciSenha";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from "../../services/api";
+import { SenhaRequisitosDropdown } from "@/src/components/senhaRequisitosDropdown";
+import { validateStrongPassword } from "@/src/utils/passwordPolicy";
 
 type NavigationProp = StackNavigationProp<RootStackParamList, "TelaLogin">;
 
 export default function TelaLogin() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [senhaFocada, setSenhaFocada] = useState(false);
   const navigation = useNavigation<NavigationProp>();
+  const senhaForte = useMemo(() => validateStrongPassword(senha).ok, [senha]);
 
   const handleLogin = async () => {
     if (!email || !senha) {
@@ -68,7 +72,10 @@ export default function TelaLogin() {
         value={senha}
         onChangeText={setSenha}
         secureTextEntry
+        onFocus={() => setSenhaFocada(true)}
+        onBlur={() => setSenhaFocada(false)}
       />
+      <SenhaRequisitosDropdown senha={senha} visible={senhaFocada && !senhaForte} />
 
       <BotaoEntrar onPress={handleLogin} />
 

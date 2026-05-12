@@ -2,11 +2,17 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { CONQUISTAS_DEFINICOES } = require("../config/conquistas");
+const { isStrongPassword } = require("../utils/passwordPolicy");
 
 //Cadastro
 const registerUser = async (req, res) => {
   try {
     const { nome, email, senha } = req.body;
+
+    const senhaCheck = isStrongPassword(senha);
+    if (!senhaCheck.ok) {
+      return res.status(400).json({ message: senhaCheck.failures[0] });
+    }
 
     //Verifica se já existe
     const userExists = await User.findOne({ email: String(email) });
