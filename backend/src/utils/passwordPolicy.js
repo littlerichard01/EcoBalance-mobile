@@ -15,8 +15,8 @@ const isStrongPassword = (senha) => {
   if (/\s/.test(s)) failures.push(REASONS.noSpaces);
   if (!/[a-z]/.test(s)) failures.push(REASONS.lower);
   if (!/[A-Z]/.test(s)) failures.push(REASONS.upper);
-  if (!/[0-9]/.test(s)) failures.push(REASONS.digit);
-  if (!/[^A-Za-z0-9\s]/.test(s)) failures.push(REASONS.special);
+  if (!/\d/.test(s)) failures.push(REASONS.digit);
+  if (!/[^A-Za-z\d\s]/.test(s)) failures.push(REASONS.special);
 
   return { ok: failures.length === 0, failures };
 };

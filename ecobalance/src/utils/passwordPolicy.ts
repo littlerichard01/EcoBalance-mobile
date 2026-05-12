@@ -11,11 +11,11 @@ export const getPasswordRequirements = (senha: string): PasswordRequirement[] =>
     { id: "minLength", label: "Precisa ter 7 caracteres ou mais", ok: s.length >= 7 },
     { id: "lower", label: "Precisa ter pelo menos 1 letra minúscula", ok: /[a-z]/.test(s) },
     { id: "upper", label: "Precisa ter pelo menos 1 letra maiúscula", ok: /[A-Z]/.test(s) },
-    { id: "digit", label: "Precisa ter pelo menos 1 número", ok: /[0-9]/.test(s) },
+    { id: "digit", label: "Precisa ter pelo menos 1 número", ok: /\d/.test(s) },
     {
       id: "special",
       label: "Precisa ter pelo menos 1 caractere especial",
-      ok: /[^A-Za-z0-9\s]/.test(s),
+      ok: /[^A-Za-z\d\s]/.test(s),
     },
     { id: "noSpaces", label: "Não pode conter espaços", ok: !/\s/.test(s) },
   ];
