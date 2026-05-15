@@ -58,6 +58,7 @@ const perfilTabBarIcon = ({ focused }: { focused: boolean }) => (
 export function TabNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,

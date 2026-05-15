@@ -49,11 +49,13 @@ export default function DietaRotina({ rotinaData, updateRotina }: any) {
         const campos = CAMPOS_POR_DIETA[dieta] || CAMPOS_PADRAO;
         return (
             <>
-                {campos.map((alimento) =>
-                    renderInput(alimento, getPorcao(alimento), (v) =>
-                        updatePorcao(alimento, v),
-                    ),
-                )}
+                {campos.map((alimento) => (
+                    <View key={alimento}>
+                        {renderInput(alimento, getPorcao(alimento), (v) =>
+                            updatePorcao(alimento, v),
+                        )}
+                    </View>
+                ))}
             </>
         );
     }
