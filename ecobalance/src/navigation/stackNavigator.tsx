@@ -12,6 +12,7 @@ import TelaEsqueciSenha from '../app/(tabs)/telaEsqueciSenha';
 import TelaRecuperacaoSenha from '../app/(tabs)/telaRecuperacaoSenha';
 import { TabNavigator } from './tabNavigator';
 import ResultadoCalculo from '../app/(tabs)/telaResultado';
+import TelaEditarRotina from '../app/(tabs)/telaEditarRotina';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +24,6 @@ export type RootStackParamList = {
     TelaLogin: undefined;
     TelaCadastro: undefined;
     TelaCarregamento: undefined;
-
     TelaRotina: undefined;
     TelaCriarRotina: undefined;
     TelaCalculos: undefined;
@@ -31,6 +31,7 @@ export type RootStackParamList = {
     Conquistas: undefined;
     TelaEsqueciSenha: undefined;
     TelaRecuperacaoSenha: undefined;
+    TelaEditarRotina: { rotinaId: string; rotinaNome: string };
     ResultadoCalculo: {
         rotinaNome?: string;
         novasConquistas?: string[];
@@ -76,6 +77,7 @@ export function RotinaFlow() {
             {/* Esta será a tela inicial da aba de rotinas */}
             <RotinaStack.Screen name="TelaRotina" component={TelaRotina} />
             <RotinaStack.Screen name="TelaCriarRotina" component={TelaCriarRotina} />
+            <RotinaStack.Screen name="TelaEditarRotina" component={TelaEditarRotina} />
         </RotinaStack.Navigator>
     );
 }

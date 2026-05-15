@@ -67,4 +67,13 @@ export const stylesTelaRotina = StyleSheet.create({
     color: coresBase.verdeMedio,
     alignSelf: "center",
   },
+  rotinaTitulo: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: coresBase.verdeMedio,
+    marginTop: 20,
+    marginBottom: 30,
+    alignSelf: "center",
+
+  }
 });
