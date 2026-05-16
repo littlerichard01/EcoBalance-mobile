@@ -13,7 +13,7 @@ import {
 import { BotaoSair } from "../../components/botaoSair";
 import { stylesTelaPerfil } from "../../styles/telaPerfilStyles";
 import { fonte } from "@/src/styles/fontes";
-import { stylesGeral } from "@/src/styles/stylesGeral";
+import { coresBase, stylesGeral } from "@/src/styles/stylesGeral";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
@@ -22,6 +22,7 @@ import api from "@/src/services/api";
 import { ScrollView } from "react-native-gesture-handler";
 import { stylesTelaRotina } from "@/src/styles/telaRotinaStyle";
 import { setLembreteTesteHabilitado } from "@/src/services/testeReminderNotifications";
+import { Feather } from "@expo/vector-icons";
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -46,6 +47,7 @@ export default function TelaPerfil() {
   const [carregandoPreferencias, setCarregandoPreferencias] = useState(false);
   const [avatarSelecionado, setAvatarSelecionado] = useState(1);
   const [modalAvatarVisivel, setModalAvatarVisivel] = useState(false);
+  const [isEditingNome, setIsEditingNome] = useState(false);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -152,6 +154,26 @@ export default function TelaPerfil() {
     [atualizarPreferencias, avatarSelecionado],
   );
 
+  const toggleEditarNome = async () => {
+    if (isEditingNome) {
+      // salvar
+      try {
+        await api.put("/users/me", { nome: usuario });
+        setIsEditingNome(false);
+        Alert.alert("Sucesso", "Nome atualizado.");
+        carregarPerfil();
+      } catch (error: any) {
+        console.error(
+          "Erro ao atualizar nome:",
+          error?.response?.data || error?.message || error,
+        );
+        Alert.alert("Erro", "Não foi possível atualizar o nome.");
+      }
+    } else {
+      setIsEditingNome(true);
+    }
+  };
+
   const handleSair = async () => {
     // #region Conexão Front-Back (Logout)
     try {
@@ -164,121 +186,190 @@ export default function TelaPerfil() {
   };
 
   return (
-  <ScrollView 
-    style={stylesGeral.telaInteira} 
-    contentContainerStyle={{ paddingBottom: 80 }} // Garante que o botão Sair não cole nas abas
-  >
-    <View style={{ marginTop: -15}}>
-      {/* 1. CABEÇALHO */}
-      <View style={stylesTelaPerfil.cabecalho}>
-        <Image
-          source={require("../../assets/engrenagem.png")}
-          style={[stylesTelaRotina.rotinaIcon, { marginRight: 10 }]}
-        />
-        <Text style={[stylesGeral.tituloPagina, { marginTop: 20, marginBottom: 20 }]}>
-          Perfil
-        </Text>
-      </View>
-
-      {/* 2. AVATAR */}
-      <View style={stylesTelaPerfil.avatarContainer}>
-        <Image
-          source={avatarSources[(avatarSelecionado || 1) - 1]}
-          style={stylesTelaPerfil.avatar}
-        />
-        <TouchableOpacity
-          onPress={() => setModalAvatarVisivel(true)}
-          disabled={carregandoPreferencias}
-        >
-          <Text style={[fonte.subtitulo, { marginTop: 10, marginBottom: 50 }]}>
-            Mudar foto
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* 3. FORMULÁRIO */}
-      <Text>Nome</Text>
-      <TextInput
-        style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
-        value={usuario}
-        editable={false}
-      />
-
-      <Text>E-mail</Text>
-      <TextInput
-        style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
-        value={email}
-        editable={false}
-      />
-
-      <Text>Senha</Text>
-      <TextInput
-        style={[stylesGeral.input2, { marginBottom: 30, marginTop: 5 }]}
-        placeholder="Digite sua senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-      />
-
-      {/* 4. CONFIGURAÇÕES */}
-      <View style={stylesTelaPerfil.notificacoesEmail}>
-        <Text style={fonte.subtitulo}>Notificações por e-mail?</Text>
-        <Switch onValueChange={toggleSwitchEmail} value={isEnabledEmail} />
-      </View>
-
-      <View style={stylesTelaPerfil.notificacoesApp}>
-        <Text style={fonte.subtitulo}>Notificações do aplicativo?</Text>
-        <Switch onValueChange={toggleSwitchApp} value={isEnabledApp} />
-      </View>
-
-      {/* 5. AÇÃO PRINCIPAL */}
-      <View style={{ marginTop: 20 }}>
-        <BotaoSair onPress={handleSair} />
-      </View>
-
-      {/* 6. MODAL (O segredo é deixar ele bem isolado no fim) */}
-      <Modal
-        transparent
-        visible={modalAvatarVisivel}
-        animationType="fade"
-        onRequestClose={() => setModalAvatarVisivel(false)}
-      >
-        <View style={stylesTelaPerfil.modalOverlay}>
-          <Pressable
-            style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
-            onPress={() => setModalAvatarVisivel(false)}
+    <ScrollView
+      style={stylesGeral.telaInteira}
+      contentContainerStyle={{ paddingBottom: 80 }} // Garante que o botão Sair não cole nas abas
+    >
+      <View style={{ marginTop: -15 }}>
+        {/* 1. CABEÇALHO */}
+        <View style={stylesTelaPerfil.cabecalho}>
+          <Image
+            source={require("../../assets/engrenagem.png")}
+            style={[stylesTelaRotina.rotinaIcon, { marginRight: 10 }]}
           />
-          <View style={stylesTelaPerfil.modalContent}>
-            <Text style={stylesTelaPerfil.modalTitle}>Escolha seu avatar</Text>
-            <View style={stylesTelaPerfil.avatarGrid}>
-              {avatarSources.map((source, idx) => (
-                <TouchableOpacity
-                  key={`avatar-${idx + 1}`}
-                  onPress={() => { selecionarAvatar(idx + 1); }}
-                  disabled={carregandoPreferencias}
-                >
-                  <Image
-                    source={source}
-                    style={[
-                      stylesTelaPerfil.avatarOption,
-                      (idx + 1) === avatarSelecionado && stylesTelaPerfil.avatarOptionSelected,
-                    ]}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
-            
-            {/* O BOTÃO FECHAR PRECISA ESTAR AQUI DENTRO DO MODAL */}
-            <TouchableOpacity
-              style={stylesTelaPerfil.modalCloseButton}
-              onPress={() => setModalAvatarVisivel(false)}
-            >
-              <Text style={stylesTelaPerfil.modalCloseButtonText}>Fechar</Text>
-            </TouchableOpacity>
-          </View>
+          <Text
+            style={[
+              stylesGeral.tituloPagina,
+              { marginTop: 20, marginBottom: 20 },
+            ]}
+          >
+            Perfil
+          </Text>
         </View>
-      </Modal>
-    </View>
-  </ScrollView>
-);
+
+        {/* 2. AVATAR */}
+        <View style={stylesTelaPerfil.avatarContainer}>
+          <Image
+            source={avatarSources[(avatarSelecionado || 1) - 1]}
+            style={stylesTelaPerfil.avatar}
+          />
+          <TouchableOpacity
+            onPress={() => setModalAvatarVisivel(true)}
+            disabled={carregandoPreferencias}
+          >
+            <Text
+              style={[fonte.subtitulo, { marginTop: 10, marginBottom: 50 }]}
+            >
+              Mudar foto
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 3. FORMULÁRIO */}
+        <Text>Nome</Text>
+        <View
+          style={[
+            stylesTelaPerfil.inputContainer,
+            {
+              backgroundColor: isEditingNome ? "#FFFFFF" : coresBase.verdeBebe,
+            }, // Fundo cinza claro quando bloqueado
+          ]}
+        >
+          <TextInput
+            value={usuario}
+            onChangeText={setUsuario}
+            editable={isEditingNome}
+            style={[
+              stylesTelaPerfil.input,
+              { color: isEditingNome ? "rgb(0, 0, 0)" : "#545454" },
+            ]}
+          />
+          <TouchableOpacity
+            style={stylesTelaPerfil.edicaoInput}
+            onPress={toggleEditarNome}
+          >
+            <Feather
+              name={isEditingNome ? "check" : "edit-2"}
+              size={18}
+              color={coresBase.verdeEscuro}
+            />
+          </TouchableOpacity>
+        </View>
+
+
+        <Text>Email</Text>
+        <View
+          style={
+            stylesTelaPerfil.inputContainer
+          }
+        >
+          <TextInput
+          value={email}
+          editable={false}
+            style={
+              stylesTelaPerfil.input}
+          />
+          <TouchableOpacity
+            style={stylesTelaPerfil.edicaoInput}
+          >
+            <Feather
+              name="edit-2"
+              size={18}
+              color={coresBase.verdeEscuro}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <Text>Senha</Text>
+        <View style={stylesTelaPerfil.inputContainer}>
+          <TextInput
+            placeholder="Digite sua senha"
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry
+            style={stylesTelaPerfil.input}
+          />
+          <TouchableOpacity style={stylesTelaPerfil.edicaoInput}>
+            <Feather
+              name="edit-2"
+              size={18}
+              color={coresBase.verdeEscuro}
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* 4. CONFIGURAÇÕES */}
+        <View style={stylesTelaPerfil.notificacoesEmail}>
+          <Text style={fonte.subtitulo}>Notificações por e-mail?</Text>
+          <Switch onValueChange={toggleSwitchEmail} value={isEnabledEmail} />
+        </View>
+
+        <View style={stylesTelaPerfil.notificacoesApp}>
+          <Text style={fonte.subtitulo}>Notificações do aplicativo?</Text>
+          <Switch onValueChange={toggleSwitchApp} value={isEnabledApp} />
+        </View>
+
+        {/* 5. AÇÃO PRINCIPAL */}
+        <View style={{ marginTop: 20 }}>
+          <BotaoSair onPress={handleSair} />
+        </View>
+
+        {/* 6. MODAL (O segredo é deixar ele bem isolado no fim) */}
+        <Modal
+          transparent
+          visible={modalAvatarVisivel}
+          animationType="fade"
+          onRequestClose={() => setModalAvatarVisivel(false)}
+        >
+          <View style={stylesTelaPerfil.modalOverlay}>
+            <Pressable
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+              onPress={() => setModalAvatarVisivel(false)}
+            />
+            <View style={stylesTelaPerfil.modalContent}>
+              <Text style={stylesTelaPerfil.modalTitle}>
+                Escolha seu avatar
+              </Text>
+              <View style={stylesTelaPerfil.avatarGrid}>
+                {avatarSources.map((source, idx) => (
+                  <TouchableOpacity
+                    key={`avatar-${idx + 1}`}
+                    onPress={() => {
+                      selecionarAvatar(idx + 1);
+                    }}
+                    disabled={carregandoPreferencias}
+                  >
+                    <Image
+                      source={source}
+                      style={[
+                        stylesTelaPerfil.avatarOption,
+                        idx + 1 === avatarSelecionado &&
+                          stylesTelaPerfil.avatarOptionSelected,
+                      ]}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* O BOTÃO FECHAR PRECISA ESTAR AQUI DENTRO DO MODAL */}
+              <TouchableOpacity
+                style={stylesTelaPerfil.modalCloseButton}
+                onPress={() => setModalAvatarVisivel(false)}
+              >
+                <Text style={stylesTelaPerfil.modalCloseButtonText}>
+                  Fechar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </ScrollView>
+  );
 }
