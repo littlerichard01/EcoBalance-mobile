@@ -264,8 +264,8 @@ export default function TelaPerfil() {
           }
         >
           <TextInput
-          value={email}
-          editable={false}
+            value={email}
+            editable={false}
             style={
               stylesTelaPerfil.input}
           />
@@ -312,6 +312,14 @@ export default function TelaPerfil() {
         {/* 5. AÇÃO PRINCIPAL */}
         <View>
           <BotaoSair onPress={handleSair} />
+          <TouchableOpacity
+            style={stylesTelaPerfil.botaoDeletar}
+
+          >
+            <Text style={stylesTelaPerfil.texto}>
+              Deletar Conta
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* 6. MODAL (O segredo é deixar ele bem isolado no fim) */}
@@ -350,7 +358,7 @@ export default function TelaPerfil() {
                       style={[
                         stylesTelaPerfil.avatarOption,
                         idx + 1 === avatarSelecionado &&
-                          stylesTelaPerfil.avatarOptionSelected,
+                        stylesTelaPerfil.avatarOptionSelected,
                       ]}
                     />
                   </TouchableOpacity>

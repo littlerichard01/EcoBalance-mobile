@@ -106,4 +106,17 @@ export const stylesTelaPerfil = StyleSheet.create({
     color: "rgb(0, 0, 0)",
     paddingRight: 10,
   },
+  botaoDeletar: {
+        backgroundColor: '#d90d36',
+        alignSelf: 'center',
+        padding: 10,
+        width: '50%',
+        borderRadius: 50,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    texto: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
 });
