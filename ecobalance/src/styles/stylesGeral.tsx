@@ -25,11 +25,13 @@ export const stylesGeral = StyleSheet.create({
         paddingTop: 15,                // altura da barra
         borderTopLeftRadius: 10,    // arredondar cantos
         borderTopRightRadius: 10,
+        
     },
 
     textInput: {
-        width: '80%',
-        height: 45,
+        alignSelf: 'center',
+        width: '100%',
+        height: 42,
         borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 10,
