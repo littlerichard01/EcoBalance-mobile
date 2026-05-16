@@ -18,7 +18,6 @@ type Conquista = ConquistaDef & {
   data?: string | null;
 };
 
-
 const agruparEmColunas = <T,>(data: T[], numRows: number): T[][] => {
   const colunas: T[][] = [];
   for (let i = 0; i < data.length; i += numRows) {
@@ -60,7 +59,9 @@ export default function Conquistas() {
   );
 
   const mapaConquistas = new Map(
-    (Array.isArray(conquistasUsuario) ? conquistasUsuario : []).map((c: any) => [c?.nome, c]),
+    (Array.isArray(conquistasUsuario) ? conquistasUsuario : []).map(
+      (c: any) => [c?.nome, c],
+    ),
   );
   const conquistasComStatus: Conquista[] = conquistasDef.map((c) => {
     const server = mapaConquistas.get(c.nome);
@@ -70,11 +71,9 @@ export default function Conquistas() {
       data: server?.data ?? null,
     };
   });
-  const dadosAgrupados = agruparEmColunas<Conquista>(conquistasComStatus, 3);
-
 
   return (
-    <ScrollView style={stylesGeral.telaInteira}>
+    <View style={stylesGeral.telaInteira}>
       <View style={StylesTelaConquistas.cabecalho}>
         <Image
           source={require("../../assets/trofeu.png")}
@@ -86,77 +85,50 @@ export default function Conquistas() {
       </View>
 
       <FlatList
-        horizontal
-        data={dadosAgrupados}
-        keyExtractor={(_, index) => `coluna-${index}`}
-        showsHorizontalScrollIndicator={false}
-        style={{ marginTop: 20 }}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false },
-        )}
-        renderItem={({ item: coluna }) => (
-          <View style={{ flexDirection: "column", width: 280, marginRight: 20 }}>
-            {coluna.map((item: Conquista) => (
-              <View
-                key={item.id}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginVertical: 10,
-                  opacity: item.desbloqueado ? 1 : 0.4,
-                }}
+        data={conquistasComStatus}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={3}
+        columnWrapperStyle={{
+          justifyContent: "flex-start", // Alinha todos à esquerda
+          paddingHorizontal: 10,
+        }}
+        style={{ height: "35%", paddingVertical: 10, }}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              width: "30%",
+              alignItems: "center",
+              opacity: item.desbloqueado ? 1 : 0.4,
+              marginBottom: 25,
+              marginHorizontal: "1.9%",
+            }}
+          >
+            <Image
+              source={item.imagem}
+              style={[StylesTelaHome.trofeuIcon, { width: 88, height: 88 }]}
+            />
+            <View style={{ alignItems: "center", width: "100%" }}>
+              <Text
+                style={[
+                  StylesTelaHome.iconeTexto,
+                  { fontSize: 14, textAlign: "center" },
+                ]}
               >
-                <Image
-                  source={item.imagem}
-                  style={[StylesTelaHome.trofeuIcon, { width: 55, height: 55 }]}
-                />
-                <View style={{ flex: 1 }}>
-                  <Text style={[StylesTelaHome.iconeTexto, { fontSize: 14 }]}>
-                    {item.titulo}
-                  </Text>
-                  <Text style={{ fontSize: 12, color: "#000" }}>
-                    {item.descricao}
-                  </Text>
-                </View>
-              </View>
-            ))}
+                {item.titulo}
+              </Text>
+            </View>
           </View>
         )}
       />
 
-      <View
-        style={{
-          width: "100%",
-          height: 8,
-          backgroundColor: coresBase.verdeClaro,
-          alignSelf: "center",
-          borderRadius: 25,
-          marginTop: 15,
-        }}
-      >
-        <Animated.View
-          style={{
-            width: "80%",
-            height: "100%",
-            backgroundColor: coresBase.verdeMedio,
-            borderRadius: 25,
-            transform: [
-              {
-                translateX: scrollX.interpolate({
-                  inputRange: [0, 280 * (dadosAgrupados.length - 1)],
-                  outputRange: [0, 100 - 100 / dadosAgrupados.length],
-                  extrapolate: "clamp",
-                }),
-              },
-            ],
-          }}
-        />
-      </View>
-
-      <View style={[StylesTelaConquistas.cabecalho, { marginTop: 50 }]}>
+      <View style={[StylesTelaConquistas.cabecalho, { marginTop: 30 }]}>
+        {" "}
         <View
-          style={[stylesTelaRotina.rotinaIconContainer, { width: 50, height: 50 }]}
+          style={[
+            stylesTelaRotina.rotinaIconContainer,
+            { width: 50, height: 50 },
+          ]}
         >
           <Image
             source={require("../../assets/icongrafico.png")}
@@ -168,10 +140,8 @@ export default function Conquistas() {
 
       <GraficoTestesHorizontal
         testes={testes}
-        indicadorLarguraFator={0.8}
-        contentContainerStyle={{ paddingRight: 10, marginTop: 15 }}
-        marginBottom={100}
+        marginBottom={10}
       />
-    </ScrollView>
+    </View>
   );
 }

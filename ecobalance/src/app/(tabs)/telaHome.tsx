@@ -257,13 +257,11 @@ export default function TelaHome() {
                   opacity: item.desbloqueado ? 1 : 0.4, // cinza se bloqueado
                 }}
               >
-                <View style={{ marginTop: 10 }}>
+                <View>
                   <Image
                     source={item.imagem}
                     style={StylesTelaHome.trofeuIcon}
                   />
-                  <Text style={StylesTelaHome.iconeTexto}>{item.titulo}</Text>
-                  {/* <Text>{item.descricao}</Text> */}
                 </View>
               </View>
             )}

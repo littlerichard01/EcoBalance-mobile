@@ -28,10 +28,13 @@ export function GraficoTestesHorizontal({
   return (
     <>
       <FlatList
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={contentContainerStyle}
-        horizontal={true}
+        contentContainerStyle={{ 
+    paddingHorizontal: 15,
+  }}
+  style={{ height: "35%", marginTop: 10 }}
         data={testes}
+        numColumns={1}
+        
         keyExtractor={(item, index) => {
           const raw =
             item?._id || item?.id || item?.dataRealizacao || item?.createdAt || index;
@@ -49,8 +52,8 @@ export function GraficoTestesHorizontal({
           const alturaMax = 112;
 
           return (
-            <View style={StylesTelaHome.graficoCard}>
-              <View style={StylesTelaHome.barrasContainer}>
+            <View style={[StylesTelaHome.graficoCard, {width: "100%", marginBottom}]}>
+              <View style={[StylesTelaHome.barrasContainer, {width: "100%"}]}>
                 {bars.map((b) => {
                   const height = Math.max(6, (b.value / b.max) * alturaMax);
                   return (
@@ -69,7 +72,7 @@ export function GraficoTestesHorizontal({
                   );
                 })}
               </View>
-              <Text style={StylesTelaHome.graficoData}>
+              <Text style={[StylesTelaHome.graficoData, { marginBottom: -5 }]}>
                 {formatarDataPtBr(item?.dataRealizacao || item?.createdAt)}
               </Text>
             </View>
@@ -77,27 +80,6 @@ export function GraficoTestesHorizontal({
         }}
       />
 
-      <View
-        style={{
-          width: "100%",
-          height: 9,
-          backgroundColor: coresBase.verdeClaro,
-          alignSelf: "center",
-          borderRadius: 25,
-          marginBottom,
-        }}
-        onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
-      >
-        <View
-          style={{
-            width: indicadorWidth,
-            height: "100%",
-            backgroundColor: coresBase.verdeMedio,
-            borderRadius: 25,
-            marginLeft: indicadorLeft,
-          }}
-        />
-      </View>
     </>
   );
 }

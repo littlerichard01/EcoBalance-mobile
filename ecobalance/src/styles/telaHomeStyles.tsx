@@ -34,9 +34,9 @@ export const StylesTelaHome = StyleSheet.create({
         fontStyle: "italic"
     },
     trofeuIcon: {
-        width: 60, 
-        height: 60, 
-        marginRight: 20,
+        width: 95, 
+        height: 95, 
+        marginRight: 30,
         alignSelf: "center",
     },
     iconeTexto: { 

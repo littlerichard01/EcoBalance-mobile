@@ -1,19 +1,16 @@
 import { StyleSheet } from "react-native";
 
 export const StylesTelaConquistas = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     cabecalho: {
         flexDirection: "row",
         alignItems: "center",
+        marginBottom: 5
     },
     conquistasContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginVertical: 10,
-
+        width: "30%",
+        marginHorizontal: 10,
+        marginTop: 20
     }
 });

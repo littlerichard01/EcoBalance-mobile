@@ -310,7 +310,7 @@ export default function TelaPerfil() {
         </View>
 
         {/* 5. AÇÃO PRINCIPAL */}
-        <View style={{ marginTop: 20 }}>
+        <View>
           <BotaoSair onPress={handleSair} />
         </View>
 
