@@ -98,9 +98,6 @@ export default function MyStack() {
             <Stack.Screen name="Conquistas" component={TelaConquistas} />
 
             {/* A tela "MainTabs" é onde o Tab Navigator é renderizado, permitindo a navegação entre as abas principais do aplicativo */}
-        
-
-
         </Stack.Navigator>
     );
 }

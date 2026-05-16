@@ -74,6 +74,22 @@ export const stylesTelaRotina = StyleSheet.create({
     marginTop: 20,
     marginBottom: 30,
     alignSelf: "center",
-
-  }
+  },
+  botao: {
+    backgroundColor: coresBase.verdeMedio,
+    alignSelf: "center",
+    padding: 10,
+    width: "90%",
+    height: 55,
+    borderRadius: 50,
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  textoBotao: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontFamily: "Jost-Bold",
+    fontSize: 18,
+  },
 });
