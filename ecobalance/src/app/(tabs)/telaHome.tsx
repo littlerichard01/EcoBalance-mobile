@@ -238,6 +238,7 @@ export default function TelaHome() {
               paddingHorizontal: 10,
               alignItems: "center",
             }}
+            nestedScrollEnabled={true}
             horizontal={true}
             data={ultimasConquistas}
             keyExtractor={(item) => item.id.toString()}
@@ -447,8 +448,9 @@ export default function TelaHome() {
       <GraficoTestesHorizontal
         testes={testes}
         indicadorLarguraFator={0.4}
-        contentContainerStyle={{ alignItems: "flex-start" }}
-        marginBottom={100}
+        larguraCard={280}
+        marginBottom={90
+}
       />
     </ScrollView>
   );

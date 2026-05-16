@@ -72,6 +72,7 @@ export default function TelaRotina() {
 
       <FlatList
         data={rotinas}
+        nestedScrollEnabled={true}
         keyExtractor={(item) => item._id.toString()}
         numColumns={3}
         columnWrapperStyle={{

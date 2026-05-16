@@ -92,7 +92,7 @@ export default function Conquistas() {
           justifyContent: "flex-start", // Alinha todos à esquerda
           paddingHorizontal: 10,
         }}
-        style={{ height: "35%", paddingVertical: 10, }}
+        style={{ height: "65%", paddingVertical: 10, }}
         contentContainerStyle={{ paddingVertical: 10 }}
         renderItem={({ item }) => (
           <View
@@ -106,7 +106,7 @@ export default function Conquistas() {
           >
             <Image
               source={item.imagem}
-              style={[StylesTelaHome.trofeuIcon, { width: 88, height: 88 }]}
+              style={[StylesTelaHome.trofeuIcon, { width: 90, height: 90 }]}
             />
             <View style={{ alignItems: "center", width: "100%" }}>
               <Text
@@ -141,6 +141,7 @@ export default function Conquistas() {
       <GraficoTestesHorizontal
         testes={testes}
         marginBottom={10}
+        vertical={true}
       />
     </View>
   );

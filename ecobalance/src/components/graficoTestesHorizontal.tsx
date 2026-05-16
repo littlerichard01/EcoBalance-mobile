@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { StyleProp, ViewStyle } from "react-native";
+import type { StyleProp, ViewStyle, DimensionValue } from "react-native";
 import { FlatList, Text, View } from "react-native";
 import { coresBase } from "@/src/styles/stylesGeral";
 import { StylesTelaHome } from "@/src/styles/telaHomeStyles";
@@ -11,13 +11,17 @@ type Props = Readonly<{
   indicadorLarguraFator?: number;
   contentContainerStyle?: StyleProp<ViewStyle>;
   marginBottom?: number;
+  larguraCard?: DimensionValue;
+  vertical?: boolean;
 }>;
 
 export function GraficoTestesHorizontal({
   testes,
   indicadorLarguraFator = 0.4,
   contentContainerStyle,
-  marginBottom = 100,
+  marginBottom = 15,
+  larguraCard = 300,
+  vertical = false,
 }: Props) {
   const [scrollOffset, setScrollOffset] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
@@ -28,16 +32,20 @@ export function GraficoTestesHorizontal({
   return (
     <>
       <FlatList
-        contentContainerStyle={{ 
-    paddingHorizontal: 15,
-  }}
-  style={{ height: "35%", marginTop: 10 }}
+        contentContainerStyle={[
+          { paddingVertical: 5 },
+          vertical && { alignItems: "center" },
+          contentContainerStyle
+        ]}
+        style={{ flexGrow: 0, marginTop: 10 }}
+        nestedScrollEnabled={true}
         data={testes}
-        numColumns={1}
-        
+        horizontal={!vertical}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={true}
         keyExtractor={(item, index) => {
-          const raw =
-            item?._id || item?.id || item?.dataRealizacao || item?.createdAt || index;
+          const raw = item?._id || item?.id || item?.dataRealizacao || item?.createdAt || index;
           return String(raw);
         }}
         onScroll={(event) => {
@@ -52,8 +60,15 @@ export function GraficoTestesHorizontal({
           const alturaMax = 112;
 
           return (
-            <View style={[StylesTelaHome.graficoCard, {width: "100%", marginBottom}]}>
-              <View style={[StylesTelaHome.barrasContainer, {width: "100%"}]}>
+            <View style={[
+              StylesTelaHome.graficoCard, 
+              { 
+                width: vertical ? "90%" : larguraCard, 
+                marginRight: vertical ? 0 : 15, 
+                marginBottom 
+              }
+            ]}>
+              <View style={[StylesTelaHome.barrasContainer, { width: "100%", flexDirection: "row", justifyContent: "space-around" }]}>
                 {bars.map((b) => {
                   const height = Math.max(6, (b.value / b.max) * alturaMax);
                   return (
@@ -79,7 +94,6 @@ export function GraficoTestesHorizontal({
           );
         }}
       />
-
     </>
   );
 }

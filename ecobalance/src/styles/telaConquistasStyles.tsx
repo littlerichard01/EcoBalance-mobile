@@ -12,5 +12,6 @@ export const StylesTelaConquistas = StyleSheet.create({
         width: "30%",
         marginHorizontal: 10,
         marginTop: 20
-    }
+    },
+    
 });
